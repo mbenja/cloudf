@@ -1,0 +1,24 @@
+{
+  "name": "cloudf",
+  "version": "1.0.0",
+  "description": "Cloud storage system built for EECS 448, Software Engineering I, at the University of Kansas.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbenja/cloudf.git"
+  },
+  "author": "Benjamin Streit, Blake Rieschick, Evan Brown",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mbenja/cloudf/issues"
+  },
+  "homepage": "https://github.com/mbenja/cloudf#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "path": "^0.12.7"
+  }
+}
