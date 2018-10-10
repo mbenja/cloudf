@@ -1,0 +1,17 @@
+body {
+  font-family: 'Ubuntu Condensed', sans-serif;
+  background: #8CABBE;
+  /* font-family: 'Ubuntu', sans-serif;
+  font-family: 'Ubuntu Mono', monospace; */
+}
+
+/**
+  Styling for login card
+*/
+#card_login {
+  background: #A4BFEB;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 15vh;
+  width: 50%;
+}
