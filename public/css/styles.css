@@ -1,6 +1,6 @@
 body {
   font-family: 'Ubuntu Condensed', sans-serif;
-  background: #8CABBE;
+  background: #E6CCBE;
   /* font-family: 'Ubuntu', sans-serif;
   font-family: 'Ubuntu Mono', monospace; */
 }
@@ -9,7 +9,7 @@ body {
   Styling for login card
 */
 #card_login {
-  background: #A4BFEB;
+  background: #8CABBE;
   margin-left: auto;
   margin-right: auto;
   margin-top: 15vh;
