@@ -30,3 +30,17 @@ Attendees: Benjamin Streit, Evan Brown
   * Discussed mongoDB configuration and implementation
   * Began testing mongoDB
   * Discussed work to begin over the weekend
+
+## Meeting \#3
+Date: Sunday, October 14, 2018
+
+Time: 11:30 - 2:00 PM
+
+Location: Spahr
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed classes that need to be implemented
+  * Discussed database implementation
+  * Divided up work among team members
+  * Planned for next meeting
