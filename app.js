@@ -26,7 +26,7 @@ var app = express();
  * backend index functionality
  * @type {Object}
  */
-const route_index = require('./routes/index');
+const route_login = require('./routes/login');
 
 /**
  * port to allow connections on
@@ -45,8 +45,7 @@ app.set('view engine', 'html');
 app.use(express.static(path.join(__dirname, 'public')));
 
 // assigning routes to app
-app.use('/', route_index);
-app.use('/index', route_index);
+app.use('/login', route_login);
 
 // expose public port
 app.listen(port);
