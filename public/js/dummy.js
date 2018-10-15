@@ -37,5 +37,71 @@ const dummy_data =
     filename: 'octocat-rotated.png',
     metadata:
      { date_added: 'Saturday, October 13th, 2018, 7:50:16 PM',
-       path: '/root/directory',
-       content_type: 'image/png' } } ]
+       path: '/root/test_dir',
+       content_type: 'image/png' } },
+   { _id: '5bc2837729fad0104b5ea3d2',
+     length: '9',
+     chunkSize: '261120',
+     uploadDate: '2018-10-13T23:44:55.478Z',
+     md5: '5f8f22b8cdbaeee8cf857673a9b6ba20',
+     filename: 'test_dir',
+     metadata:
+      { date_added: 'Saturday, October 13th, 2018, 6:44:55 PM',
+        path: '/root',
+        content_type: 'directory' } },
+
+        { _id: '5bc2837729fad0104b5ea3d2',
+          length: '9',
+          chunkSize: '261120',
+          uploadDate: '2018-10-13T23:44:55.478Z',
+          md5: '5f8f22b8cdbaeee8cf857673a9b6ba20',
+          filename: 'what',
+          metadata:
+           { date_added: 'Saturday, October 13th, 2018, 6:44:55 PM',
+             path: '/root',
+             content_type: 'directory' } },
+
+             { _id: '5bc2837729fad0104b5ea3d2',
+               length: '9',
+               chunkSize: '261120',
+               uploadDate: '2018-10-13T23:44:55.478Z',
+               md5: '5f8f22b8cdbaeee8cf857673a9b6ba20',
+               filename: 'help_me',
+               metadata:
+                { date_added: 'Saturday, October 13th, 2018, 6:44:55 PM',
+                  path: '/root/what',
+                  content_type: 'directory' } },
+
+                  { _id: '5bc2837729fad0104b5ea3d2',
+                    length: '9',
+                    chunkSize: '261120',
+                    uploadDate: '2018-10-13T23:44:55.478Z',
+                    md5: '5f8f22b8cdbaeee8cf857673a9b6ba20',
+                    filename: 'test_image',
+                    metadata:
+                     { date_added: 'Saturday, October 13th, 2018, 6:44:55 PM',
+                       path: '/root/what/help_me',
+                       content_type: 'image/png' } },
+
+                       { _id: '5bc2837729fad0104b5ea3d2',
+                         length: '9',
+                         chunkSize: '261120',
+                         uploadDate: '2018-10-13T23:44:55.478Z',
+                         md5: '5f8f22b8cdbaeee8cf857673a9b6ba20',
+                         filename: 'aaaaaaaaah',
+                         metadata:
+                          { date_added: 'Saturday, October 13th, 2018, 6:44:55 PM',
+                            path: '/root/what/help_me',
+                            content_type: 'image/png' } },
+
+                            { _id: '5bc2837729fad0104b5ea3d2',
+                              length: '9',
+                              chunkSize: '261120',
+                              uploadDate: '2018-10-13T23:44:55.478Z',
+                              md5: '5f8f22b8cdbaeee8cf857673a9b6ba20',
+                              filename: 'another one',
+                              metadata:
+                               { date_added: 'Saturday, October 13th, 2018, 6:44:55 PM',
+                                 path: '/root/what/help_me',
+                                 content_type: 'directory' } }
+                               ];

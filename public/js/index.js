@@ -1,9 +1,14 @@
 let current_file_data = [];
+let current_path;
 let files_div = document.getElementById("files");
 $.when(refreshData()).done(populateDirectoryListing("/root"));
 
 
 function populateDirectoryListing(path){
+
+  // update current path
+  current_path = path;
+
   // remove all of the files currently displayed
   while(files_div.firstChild){
     files_div.removeChild(files_div.firstChild);
@@ -17,28 +22,36 @@ function populateDirectoryListing(path){
     files_in_path.unshift({metadata: {content_type: 'parent'}, filename: '..'})
   }
 
+  // go though each of the files in this directory
   for(let i = 0; i < files_in_path.length; i++){
-    let cur_type = current_file_data[i].metadata.content_type;
+    let cur_type = files_in_path[i].metadata.content_type;
 
+    // create enclosing div for file
     let file_card = document.createElement('div');
+    // set css class and onlick attributes based on file type
     if(cur_type == "parent"){
       file_card.setAttribute("class", "card parent");
+      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + current_path.split('/').splice(0, current_path.split('/').length-1).join('/') + "\");");
     }
     else if(cur_type == "directory"){
       file_card.setAttribute("class", "card directory");
+      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + path + "/" + files_in_path[i].filename + "\")")
     }
     else{
       file_card.setAttribute("class", "card file");
     }
 
+    // create body for file type image and name
     let card_body = document.createElement('div');
     card_body.setAttribute("class", "card-body");
 
+    // create file type image
     let file_icon = document.createElement('img');
     file_icon.setAttribute("src", "../images/icons/" + icons_map[cur_type]);
     file_icon.setAttribute("class", "file_icon");
     card_body.appendChild(file_icon);
 
+    // write file name
     let file_name = document.createElement('span');
     file_name.innerHTML = files_in_path[i].filename;
     card_body.appendChild(file_name);
@@ -48,6 +61,8 @@ function populateDirectoryListing(path){
     files_div.appendChild(file_card);
   }
 }
+
+
 
 function populateBreadcrumbs(){
 
