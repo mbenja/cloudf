@@ -67,21 +67,7 @@ function populateDirectoryListing(path){
 
 
 function populateBreadcrumbs(path){
-  let partialPath = "";
-  let parentCount = 0;
-  console.log("Current Path: " + path);
 
-  //Parse File Path
-  for(let x = 1; x <= path.length; x++)
-  {
-    partialPath = partialPath + path[x];
-    if(path[x] == '/')
-    {
-      parentCount++;
-      console.log("Path number " + parentCount + "is: " + partialPath);
-      partialPath = "";
-    }
-  }
 
 }
 
