@@ -17,8 +17,25 @@ body {
 }
 
 #main_container {
-  background-color: #C8CC92;
+  background-color: white;
   border: 2px solid black;
   padding: 1vw;
   border-radius: 1vw;
+  /*overflow: scroll;*/
+}
+
+.file_icon {
+  margin-right: 1.25rem;
+}
+
+.card.file {
+  background-color: lightgrey;
+}
+
+.card.directory {
+  background-color: #8CABBE;
+}
+
+.card.parent {
+  background-color: #C8CC92;
 }

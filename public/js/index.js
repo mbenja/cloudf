@@ -1,5 +1,52 @@
-function populateDirectoryListing(path){
+let current_file_data = [];
+let files_div = document.getElementById("files");
+$.when(refreshData()).done(populateDirectoryListing("/root"));
 
+
+function populateDirectoryListing(path){
+  // remove all of the files currently displayed
+  while(files_div.firstChild){
+    files_div.removeChild(files_div.firstChild);
+  }
+
+  // filter the files to only show those in the current path
+  let files_in_path = current_file_data.filter(val => val.metadata.path == path);
+
+  // if we're not looking at the root directory add additional file for parent dir
+  if(path != "/root"){
+    files_in_path.unshift({metadata: {content_type: 'parent'}, filename: '..'})
+  }
+
+  for(let i = 0; i < files_in_path.length; i++){
+    let cur_type = current_file_data[i].metadata.content_type;
+
+    let file_card = document.createElement('div');
+    if(cur_type == "parent"){
+      file_card.setAttribute("class", "card parent");
+    }
+    else if(cur_type == "directory"){
+      file_card.setAttribute("class", "card directory");
+    }
+    else{
+      file_card.setAttribute("class", "card file");
+    }
+
+    let card_body = document.createElement('div');
+    card_body.setAttribute("class", "card-body");
+
+    let file_icon = document.createElement('img');
+    file_icon.setAttribute("src", "../images/icons/" + icons_map[cur_type]);
+    file_icon.setAttribute("class", "file_icon");
+    card_body.appendChild(file_icon);
+
+    let file_name = document.createElement('span');
+    file_name.innerHTML = files_in_path[i].filename;
+    card_body.appendChild(file_name);
+
+    file_card.appendChild(card_body);
+
+    files_div.appendChild(file_card);
+  }
 }
 
 function populateBreadcrumbs(){
@@ -31,47 +78,13 @@ function createDirectory(){
 }
 
 function refreshData(){
-  // ajax call to backend here
-}
 
-const dummy_data =
-[ { _id: '5bc27fb042f6bc101e82a65e',
-    length: '9830',
-    chunkSize: '261120',
-    uploadDate: '2018-10-13T23:28:49.040Z',
-    md5: '274fbab8fcc292e164a52c6e811eb584',
-    filename: 'octocat-pixelated.png',
-    metadata:
-     { date_added: 'Saturday, October 13th, 2018, 6:28:48 PM',
-       path: '/root',
-       content_type: 'image/png' } },
-  { _id: '5bc27ff2ef827210201c3e4f',
-    length: '2131769',
-    chunkSize: '261120',
-    uploadDate: '2018-10-13T23:29:54.580Z',
-    md5: 'ef468e275a2c13d0bc7156549261fde6',
-    filename: 'Octocat.png',
-    metadata:
-     { date_added: 'Saturday, October 13th, 2018, 6:29:54 PM',
-       path: '/root',
-       content_type: 'image/png' } },
-  { _id: '5bc2837729fad0104b5ea3d2',
-    length: '9',
-    chunkSize: '261120',
-    uploadDate: '2018-10-13T23:44:55.478Z',
-    md5: '5f8f22b8cdbaeee8cf857673a9b6ba20',
-    filename: 'directory',
-    metadata:
-     { date_added: 'Saturday, October 13th, 2018, 6:44:55 PM',
-       path: '/root',
-       content_type: 'directory' } },
-  { _id: '5bc292c8a839651112ea8c17',
-    length: '51493',
-    chunkSize: '261120',
-    uploadDate: '2018-10-14T00:50:16.603Z',
-    md5: 'a38ac4c0081817dc6d236817e30e1617',
-    filename: 'octocat-rotated.png',
-    metadata:
-     { date_added: 'Saturday, October 13th, 2018, 7:50:16 PM',
-       path: '/root/directory',
-       content_type: 'image/png' } } ]
+  let callback = $.Deferred();
+
+  // ajax call to backend here
+  current_file_data = dummy_data;
+  callback.resolve();
+
+  return callback.promise();
+
+}
