@@ -20,14 +20,19 @@
       <!-- put current username and logout button here -->
     </div>
     <div class="container" id="main_container">
-      <!-- add path breadcrumbs here -->
+      <!-- breadcrumbs Banner -->
+      <div class="breadcrumbs" id="banner">
+        <div class="breadcrumbs" id="pathSection">
+          <p style="text-align: center">Root</p>
+        </div>
+      </div>
       <div id="files">
         <p>Loading files, please wait...</p>
       </div>
       <!-- Floating Buttons -->
       <div class="floatingButtons">
         <div class="circleButton" id="uploadFile" onclick="uploadFile()"> </div>
-        <div class="circleButton" id="newFolder" onclick="newFolder()"> </div>
+        <div class="circleButton" id="newFolder" onclick="createDirectory()"> </div>
       </div>
     </div>
 
