@@ -41,3 +41,34 @@ body {
 .card.parent {
   background-color: #C8CC92;
 }
+
+/* Styling for floatingButtons */
+#uploadFile {
+  background-image: url("/images/flaticon/upload-to-cloud.png");
+  right: 0px;
+}
+
+#newFolder {
+  background-image: url("/images/flaticon/new-add-folder.png");
+}
+
+.circleButton {
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  background: red;
+  border: 3px solid #000;
+  background-repeat: round ;
+  cursor: pointer;
+
+  position: absolute;
+}
+
+.floatingButtons {
+  height: 50px;
+  width: 100px;
+
+  position: relative;
+  left: 725px;
+  bottom: 25px;
+}
