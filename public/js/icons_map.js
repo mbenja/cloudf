@@ -1,5 +1,5 @@
 const icons_map = {
-  "directory": "folder.png", // http://getyourimage.club/fast-club.html
+  "directory": "folder.png", // http://yousense.info/33/06889-folder-icon-32x32.html
   "parent": "folder.png",
   "audio/x-aac": "aac.png", // https://github.com/redbooth/free-file-icons
   "application/postscript": "ai.png",
