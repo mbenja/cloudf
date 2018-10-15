@@ -15,3 +15,10 @@ body {
   margin-top: 15vh;
   width: 50%;
 }
+
+#main_container {
+  background-color: #C8CC92;
+  border: 2px solid black;
+  padding: 1vw;
+  border-radius: 1vw;
+}

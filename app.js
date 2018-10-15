@@ -27,7 +27,7 @@ var app = express();
  * @type {Object}
  */
 const route_login = require('./routes/login');
-
+const route_index = require('./routes/index')
 /**
  * port to allow connections on
  * @type {Number}
@@ -46,6 +46,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // assigning routes to app
 app.use('/login', route_login);
+app.use('/', route_index);
 
 // expose public port
 app.listen(port);
