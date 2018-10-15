@@ -47,7 +47,7 @@ function populateDirectoryListing(path){
 
     // create file type image
     let file_icon = document.createElement('img');
-    file_icon.setAttribute("src", "../images/icons/" + icons_map[cur_type]);
+    file_icon.setAttribute("src", "../images/icons/" + (icons_map[cur_type] ? icons_map[cur_type] : "_blank.png"));
     file_icon.setAttribute("class", "file_icon");
     card_body.appendChild(file_icon);
 

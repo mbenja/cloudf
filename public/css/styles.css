@@ -26,6 +26,8 @@ body {
 
 .file_icon {
   margin-right: 1.25rem;
+  height: 32px;
+  width: 32px;
 }
 
 .card.file {
