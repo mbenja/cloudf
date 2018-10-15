@@ -69,6 +69,6 @@ body {
   width: 100px;
 
   position: relative;
-  left: 725px;
-  bottom: 25px;
+  top: 30px;
+  left: 95%;
 }
