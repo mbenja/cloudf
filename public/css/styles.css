@@ -79,11 +79,22 @@ body {
  }
 
  #banner {
-
+   display: flex;
  }
- 
- #pathSection {
+.root {
   height: 25px;
   width: 10%;
   background-color: #c0eafc;
+  right: 0px;
+  flex: 1;
+  cursor: pointer
+}
+ .pathSection {
+  height: 25px;
+  width: 10%;
+  background-color: #c0eafc;
+  right: 0px;
+  flex: 1;
+  visibility: hidden;
+  cursor: pointer
 }

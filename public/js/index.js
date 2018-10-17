@@ -1,11 +1,12 @@
 let current_file_data = [];
 let current_path;
+let current_breadcrumb_path;
+let current_breadcrumb_parents = 0;
 let files_div = document.getElementById("files");
 $.when(refreshData()).done(populateDirectoryListing("/root"));
 
 
 function populateDirectoryListing(path){
-
   // update current path
   current_path = path;
 
@@ -68,19 +69,48 @@ function populateDirectoryListing(path){
 
 function populateBreadcrumbs(path){
   let partialPath = "";
-    let parentCount = 0;
+  let parentCount = 0;
+  //let isRoot = true;
     console.log("Current Path: " + path);
-     //Parse File Path
+     //Count Parents Directory
     for(let x = 1; x <= path.length; x++)
     {
-      partialPath = partialPath + path[x];
-      if(path[x] == '/')
-      {
+      if(path[x] == '/') {
         parentCount++;
-        console.log("Path number " + parentCount + "is: " + partialPath);
-        partialPath = "";
       }
     }
+    console.log("P: " + parentCount + "CBC:" + current_breadcrumb_parents);
+    if(parentCount > current_breadcrumb_parents) {
+      current_breadcrumb_parents = parentCount;
+       //Parse File Path
+      for(let x = path.length-1; x != 0; x--)
+      {
+        partialPath = path[x] + partialPath;
+        if(path[x] == '/')
+        {
+
+          document.getElementById("path"+parentCount).innerHTML = partialPath;
+          document.getElementById("pathSection"+parentCount).style.visibility = "visible";
+          document.getElementById("pathSection"+parentCount).divPath = current_path;
+          parentCount--;
+          partialPath = "";
+
+        }
+
+      }
+    current_breadcrumb_path = path;
+   }
+   else if (parentCount < current_breadcrumb_parents && parentCount != 0) {
+     let jumpParentNum = current_breadcrumb_parents - parentCount;
+     console.log("Num to jump: " + jumpParentNum);
+     for(let x = 0; x < jumpParentNum; x++)
+     {
+       console.log("hiding Something");
+       document.getElementById("pathSection"+current_breadcrumb_parents).style.visibility = "hidden";
+       document.getElementById("pathSection"+parentCount).divPath = current_path;
+       current_breadcrumb_parents--;
+     }
+   }
 }
 
 function populateSidebar(){

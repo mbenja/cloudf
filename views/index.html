@@ -22,8 +22,29 @@
     <div class="container" id="main_container">
       <!-- breadcrumbs Banner -->
       <div class="breadcrumbs" id="banner">
-          <div class="breadcrumbs" id="pathSection">
-            <p style="text-align: center">Root</p>
+          <div class="root" >
+            <p style="text-align: center" id="path" onclick="populateDirectoryListing('/root')">Root</p>
+          </div>
+          <div class="pathSection" id="pathSection1" onclick="populateDirectoryListing(this.divPath)">
+            <p style="text-align: center" id="path1"></p>
+          </div>
+          <div class="pathSection" id="pathSection2" onclick="populateDirectoryListing(this.divPath)">
+            <p style="text-align: center" id="path2"></p>
+          </div>
+          <div class="pathSection" id="pathSection3" onclick="populateDirectoryListing(this.divPath)">
+            <p style="text-align: center" id="path3"></p>
+          </div>
+          <div class="pathSection" id="pathSection4">
+            <p style="text-align: center" id="path4"></p>
+          </div>
+          <div class="pathSection" id="pathSection5">
+            <p style="text-align: center" id="path5"></p>
+          </div>
+          <div class="pathSection" id="pathSection6">
+            <p style="text-align: center" id="path6"></p>
+          </div>
+          <div class="pathSection" id="pathSection7" onclick="populateDirectoryListing(this.divPath)">
+            <p style="text-align: center" id="path7"></p>
           </div>
       </div>
       <div id="files">
