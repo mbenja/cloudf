@@ -197,12 +197,20 @@ $('#upload_form').submit(function(e){
 
   // submit the form
   $(this).ajaxSubmit({
-   data: form_data,
-   contentType: 'application/json',
-   success: function(response){
+    data: form_data,
+    contentType: 'application/json',
+    success: function(response) {
      // dismiss modal upon success
      $('#modal_upload_form').modal('hide');
-   }
+     // present snackbar
+     $.snackbar({content: "<strong>Success!</strong> Upload complete."});
+    },
+    error: function(response) {
+      // dismiss modal
+      $('#modal_upload_form').modal('hide');
+      // present snackbar
+      $.snackbar({content: "<strong>Error</strong> Upload was not completed."});
+     }
   });
   return false;
 });
