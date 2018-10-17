@@ -102,8 +102,27 @@ function editFileName(){
 
 }
 
-function uploadFile(){
-
+/**
+  * Retrieves necessary data from user to perform back-end call to upload file
+*/
+function sendState() {
+  // define data needed on backend
+  // TODO this is hard-coded until we implement user authentication
+  const obj = {
+    user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
+    user_path: current_path
+  };
+  // perform ajax call
+  $.ajax({
+    url: '/FileInteraction/clientState',
+    data: obj,
+    success: function (data) {
+      //console.log(data);
+    },
+    error: function (data) {
+      console.log(data);
+    }
+  });
 }
 
 function downloadFile(){
@@ -114,6 +133,9 @@ function createDirectory(){
 
 }
 
+/**
+  * Retrieves root directory
+*/
 function refreshData() {
   // define data needed on backend
   // TODO this is hard-coded until we implement user authentication
@@ -131,6 +153,8 @@ function refreshData() {
       console.log(data);
     }
   });
+  // call to send client state
+  sendState();
 
 
   // let callback = $.Deferred();
@@ -154,8 +178,8 @@ function refreshData() {
   //   error: function (data) {
   //     console.log(data);
   //   }
-  // });
-  // callback.resolve();
+  // }).done(callback.resolve);
+  // // callback.resolve();
   //
   // return callback.promise();
 

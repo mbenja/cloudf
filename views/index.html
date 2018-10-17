@@ -31,8 +31,17 @@
       </div>
       <!-- Floating Buttons -->
       <div class="floatingButtons">
-        <div class="circleButton" id="uploadFile" onclick="uploadFile()"> </div>
-        <div class="circleButton" id="newFolder" onclick="createDirectory()"> </div>
+        <form ref='uploadForm'
+          id='uploadForm'
+          action='/FileInteraction/uploadFile'
+          method='post'
+          encType="multipart/form-data">
+            <input id="input_upload_file" type="file" name="input_upload_file" onchange="sendState();">
+            <input class="circleButton" id="uploadFile" type="submit"> </input>
+        </form>
+        <!-- <input id="input_upload_file" type="file" style="display:none;" onchange="uploadFile();">
+        <div class="circleButton" id="uploadFile" onclick="document.getElementById('input_upload_file').click();"> </div>
+        <div class="circleButton" id="newFolder" onclick="createDirectory()"> </div> -->
       </div>
     </div>
 

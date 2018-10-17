@@ -3,11 +3,35 @@
 */
 var express = require('express');
 var router = express.Router();
+var fs = require('fs');
 var mongodb = require('mongodb');
 var assert = require('assert');
+var dateFormat = require('dateformat');
+var Readable = require('stream').Readable;
+
+/**
+  * Defining object containing state variables from front-end
+*/
+var client_state = {
+  user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
+  user_path: ''
+};
 
 // Defining DB URL
 var url = 'mongodb://localhost:32768/cloudf';
+
+// TODO this is temporarily hard-coded until we implement user authentication
+var user_id = 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx';
+
+/**
+  * Route for updating client state
+  * @param {Object} client_state - the client state to be set as current
+*/
+router.get('/clientState', function(req, res) {
+  console.log("GET /clientState");
+  client_state = req.query;
+  res.send('success');
+});
 
 /**
   * Route for getting root directory
@@ -31,6 +55,32 @@ router.get('/getSubdirectory', function(req, res) {
   console.log("GET /getSubdirectory");
   getSubdirectory(req.query.user_id, req.query.subdirectory).then((response) => {
     res.send(response);
+  });
+});
+
+/**
+
+*/
+router.post('/uploadFile', function(req, res) {
+  console.log("POST /uploadFile");
+  if (!req.files) {
+    return res.status(400).send('No files were uploaded.');
+  }
+
+  // get file
+  let input_upload_file = req.files.input_upload_file;
+
+  // place within temp dir on server
+  const upload_file_name = input_upload_file.name;
+  input_upload_file.mv(upload_path, function(err) {
+    if (err) {
+      return res.status(500).send(err);
+    } else {
+      // now call async function that uploads to mongoDB
+      uploadFile(user_id, input_upload_file).then((response) => {
+        res.send(response);
+      })
+    }
   });
 });
 
@@ -77,6 +127,33 @@ async function getSubdirectory(user_id, subdirectory) {
   });
   let documents = await promise;
   return documents;
+}
+
+/**
+
+*/
+async function uploadFile(user_id, input_upload_file) {
+  let promise = new Promise(function(resolve, reject) {
+    mongodb.MongoClient.connect(url, function(err, database) {
+      assert.equal(null, err);
+      console.log("Successfully connected to mongoDB");
+
+      const db = database.db('cloudf');
+      // define bucket
+      var bucket = new mongodb.GridFSBucket(db, {
+        bucketName: user_id
+      });
+      // create upload stream
+      upload_stream = bucket.openUploadStream(input_upload_file);
+      upload_stream.options.metadata = {
+        date_added: date_added,
+        path: current_path,
+        content_type: content_type
+      };
+    });
+  });
+  let result = await promise;
+  return result;
 }
 
 module.exports = router;

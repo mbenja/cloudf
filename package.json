@@ -17,8 +17,12 @@
   },
   "homepage": "https://github.com/mbenja/cloudf#readme",
   "dependencies": {
+    "dateformat": "^3.0.3",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
+    "express-fileupload": "^1.0.0-alpha.1",
+    "file-dialog": "0.0.7",
+    "formidable": "^1.2.1",
     "mongodb": "^3.1.8",
     "path": "^0.12.7"
   }
