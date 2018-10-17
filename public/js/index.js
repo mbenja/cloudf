@@ -184,3 +184,25 @@ function refreshData() {
   // return callback.promise();
 
 }
+
+/**
+  * Defining on submit for upload_form so that we can handle on complete, etc.
+*/
+$('#upload_form').submit(function(e){
+  // prevents rerouting of page
+  e.preventDefault();
+
+  // serialize the form
+  var form_data = $('#upload_form').serialize();
+
+  // submit the form
+  $(this).ajaxSubmit({
+   data: form_data,
+   contentType: 'application/json',
+   success: function(response){
+     // dismiss modal upon success
+     $('#modal_upload_form').modal('hide');
+   }
+  });
+  return false;
+});

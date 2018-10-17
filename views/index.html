@@ -31,17 +31,8 @@
       </div>
       <!-- Floating Buttons -->
       <div class="floatingButtons">
-        <form ref='uploadForm'
-          id='uploadForm'
-          action='/FileInteraction/uploadFile'
-          method='post'
-          encType="multipart/form-data">
-            <input id="input_upload_file" type="file" name="input_upload_file" onchange="sendState();">
-            <input class="circleButton" id="uploadFile" type="submit"> </input>
-        </form>
-        <!-- <input id="input_upload_file" type="file" style="display:none;" onchange="uploadFile();">
-        <div class="circleButton" id="uploadFile" onclick="document.getElementById('input_upload_file').click();"> </div>
-        <div class="circleButton" id="newFolder" onclick="createDirectory()"> </div> -->
+        <div class="circleButton" id="uploadFile" onclick="$('#modal_upload_form').modal('show');"> </div>
+        <div class="circleButton" id="newFolder" onclick="createDirectory()"> </div>
       </div>
     </div>
 
@@ -49,8 +40,44 @@
       <p>© 2018 Benjamin Streit, Blake Rieschick, and Evan Brown</p>
     </div>
 
+    <!--
+    Upload form modal
+    -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_upload_form">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modal_upload_form_content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              File Selection
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form ref='upload_form' class="form-inline justify-content-between"
+              id='upload_form'
+              action='/FileInteraction/uploadFile'
+              method='post'
+              encType="multipart/form-data">
+              <div class="form-group">
+                <div class="custom-file">
+                  <input type="file" class="form-control-file" id="input_upload_file" name="input_upload_file" onchange="sendState();">
+                </div>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-raised btn-success">Upload</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <!-- jQuery first, then Popper.js, SnackbarJS, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
     <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
     <!-- SnackbarJS plugin -->
     <script src="https://cdn.rawgit.com/FezVrasta/snackbarjs/1.1.0/dist/snackbar.min.js"></script>

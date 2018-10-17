@@ -36,7 +36,6 @@ var user_id = 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx';
 router.get('/clientState', function(req, res) {
   console.log("GET /clientState");
   client_state = req.query;
-  console.log(client_state);
   res.send('success');
 });
 
@@ -79,19 +78,9 @@ router.post('/uploadFile', function(req, res) {
 
   // place within temp dir on server
   const upload_file_name = input_upload_file.name;
-  const upload_path = './' + upload_file_name;
-  // var fstream = fs.createWriteStream('./upload/' + upload_file_name);
-  // input_upload_file.pipe(fstream);
-  // fstream.on('close', function () {
-  //     res.send('upload succeeded!');
-  //     //now call async function that uploads to mongoDB
-  //     uploadFile(input_upload_file).then((response) => {
-  //       res.send(response);
-  //     });
-  // });
+  const upload_path = './routes/upload/' + upload_file_name;
   input_upload_file.mv(upload_path, function(err) {
     if (err) {
-      console.log('error out');
       console.log(err);
       return res.status(500).send(err);
     } else {
@@ -170,15 +159,15 @@ async function uploadFile(input_upload_file) {
         content_type: input_upload_file.mimetype
       };
       // create read stream and pipe
-      fs.createReadStream('./' + input_upload_file.name).
+      fs.createReadStream('./routes/upload/' + input_upload_file.name).
         pipe(upload_stream).
         on('error', function(error) {
           assert.ifError(error);
         }).
         on('finish', function() {
-          console.log('done!');
+          console.log('File upload complete.');
           database.close();
-          process.exit(0);
+          resolve('success');
         });
     });
   });

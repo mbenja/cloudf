@@ -81,9 +81,16 @@ body {
  #banner {
 
  }
- 
+
  #pathSection {
   height: 25px;
   width: 10%;
   background-color: #c0eafc;
+}
+
+/**
+  * Styling for upload form modal
+*/
+#modal_upload_form_content {
+  background-color: #E6CCBE;
 }
