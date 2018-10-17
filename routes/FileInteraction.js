@@ -138,7 +138,8 @@ async function getSubdirectory(user_id, subdirectory) {
 }
 
 /**
-
+  * Uploads file from Node server to mongoDB
+  * @param {Object} input_upload_file - the file object to be uploaded to mongoDB
 */
 async function uploadFile(input_upload_file) {
   let promise = new Promise(function(resolve, reject) {
