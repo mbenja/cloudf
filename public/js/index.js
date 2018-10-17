@@ -1,5 +1,8 @@
 let current_file_data = [];
 let current_path;
+let current_breadcrumb_path;
+let current_breadcrumb_parents = 0;
+let current_path_sections = 0;
 let files_div = document.getElementById("files");
 $.when(refreshData()).done(populateDirectoryListing("/root"));
 
@@ -69,17 +72,58 @@ function populateDirectoryListing(path){
 function populateBreadcrumbs(path){
   let partialPath = "";
     let parentCount = 0;
-    console.log("Current Path: " + path);
      //Parse File Path
-    for(let x = 1; x <= path.length; x++)
-    {
-      partialPath = partialPath + path[x];
-      if(path[x] == '/')
-      {
-        parentCount++;
-        console.log("Path number " + parentCount + "is: " + partialPath);
-        partialPath = "";
+     for(let x = 1; x <= path.length; x++)
+     {
+       if(path[x] == '/') {
+         parentCount++;
+       }
+     }
+     if(parentCount > current_breadcrumb_parents) {
+     current_breadcrumb_parents = parentCount;
+      //Parse File Path
+       for(let x = path.length-1; x != 0; x--)
+       {
+         partialPath = path[x] + partialPath;
+         if(path[x] == '/')
+         {
+          parentCount++;
+          current_path_sections++;
+
+          //add HTML block to document
+          var block_to_insert ;
+          var container_block ;
+
+          block_to_insert = document.createElement( 'div' );
+          block_to_insert.id = 'pathSection'+current_path_sections;
+          block_to_insert.classList.add('pathSection');
+          block_to_insert.path = path;
+          block_to_insert.setAttribute("onclick", "populateDirectoryListing(this.path)");
+          //block_to_insert.addEventListener("click", populateDirectoryListing(this.path))
+          block_to_insert.innerHTML = partialPath ;
+          block_to_insert.pathNum = current_path_sections;
+
+
+          container_block = document.getElementById( 'banner' );
+          container_block.appendChild( block_to_insert );
+
+          partialPath = "";
+          break;
+        }
       }
+    }
+    else if (parentCount < current_breadcrumb_parents)
+    {
+     let jumpParentNum = current_breadcrumb_parents - parentCount;
+     for(let x=0; x<jumpParentNum; x++)
+     {
+       let block_to_remove = document.getElementById('pathSection'+current_path_sections);
+       block_to_remove.parentNode.removeChild(block_to_remove);
+       current_path_sections--;
+       current_breadcrumb_parents = parentCount;
+
+     }
+
     }
 }
 

@@ -79,11 +79,13 @@ body {
  }
 
  #banner {
-
+   display: flex;
  }
- 
- #pathSection {
+
+ .pathSection {
   height: 25px;
   width: 10%;
   background-color: #c0eafc;
+  flex: 1;
+  cursor: pointer;
 }
