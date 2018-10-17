@@ -204,6 +204,8 @@ $('#upload_form').submit(function(e){
      $('#modal_upload_form').modal('hide');
      // present snackbar
      $.snackbar({content: "<strong>Success!</strong> Upload complete."});
+     // refresh front-end
+     refreshData();
     },
     error: function(response) {
       // dismiss modal
