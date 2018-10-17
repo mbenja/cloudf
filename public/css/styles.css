@@ -89,8 +89,8 @@ body {
 }
 
 /**
-  * Styling for upload form modal
+  * Styling for upload form modal, create directory modal
 */
-#modal_upload_form_content {
+#modal_upload_form_content, #modal_create_directory_content {
   background-color: #E6CCBE;
 }

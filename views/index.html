@@ -32,7 +32,7 @@
       <!-- Floating Buttons -->
       <div class="floatingButtons">
         <div class="circleButton" id="uploadFile" onclick="$('#modal_upload_form').modal('show');"> </div>
-        <div class="circleButton" id="newFolder" onclick="createDirectory()"> </div>
+        <div class="circleButton" id="newFolder" onclick="$('#modal_create_directory').modal('show');"> </div>
       </div>
     </div>
 
@@ -67,6 +67,35 @@
               </div>
               <div class="form-group">
                 <button type="submit" class="btn btn-raised btn-success">Upload</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--
+    Upload form modal
+    -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_create_directory">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modal_create_directory_content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              Create Folder
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form class="form">
+              <div class="form-group">
+                <label for="input_directory_name" class="bmd-label-floating">New Folder</label>
+                <input type="email" class="form-control" id="input_directory_name">
+              </div>
+              <div class="form-group">
+                <button type="button" class="btn btn-raised btn-success" onclick="createDirectory();">Create</button>
               </div>
             </form>
           </div>
