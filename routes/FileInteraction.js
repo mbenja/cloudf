@@ -8,13 +8,19 @@ var mongodb = require('mongodb');
 var assert = require('assert');
 var dateFormat = require('dateformat');
 var Readable = require('stream').Readable;
+const fileUpload = require('express-fileupload');
+var path = require('path');
+router.use(fileUpload());
+
+// setting up static folder
+router.use(express.static(path.join(__dirname, 'public')));
 
 /**
   * Defining object containing state variables from front-end
 */
 var client_state = {
   user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
-  user_path: ''
+  current_path: ''
 };
 
 // Defining DB URL
@@ -30,6 +36,7 @@ var user_id = 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx';
 router.get('/clientState', function(req, res) {
   console.log("GET /clientState");
   client_state = req.query;
+  console.log(client_state);
   res.send('success');
 });
 
@@ -72,12 +79,24 @@ router.post('/uploadFile', function(req, res) {
 
   // place within temp dir on server
   const upload_file_name = input_upload_file.name;
+  const upload_path = './' + upload_file_name;
+  // var fstream = fs.createWriteStream('./upload/' + upload_file_name);
+  // input_upload_file.pipe(fstream);
+  // fstream.on('close', function () {
+  //     res.send('upload succeeded!');
+  //     //now call async function that uploads to mongoDB
+  //     uploadFile(input_upload_file).then((response) => {
+  //       res.send(response);
+  //     });
+  // });
   input_upload_file.mv(upload_path, function(err) {
     if (err) {
+      console.log('error out');
+      console.log(err);
       return res.status(500).send(err);
     } else {
       // now call async function that uploads to mongoDB
-      uploadFile(user_id, input_upload_file).then((response) => {
+      uploadFile(input_upload_file).then((response) => {
         res.send(response);
       })
     }
@@ -132,7 +151,7 @@ async function getSubdirectory(user_id, subdirectory) {
 /**
 
 */
-async function uploadFile(user_id, input_upload_file) {
+async function uploadFile(input_upload_file) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
       assert.equal(null, err);
@@ -141,15 +160,26 @@ async function uploadFile(user_id, input_upload_file) {
       const db = database.db('cloudf');
       // define bucket
       var bucket = new mongodb.GridFSBucket(db, {
-        bucketName: user_id
+        bucketName: client_state.user_id
       });
       // create upload stream
-      upload_stream = bucket.openUploadStream(input_upload_file);
+      upload_stream = bucket.openUploadStream(input_upload_file.name);
       upload_stream.options.metadata = {
-        date_added: date_added,
-        path: current_path,
-        content_type: content_type
+        date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
+        path: client_state.current_path,
+        content_type: input_upload_file.mimetype
       };
+      // create read stream and pipe
+      fs.createReadStream('./' + input_upload_file.name).
+        pipe(upload_stream).
+        on('error', function(error) {
+          assert.ifError(error);
+        }).
+        on('finish', function() {
+          console.log('done!');
+          database.close();
+          process.exit(0);
+        });
     });
   });
   let result = await promise;

@@ -1,5 +1,5 @@
 let current_file_data = [];
-let current_path;
+let current_path = '/root';
 let files_div = document.getElementById("files");
 //$.when(refreshData()).done(populateDirectoryListing("/root"));
 
@@ -110,7 +110,7 @@ function sendState() {
   // TODO this is hard-coded until we implement user authentication
   const obj = {
     user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
-    user_path: current_path
+    current_path: current_path
   };
   // perform ajax call
   $.ajax({
