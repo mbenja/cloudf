@@ -84,9 +84,19 @@ router.post('/uploadFile', function(req, res) {
       console.log(err);
       return res.status(500).send(err);
     } else {
-      // now call async function that uploads to mongoDB
-      uploadFile(input_upload_file).then((response) => {
-        res.send(response);
+      // ensure no duplicate uploads
+      isInDirectory(client_state.current_path, input_upload_file.name).then((response) => {
+        console.log(response);
+        if (response === true) {
+          // already exists
+          res.send('FILE ALREADY EXISTS');
+        } else {
+          // proceed
+          // now call async function that uploads to mongoDB
+          uploadFile(input_upload_file).then((response) => {
+            res.send(response);
+          })
+        }
       })
     }
   });
@@ -180,6 +190,34 @@ async function uploadFile(input_upload_file) {
 }
 
 /**
+  * Determines if the given file already exists in the given directory
+  * @param {String} path - the directory in question
+  * @param {String} file_name - the file name in question
+  * @returns {Bool} exists - bool of whether or not the file exists
+*/
+async function isInDirectory(path, file_name) {
+  let promise = new Promise(function(resolve, reject) {
+    mongodb.MongoClient.connect(url, function(err, database) {
+      assert.equal(null, err);
+      console.log("Successfully connected to mongoDB");
+
+      const db = database.db('cloudf');
+      db.collection(client_state.user_id + '.files').find({'metadata.path': path, 'filename': file_name}).toArray(function(err, documents) {
+        database.close();
+        resolve(documents);
+      });
+    });
+  });
+  let documents = await promise;
+
+  if (documents.length != 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/**
   * Purges the routes/upload directory
   * To be called after each upload to ensure no data is left outstanding
 */
@@ -189,7 +227,6 @@ function purgeUploadDirectory() {
     if (err) {
       throw err;
     }
-
     // iterate through each file of the directory
     for (const file of files) {
       // remove each file

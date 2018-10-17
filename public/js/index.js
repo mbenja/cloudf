@@ -200,19 +200,25 @@ $('#upload_form').submit(function(e){
     data: form_data,
     contentType: 'application/json',
     success: function(response) {
-     // dismiss modal upon success
-     $('#modal_upload_form').modal('hide');
-     // present snackbar
-     $.snackbar({content: "<strong>Success!</strong> Upload complete."});
-     // refresh front-end
-     refreshData();
+      // dismiss modal upon success
+      $('#modal_upload_form').modal('hide');
+      // show snackbar dependent upon response
+      if (response == 'FILE ALREADY EXISTS') {
+        $.snackbar({content: "<strong>Error:</strong> A file of that name already exists within this directory."});
+      } else {
+        $.snackbar({content: "<strong>Success!</strong> Upload complete."});
+      }
+      // refresh front-end
+      refreshData();
     },
     error: function(response) {
       // dismiss modal
       $('#modal_upload_form').modal('hide');
       // present snackbar
-      $.snackbar({content: "<strong>Error</strong> Upload was not completed."});
+      $.snackbar({content: "<strong>Error:</strong> Upload was not completed."});
      }
   });
+  // reset input
+  document.getElementById("input_upload_file").value = "";
   return false;
 });
