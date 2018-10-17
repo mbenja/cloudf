@@ -167,13 +167,39 @@ async function uploadFile(input_upload_file) {
         }).
         on('finish', function() {
           console.log('File upload complete.');
+          // close database connection
           database.close();
+          // make call to purge temp upload directory
+          purgeUploadDirectory();
           resolve('success');
         });
     });
   });
   let result = await promise;
   return result;
+}
+
+/**
+  * Purges the routes/upload directory
+  * To be called after each upload to ensure no data is left outstanding
+*/
+function purgeUploadDirectory() {
+  // read the directory
+  fs.readdir('./routes/upload', (err, files) => {
+    if (err) {
+      throw err;
+    }
+
+    // iterate through each file of the directory
+    for (const file of files) {
+      // remove each file
+      fs.unlink(path.join('./routes/upload', file), err => {
+        if (err) {
+          throw err;
+        }
+      });
+    }
+  });
 }
 
 module.exports = router;
