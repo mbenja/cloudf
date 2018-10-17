@@ -44,3 +44,17 @@ Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
   * Discussed database implementation
   * Divided up work among team members
   * Planned for next meeting
+
+## Meeting \#4
+Date: Wednesday, October 17, 2018
+
+Time: 11:30 - 11:50 PM
+
+Location: In-class
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed issues implementing upload file function
+  * Discussed current work being done by each member
+  * Discussed future work to be done by each member
+  * Discussed next meeting
