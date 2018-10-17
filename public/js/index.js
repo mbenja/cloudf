@@ -1,11 +1,18 @@
 let current_file_data = [];
 let current_path;
 let files_div = document.getElementById("files");
-$.when(refreshData()).done(populateDirectoryListing("/root"));
+//$.when(refreshData()).done(populateDirectoryListing("/root"));
+
+// calling function to refresh data upon initial page load
+refreshData();
+
+// calling function to populate directory listing once ajax is finished
+$( document ).ajaxStop(function() {
+  populateDirectoryListing('/root');
+});
 
 
 function populateDirectoryListing(path){
-
   // update current path
   current_path = path;
 
@@ -107,14 +114,49 @@ function createDirectory(){
 
 }
 
-function refreshData(){
+function refreshData() {
+  // define data needed on backend
+  // TODO this is hard-coded until we implement user authentication
+  const obj = {
+    user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx'
+  };
+  // perform ajax call
+  $.ajax({
+    url: '/FileInteraction/getRootDirectory',
+    data: obj,
+    success: function (data) {
+      current_file_data = data;
+    },
+    error: function (data) {
+      console.log(data);
+    }
+  });
 
-  let callback = $.Deferred();
 
-  // ajax call to backend here
-  current_file_data = dummy_data;
-  callback.resolve();
-
-  return callback.promise();
+  // let callback = $.Deferred();
+  //
+  // // ajax call to backend here
+  // //current_file_data = dummy_data;
+  //
+  // // define data needed on backend
+  // // TODO this is hard-coded until we implement user authentication
+  // const obj = {
+  //   user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx'
+  // };
+  // // perform ajax call
+  // $.ajax({
+  //   url: '/FileInteraction/getRootDirectory',
+  //   data: obj,
+  //   success: function (data) {
+  //     current_file_data = data;
+  //     console.log(current_file_data);
+  //   },
+  //   error: function (data) {
+  //     console.log(data);
+  //   }
+  // });
+  // callback.resolve();
+  //
+  // return callback.promise();
 
 }
