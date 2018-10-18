@@ -65,7 +65,7 @@ router.get('/getSubdirectory', function(req, res) {
 });
 
 /**
-
+  * Extracts upload_form data and calls for file to be uploaded if not duplicate
 */
 router.post('/uploadFile', function(req, res) {
   console.log("POST /uploadFile");
@@ -100,6 +100,27 @@ router.post('/uploadFile', function(req, res) {
       })
     }
   });
+});
+
+/**
+  * Calls for directory to be created if not duplicate
+*/
+router.get('/createDirectory', function(req, res) {
+  console.log("GET /createDirectory");
+  // ensure no duplicate uploads
+  isInDirectory(client_state.current_path, req.query.directory_name).then((response) => {
+    console.log(response);
+    if (response === true) {
+      // already exists
+      res.send('DIRECTORY ALREADY EXISTS');
+    } else {
+      // proceed
+      // now call async function that uploads to mongoDB
+      createDirectory(req.query.directory_name).then((response) => {
+        res.send(response);
+      })
+    }
+  })
 });
 
 /**
@@ -177,6 +198,53 @@ async function uploadFile(input_upload_file) {
         }).
         on('finish', function() {
           console.log('File upload complete.');
+          // close database connection
+          database.close();
+          // make call to purge temp upload directory
+          purgeUploadDirectory();
+          resolve('success');
+        });
+    });
+  });
+  let result = await promise;
+  return result;
+}
+
+/**
+  * Uploads directory from Node server to mongoDB
+  * @param {Object} directory_name - the directory to be uploaded to mongoDB
+*/
+async function createDirectory(directory_name) {
+  let promise = new Promise(function(resolve, reject) {
+    mongodb.MongoClient.connect(url, function(err, database) {
+      assert.equal(null, err);
+      console.log("Successfully connected to mongoDB");
+
+      const db = database.db('cloudf');
+      // define bucket
+      var bucket = new mongodb.GridFSBucket(db, {
+        bucketName: client_state.user_id
+      });
+      // create upload stream
+      upload_stream = bucket.openUploadStream(directory_name);
+      upload_stream.options.metadata = {
+        date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
+        path: client_state.current_path,
+        content_type: 'directory'
+      };
+      // create new readable stream
+      var upload_stream_path = new Readable();
+      // insert and end file
+      upload_stream_path.push('./routes/upload/directory');
+      upload_stream_path.push(null);
+      // pipe
+      upload_stream_path.
+        pipe(upload_stream).
+        on('error', function(error) {
+          assert.ifError(error);
+        }).
+        on('finish', function() {
+          console.log('Directory creation complete.');
           // close database connection
           database.close();
           // make call to purge temp upload directory

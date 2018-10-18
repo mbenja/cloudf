@@ -129,8 +129,47 @@ function downloadFile(){
 
 }
 
-function createDirectory(){
+/**
+  * Performs back-end call to create a directory in MongoDB
+*/
+function createDirectory() {
+  // send state
+  sendState();
 
+  // get data for back-end
+  // account for empty folder name
+  var directory_name = document.getElementById('input_directory_name').value;
+  if (directory_name == '') {
+    directory_name = 'New Folder';
+  }
+  const obj = {
+    directory_name: directory_name
+  };
+  // perform ajax call
+  $.ajax({
+    url: '/FileInteraction/createDirectory',
+    data: obj,
+    success: function(response) {
+      // dismiss modal upon success
+      $('#modal_create_directory').modal('hide');
+      // show snackbar dependent upon response
+      if (response == 'DIRECTORY ALREADY EXISTS') {
+        $.snackbar({content: "<strong>Error:</strong> A folder of that name already exists within this directory."});
+      } else {
+        $.snackbar({content: "<strong>Success!</strong> Folder creation complete."});
+      }
+      // refresh front-end
+      refreshData();
+    },
+    error: function(response) {
+      // dismiss modal
+      $('#modal_create_directory').modal('hide');
+      // present snackbar
+      $.snackbar({content: "<strong>Error:</strong> Folder creation was not completed."});
+     }
+  });
+  // reset input
+  document.getElementById("input_directory_name").value = "";
 }
 
 /**
