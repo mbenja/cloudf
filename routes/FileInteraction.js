@@ -23,8 +23,11 @@ var client_state = {
   current_path: ''
 };
 
+// Defining port
+const port = '27017';
+
 // Defining DB URL
-var url = 'mongodb://localhost:32768/cloudf';
+const url = 'mongodb://mongo:' + port + '/cloudf';
 
 // TODO this is temporarily hard-coded until we implement user authentication
 var user_id = 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx';
