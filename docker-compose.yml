@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - ./dbs/mongo:/data/db
+
+  mysql:
+    image: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - ./dbs/mysql:/var/lib/mysql
+
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: exampler
+    ports:
+      - 3000:3000
+    depends_on:
+    - mongo
+    - mysql
