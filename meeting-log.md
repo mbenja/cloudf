@@ -58,3 +58,15 @@ Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
   * Discussed current work being done by each member
   * Discussed future work to be done by each member
   * Discussed next meeting
+
+## Meeting \#5
+Date: Friday, October 18, 2018
+
+Time: 11:30 - 11:50 PM
+
+Location: In-class
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed work done so far and work to be done before code freeze
+  * Discussed implementation of several back-end functions
