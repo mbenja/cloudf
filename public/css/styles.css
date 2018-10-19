@@ -46,10 +46,33 @@ body {
 #uploadFile {
   background-image: url("/images/flaticon/upload-to-cloud.png");
   right: 0px;
+
+  top: 30px;
+  left: -15%;
 }
 
 #newFolder {
   background-image: url("/images/flaticon/new-add-folder.png");
+
+  top: 30px;
+  left: 36%;
+}
+
+#deleteFile {
+  background-image: url("/images/flaticon/delete.png");
+  right: 0px;
+
+  top: 30px;
+  left: -1000%;
+  visibility: hidden;
+}
+
+#downloadFile {
+  background-image: url("/images/flaticon/cloud-computing.png");
+
+  top: 30px;
+  left: -1050%;
+  visibility: hidden;
 }
 
 .circleButton {
@@ -93,6 +116,6 @@ body {
 /**
   * Styling for upload form modal, create directory modal
 */
-#modal_upload_form_content, #modal_create_directory_content {
+#modal_upload_form_content, #modal_create_directory_content, #modal_delete_file, #modal_download_file{
   background-color: #E6CCBE;
 }

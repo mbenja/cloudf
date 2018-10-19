@@ -9,6 +9,7 @@ let files_div = document.getElementById("files");
 refreshData();
 
 function populateDirectoryListing(path){
+
   // update current path
   current_path = path;
 
@@ -34,14 +35,15 @@ function populateDirectoryListing(path){
     // set css class and onlick attributes based on file type
     if(cur_type == "parent"){
       file_card.setAttribute("class", "card parent");
-      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + current_path.split('/').splice(0, current_path.split('/').length-1).join('/') + "\");");
+      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + current_path.split('/').splice(0, current_path.split('/').length-1).join('/') + "\"); showHideDownloadDelete(false);");
     }
     else if(cur_type == "directory"){
       file_card.setAttribute("class", "card directory");
-      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + path + "/" + files_in_path[i].filename + "\")")
+      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + path + "/" + files_in_path[i].filename + "\"); showHideDownloadDelete(false);")
     }
     else{
       file_card.setAttribute("class", "card file");
+      file_card.setAttribute("onclick", "showHideDownloadDelete(true)")
     }
 
     // create body for file type image and name
@@ -126,6 +128,21 @@ function populateBreadcrumbs(path){
 
     }
 }
+
+//Show Delete and Download floatingButtons
+function showHideDownloadDelete(show){
+  if(show) {
+    document.getElementById('deleteFile').style.visibility = "visible";
+    document.getElementById('downloadFile').style.visibility = "visible";
+  }
+  else {
+    document.getElementById('deleteFile').style.visibility = "hidden";
+    document.getElementById('downloadFile').style.visibility = "hidden";
+  }
+
+}
+
+
 
 function populateSidebar(){
 
