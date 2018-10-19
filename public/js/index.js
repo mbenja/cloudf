@@ -4,9 +4,9 @@ let current_breadcrumb_path;
 let current_breadcrumb_parents = 0;
 let current_path_sections = 0;
 let files_div = document.getElementById("files");
-$.when(refreshData()).done(() => { populateDirectoryListing("/root"); });
+//$.when(refreshData()).done(() => { populateDirectoryListing("/root"); });
 
-
+refreshData();
 
 function populateDirectoryListing(path){
   // update current path
@@ -227,6 +227,7 @@ function refreshData() {
     data: obj,
     success: function (data) {
       current_file_data = data;
+      populateDirectoryListing('/root');
       callback.resolve();
     },
     error: function (data) {
