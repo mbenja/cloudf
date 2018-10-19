@@ -4,15 +4,8 @@ let current_breadcrumb_path;
 let current_breadcrumb_parents = 0;
 let current_path_sections = 0;
 let files_div = document.getElementById("files");
-//$.when(refreshData()).done(populateDirectoryListing("/root"));
+$.when(refreshData()).done(() => { populateDirectoryListing("/root"); });
 
-// calling function to refresh data upon initial page load
-refreshData();
-
-// calling function to populate directory listing once ajax is finished
-$( document ).ajaxStop(function() {
-  populateDirectoryListing('/root');
-});
 
 
 function populateDirectoryListing(path){
@@ -222,6 +215,9 @@ function createDirectory() {
 function refreshData() {
   // define data needed on backend
   // TODO this is hard-coded until we implement user authentication
+
+  let callback = $.Deferred();
+
   const obj = {
     user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx'
   };
@@ -231,13 +227,17 @@ function refreshData() {
     data: obj,
     success: function (data) {
       current_file_data = data;
+      callback.resolve();
     },
     error: function (data) {
       console.log(data);
+      callback.reject();
     }
   });
   // call to send client state
   sendState();
+
+  return callback.promise();
 
 
   // let callback = $.Deferred();
