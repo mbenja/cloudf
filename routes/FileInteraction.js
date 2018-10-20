@@ -89,10 +89,11 @@ router.post('/uploadFile', function(req, res) {
     } else {
       // ensure no duplicate uploads
       isInDirectory(client_state.current_path, input_upload_file.name).then((response) => {
-        console.log(response);
         if (response === true) {
           // already exists
           res.send('FILE ALREADY EXISTS');
+        } else if (response == 'BROKEN PIPE') {
+          res.send(response);
         } else {
           // proceed
           // now call async function that uploads to mongoDB
@@ -112,10 +113,11 @@ router.get('/createDirectory', function(req, res) {
   console.log("GET /createDirectory");
   // ensure no duplicate uploads
   isInDirectory(client_state.current_path, req.query.directory_name).then((response) => {
-    console.log(response);
     if (response === true) {
       // already exists
       res.send('DIRECTORY ALREADY EXISTS');
+    } else if (response == 'BROKEN PIPE') {
+      res.send(response);
     } else {
       // proceed
       // now call async function that uploads to mongoDB
@@ -134,14 +136,18 @@ router.get('/createDirectory', function(req, res) {
 async function getRootDirectory(user_id) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
-      assert.equal(null, err);
-      console.log("Successfully connected to mongoDB");
+      // handle bad connection to mongoDB
+      if (database == null) {
+        resolve('BROKEN PIPE');
+      } else {
+        console.log("Successfully connected to mongoDB");
 
-      const db = database.db('cloudf');
-      db.collection(user_id + '.files').find().toArray(function(err, documents) {
-        database.close();
-        resolve(documents);
-      });
+        const db = database.db('cloudf');
+        db.collection(user_id + '.files').find().toArray(function(err, documents) {
+          database.close();
+          resolve(documents);
+        });
+      }
     });
   });
   let documents = await promise;
@@ -157,14 +163,18 @@ async function getRootDirectory(user_id) {
 async function getSubdirectory(user_id, subdirectory) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
-      assert.equal(null, err);
-      console.log("Successfully connected to mongoDB");
+      // handle bad connection to mongoDB
+      if (database == null) {
+        resolve('BROKEN PIPE');
+      } else {
+        console.log("Successfully connected to mongoDB");
 
-      const db = database.db('cloudf');
-      db.collection(user_id + '.files').find({'metadata.path': subdirectory}).toArray(function(err, documents) {
-        database.close();
-        resolve(documents);
-      });
+        const db = database.db('cloudf');
+        db.collection(user_id + '.files').find({'metadata.path': subdirectory}).toArray(function(err, documents) {
+          database.close();
+          resolve(documents);
+        });
+      }
     });
   });
   let documents = await promise;
@@ -178,35 +188,39 @@ async function getSubdirectory(user_id, subdirectory) {
 async function uploadFile(input_upload_file) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
-      assert.equal(null, err);
-      console.log("Successfully connected to mongoDB");
+      // handle bad connection to mongoDB
+      if (database == null) {
+        resolve('BROKEN PIPE');
+      } else {
+        console.log("Successfully connected to mongoDB");
 
-      const db = database.db('cloudf');
-      // define bucket
-      var bucket = new mongodb.GridFSBucket(db, {
-        bucketName: client_state.user_id
-      });
-      // create upload stream
-      upload_stream = bucket.openUploadStream(input_upload_file.name);
-      upload_stream.options.metadata = {
-        date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
-        path: client_state.current_path,
-        content_type: input_upload_file.mimetype
-      };
-      // create read stream and pipe
-      fs.createReadStream('./routes/upload/' + input_upload_file.name).
-        pipe(upload_stream).
-        on('error', function(error) {
-          assert.ifError(error);
-        }).
-        on('finish', function() {
-          console.log('File upload complete.');
-          // close database connection
-          database.close();
-          // make call to purge temp upload directory
-          purgeUploadDirectory();
-          resolve('success');
+        const db = database.db('cloudf');
+        // define bucket
+        var bucket = new mongodb.GridFSBucket(db, {
+          bucketName: client_state.user_id
         });
+        // create upload stream
+        upload_stream = bucket.openUploadStream(input_upload_file.name);
+        upload_stream.options.metadata = {
+          date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
+          path: client_state.current_path,
+          content_type: input_upload_file.mimetype
+        };
+        // create read stream and pipe
+        fs.createReadStream('./routes/upload/' + input_upload_file.name).
+          pipe(upload_stream).
+          on('error', function(error) {
+            assert.ifError(error);
+          }).
+          on('finish', function() {
+            console.log('File upload complete.');
+            // close database connection
+            database.close();
+            // make call to purge temp upload directory
+            purgeUploadDirectory();
+            resolve('success');
+          });
+      }
     });
   });
   let result = await promise;
@@ -220,40 +234,44 @@ async function uploadFile(input_upload_file) {
 async function createDirectory(directory_name) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
-      assert.equal(null, err);
-      console.log("Successfully connected to mongoDB");
+      // handle bad connection to mongoDB
+      if (database == null) {
+        resolve('BROKEN PIPE');
+      } else {
+        console.log("Successfully connected to mongoDB");
 
-      const db = database.db('cloudf');
-      // define bucket
-      var bucket = new mongodb.GridFSBucket(db, {
-        bucketName: client_state.user_id
-      });
-      // create upload stream
-      upload_stream = bucket.openUploadStream(directory_name);
-      upload_stream.options.metadata = {
-        date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
-        path: client_state.current_path,
-        content_type: 'directory'
-      };
-      // create new readable stream
-      var upload_stream_path = new Readable();
-      // insert and end file
-      upload_stream_path.push('./routes/upload/directory');
-      upload_stream_path.push(null);
-      // pipe
-      upload_stream_path.
-        pipe(upload_stream).
-        on('error', function(error) {
-          assert.ifError(error);
-        }).
-        on('finish', function() {
-          console.log('Directory creation complete.');
-          // close database connection
-          database.close();
-          // make call to purge temp upload directory
-          purgeUploadDirectory();
-          resolve('success');
+        const db = database.db('cloudf');
+        // define bucket
+        var bucket = new mongodb.GridFSBucket(db, {
+          bucketName: client_state.user_id
         });
+        // create upload stream
+        upload_stream = bucket.openUploadStream(directory_name);
+        upload_stream.options.metadata = {
+          date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
+          path: client_state.current_path,
+          content_type: 'directory'
+        };
+        // create new readable stream
+        var upload_stream_path = new Readable();
+        // insert and end file
+        upload_stream_path.push('./routes/upload/directory');
+        upload_stream_path.push(null);
+        // pipe
+        upload_stream_path.
+          pipe(upload_stream).
+          on('error', function(error) {
+            assert.ifError(error);
+          }).
+          on('finish', function() {
+            console.log('Directory creation complete.');
+            // close database connection
+            database.close();
+            // make call to purge temp upload directory
+            purgeUploadDirectory();
+            resolve('success');
+          });
+      }
     });
   });
   let result = await promise;
@@ -269,22 +287,30 @@ async function createDirectory(directory_name) {
 async function isInDirectory(path, file_name) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
-      assert.equal(null, err);
-      console.log("Successfully connected to mongoDB");
+      // handle bad connection to mongoDB
+      if (database == null) {
+        resolve('BROKEN PIPE');
+      } else {
+        console.log("Successfully connected to mongoDB");
 
-      const db = database.db('cloudf');
-      db.collection(client_state.user_id + '.files').find({'metadata.path': path, 'filename': file_name}).toArray(function(err, documents) {
-        database.close();
-        resolve(documents);
-      });
+        const db = database.db('cloudf');
+        db.collection(client_state.user_id + '.files').find({'metadata.path': path, 'filename': file_name}).toArray(function(err, documents) {
+          database.close();
+          resolve(documents);
+        });
+      }
     });
   });
   let documents = await promise;
 
-  if (documents.length != 0) {
-    return true;
+  if (documents == 'BROKEN PIPE') {
+    return documents;
   } else {
-    return false;
+    if (documents.length != 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 

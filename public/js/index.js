@@ -192,11 +192,13 @@ function createDirectory() {
       // show snackbar dependent upon response
       if (response == 'DIRECTORY ALREADY EXISTS') {
         $.snackbar({content: "<strong>Error:</strong> A folder of that name already exists within this directory."});
+      } else if (response == 'BROKEN PIPE') {
+        $.snackbar({content: "<strong>Error:</strong> Servers are down."});
       } else {
         $.snackbar({content: "<strong>Success!</strong> Folder creation complete."});
+        // refresh front-end
+        refreshData();
       }
-      // refresh front-end
-      refreshData();
     },
     error: function(response) {
       // dismiss modal
@@ -226,8 +228,13 @@ function refreshData() {
     url: '/FileInteraction/getRootDirectory',
     data: obj,
     success: function (data) {
-      current_file_data = data;
-      populateDirectoryListing('/root');
+      // present error if broken pipe
+      if (data == 'BROKEN PIPE') {
+        $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+      } else {
+        current_file_data = data;
+        populateDirectoryListing('/root');
+      }
       callback.resolve();
     },
     error: function (data) {
@@ -289,11 +296,13 @@ $('#upload_form').submit(function(e){
       // show snackbar dependent upon response
       if (response == 'FILE ALREADY EXISTS') {
         $.snackbar({content: "<strong>Error:</strong> A file of that name already exists within this directory."});
+      } else if (response == 'BROKEN PIPE') {
+        $.snackbar({content: "<strong>Error:</strong> Servers are down."});
       } else {
         $.snackbar({content: "<strong>Success!</strong> Upload complete."});
+        // refresh front-end
+        refreshData();
       }
-      // refresh front-end
-      refreshData();
     },
     error: function(response) {
       // dismiss modal
