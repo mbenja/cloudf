@@ -43,12 +43,9 @@ function populateDirectoryListing(path){
     }
     else{
       file_card.setAttribute("class", "card file");
-<<<<<<< HEAD
-      file_card.setAttribute("onclick", "showHideDownloadDelete(true)")
-=======
+      //file_card.setAttribute("onclick", "showHideDownloadDelete(true)")
       // set onclick event to show sidebar
       file_card.setAttribute("onclick", "showSidebar(" + files_in_path[i].index + ");")
->>>>>>> master
     }
 
     // create body for file type image and name
