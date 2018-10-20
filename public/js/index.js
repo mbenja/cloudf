@@ -147,10 +147,12 @@ function showHideDownloadDelete(show){
 function showSidebar(index) {
     populateSidebar(index);
     document.getElementById("file_sidebar").removeAttribute('disabled')
+    showHideDownloadDelete(true);
 }
 
 function hideSidebar() {
     document.getElementById("file_sidebar").setAttribute('disabled', true)
+    showHideDownloadDelete(false);
 }
 
 function populateSidebar(index){

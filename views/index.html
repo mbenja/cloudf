@@ -33,8 +33,7 @@
       <div class="floatingButtons">
         <div class="circleButton" id="uploadFile" onclick="$('#modal_upload_form').modal('show');"> </div>
         <div class="circleButton" id="newFolder" onclick="$('#modal_create_directory').modal('show');"> </div>
-        <div class="circleButton" id="deleteFile" onclick="$('#modal_delete_file').modal('show');"> </div>
-        <div class="circleButton" id="downloadFile" onclick="$('#modal_download_file').modal('show');"> </div>
+
       </div>
     </div>
 
@@ -168,6 +167,8 @@
 
     <!-- div for file data display sidebar -->
     <div id="file_sidebar" class="sidebar" disabled>
+      <div class="circleButton" id="deleteFile" onclick="$('#modal_delete_file').modal('show');"> </div>
+      <div class="circleButton" id="downloadFile" onclick="$('#modal_download_file').modal('show');"> </div>
       <a href="javascript:void(0)" class="close" onclick="hideSidebar()">&times;</a>
       <p id="data-filename"></p>
       <p id="data-filetype"></p>

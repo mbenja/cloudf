@@ -63,16 +63,16 @@ body {
   background-image: url("/images/flaticon/delete.png");
   right: 0px;
 
-  top: 30px;
-  left: -1000%;
+  top: 10px;
+  left: 40%;
   visibility: hidden;
 }
 
 #downloadFile {
   background-image: url("/images/flaticon/cloud-computing.png");
 
-  top: 30px;
-  left: -1050%;
+  top: 10px;
+  left: 10%;
   visibility: hidden;
 }
 
@@ -94,7 +94,7 @@ body {
   width: 100px;
 
   position: relative;
-  top: 30px;
+  top: 400px;
   left: 95%;
 }
 
