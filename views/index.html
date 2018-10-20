@@ -16,7 +16,7 @@
 
   <body>
     <div class="container">
-      <img src="/images/cloudf.png" style="width:10%">
+      <img src="/images/cloudf.png" style="height:10vh;">
       <!-- put current username and logout button here -->
     </div>
     <div class="container" id="main_container">
@@ -103,6 +103,13 @@
       </div>
     </div>
 
+    <!-- div for file data display sidebar -->
+    <div id="file_sidebar" class="sidebar" disabled>
+      <a href="javascript:void(0)" class="close" onclick="hideSidebar()">&times;</a>
+      <p id="data-filename"></p>
+      <p id="data-filetype"></p>
+      <p id="data-adddate"></p>
+    </div>
 
     <!-- jQuery first, then Popper.js, SnackbarJS, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -116,5 +123,6 @@
     <script src="js/icons_map.js"></script>
     <script src="js/dummy.js"></script>
     <script src="js/index.js"></script>
+
   </body>
 </html>

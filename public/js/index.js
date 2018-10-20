@@ -42,6 +42,8 @@ function populateDirectoryListing(path){
     }
     else{
       file_card.setAttribute("class", "card file");
+      // set onclick event to show sidebar
+      file_card.setAttribute("onclick", "showSidebar(" + files_in_path[i].index + ");")
     }
 
     // create body for file type image and name
@@ -127,7 +129,19 @@ function populateBreadcrumbs(path){
     }
 }
 
-function populateSidebar(){
+function showSidebar(index) {
+    populateSidebar(index);
+    document.getElementById("file_sidebar").removeAttribute('disabled')
+}
+
+function hideSidebar() {
+    document.getElementById("file_sidebar").setAttribute('disabled', true)
+}
+
+function populateSidebar(index){
+  document.getElementById("data-filename").innerHTML = current_file_data[index].filename;
+  document.getElementById("data-filetype").innerHTML = current_file_data[index].metadata.content_type;
+  document.getElementById("data-adddate").innerHTML = current_file_data[index].metadata.date_added;
 
 }
 
@@ -232,7 +246,7 @@ function refreshData() {
       if (data == 'BROKEN PIPE') {
         $.snackbar({content: "<strong>Error:</strong> Servers are down."});
       } else {
-        current_file_data = data;
+        current_file_data = data.map((val, ind) => { val.index = ind; return val; });
         populateDirectoryListing('/root');
       }
       callback.resolve();

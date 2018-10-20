@@ -21,6 +21,7 @@ body {
   border: 2px solid black;
   padding: 1vw;
   border-radius: 1vw;
+  min-height: 80vh;
   /*overflow: scroll;*/
 }
 
@@ -62,6 +63,7 @@ body {
   cursor: pointer;
 
   position: absolute;
+  z-index: 2;
 }
 
 .floatingButtons {
@@ -95,4 +97,41 @@ body {
 */
 #modal_upload_form_content, #modal_create_directory_content {
   background-color: #E6CCBE;
+}
+
+.sidebar {
+  right: 0px;
+  height: 70vh;
+  width: 200px;
+  position: fixed;
+  z-index: 1;
+  top: 10vh;
+  transition: 0.5s;
+  padding-top: 10vh;
+  background-color: white;
+  border: 2px solid black;
+  /*padding: 1vw;*/
+  border-radius: 1vw;
+}
+.sidebar[disabled]{
+  right: -200px;
+}
+@media (min-width: 576px) {
+  .sidebar {
+    right: calc(50vw - 270px); } }
+@media (min-width: 768px) {
+  .sidebar {
+    right: calc(50vw - 360px); } }
+@media (min-width: 992px) {
+  .sidebar {
+    right: calc(50vw - 480px); } }
+@media (min-width: 1200px) {
+  .sidebar {
+    right: calc(50vw - 570px); } }
+
+.sidebar .close {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
 }
