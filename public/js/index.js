@@ -5,6 +5,7 @@ let current_breadcrumb_parents = 0;
 let current_path_sections = 0;
 let files_div = document.getElementById("files");
 //$.when(refreshData()).done(() => { populateDirectoryListing("/root"); });
+let selected_index = 0;
 
 refreshData();
 
@@ -145,14 +146,15 @@ function showHideDownloadDelete(show){
 }
 
 function showSidebar(index) {
-    populateSidebar(index);
-    document.getElementById("file_sidebar").removeAttribute('disabled')
-    showHideDownloadDelete(true);
+  selected_index = index;
+  populateSidebar(index);
+  document.getElementById("file_sidebar").removeAttribute('disabled')
+  showHideDownloadDelete(true);
 }
 
 function hideSidebar() {
-    document.getElementById("file_sidebar").setAttribute('disabled', true)
-    showHideDownloadDelete(false);
+  document.getElementById("file_sidebar").setAttribute('disabled', true)
+  showHideDownloadDelete(false);
 }
 
 function populateSidebar(index){
@@ -163,8 +165,39 @@ function populateSidebar(index){
 
 }
 
-function deleteFile(){
-
+/**
+  * Sends necessary data to backe-end for call to delete file
+*/
+function deleteFile() {
+  console.log(current_file_data[selected_index]);
+  // update state variables in back-end
+  sendState();
+  // define object to be sent to back-end
+  const obj = {
+    file_id: current_file_data[selected_index]["_id"]
+  };
+  // perform ajax call
+  $.ajax({
+    url: '/FileInteraction/deleteFile',
+    data: obj,
+    success: function (response) {
+      // dismiss delete modal
+      $('#modal_delete_file').modal('hide');
+      // hide sidebar
+      hideSidebar();
+      // show snackbar dependent upon response
+      if (response == 'BROKEN PIPE') {
+        $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+      } else {
+        $.snackbar({content: "<strong>Success!</strong> The file has been deleted."});
+        // refresh front-end
+        refreshData();
+      }
+    },
+    error: function (data) {
+      console.log(data);
+    }
+  });
 }
 
 function editFileName(){

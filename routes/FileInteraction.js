@@ -129,6 +129,16 @@ router.get('/createDirectory', function(req, res) {
 });
 
 /**
+  * Calls for file to be deleted
+*/
+router.get('/deleteFile', function(req, res) {
+  console.log("GET /deleteFile");
+  deleteFile(req.query.file_id).then((response) => {
+    res.send(response);
+  })
+});
+
+/**
   * Retrieves an array of all documents within root directory of user collection
   * @param {String} user_id - the user id to retrieve root directory for
   * @returns {Array} documents - an array of document objects
@@ -276,6 +286,30 @@ async function createDirectory(directory_name) {
   });
   let result = await promise;
   return result;
+}
+
+/**
+  * Deletes specified file by ID
+  * @param {String} file_id - unique file id of file to be deleted
+*/
+async function deleteFile(file_id) {
+  console.log(file_id);
+  let promise = new Promise(function(resolve, reject) {
+    mongodb.MongoClient.connect(url, function(err, database) {
+      // handle bad connection to mongoDB
+      if (database == null) {
+        resolve('BROKEN PIPE');
+      } else {
+        console.log("Successfully connected to mongoDB");
+
+        const db = database.db('cloudf');
+        db.collection(client_state.user_id + '.files').deleteOne({_id: new mongodb.ObjectID(file_id)}, function(err, response) {
+          database.close();
+          resolve(response);
+        });
+      }
+    });
+  });
 }
 
 /**
