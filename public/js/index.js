@@ -43,7 +43,12 @@ function populateDirectoryListing(path){
     }
     else{
       file_card.setAttribute("class", "card file");
+<<<<<<< HEAD
       file_card.setAttribute("onclick", "showHideDownloadDelete(true)")
+=======
+      // set onclick event to show sidebar
+      file_card.setAttribute("onclick", "showSidebar(" + files_in_path[i].index + ");")
+>>>>>>> master
     }
 
     // create body for file type image and name
@@ -142,9 +147,20 @@ function showHideDownloadDelete(show){
 
 }
 
+function showSidebar(index) {
+    populateSidebar(index);
+    document.getElementById("file_sidebar").removeAttribute('disabled')
+}
 
+function hideSidebar() {
+    document.getElementById("file_sidebar").setAttribute('disabled', true)
+}
 
-function populateSidebar(){
+function populateSidebar(index){
+  document.getElementById("data-filename").innerHTML = current_file_data[index].filename;
+  document.getElementById("data-filetype").innerHTML = current_file_data[index].metadata.content_type;
+  document.getElementById("data-adddate").innerHTML = current_file_data[index].metadata.date_added;
+
 
 }
 
@@ -209,11 +225,13 @@ function createDirectory() {
       // show snackbar dependent upon response
       if (response == 'DIRECTORY ALREADY EXISTS') {
         $.snackbar({content: "<strong>Error:</strong> A folder of that name already exists within this directory."});
+      } else if (response == 'BROKEN PIPE') {
+        $.snackbar({content: "<strong>Error:</strong> Servers are down."});
       } else {
         $.snackbar({content: "<strong>Success!</strong> Folder creation complete."});
+        // refresh front-end
+        refreshData();
       }
-      // refresh front-end
-      refreshData();
     },
     error: function(response) {
       // dismiss modal
@@ -243,8 +261,13 @@ function refreshData() {
     url: '/FileInteraction/getRootDirectory',
     data: obj,
     success: function (data) {
-      current_file_data = data;
-      populateDirectoryListing('/root');
+      // present error if broken pipe
+      if (data == 'BROKEN PIPE') {
+        $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+      } else {
+        current_file_data = data.map((val, ind) => { val.index = ind; return val; });
+        populateDirectoryListing('/root');
+      }
       callback.resolve();
     },
     error: function (data) {
@@ -306,11 +329,13 @@ $('#upload_form').submit(function(e){
       // show snackbar dependent upon response
       if (response == 'FILE ALREADY EXISTS') {
         $.snackbar({content: "<strong>Error:</strong> A file of that name already exists within this directory."});
+      } else if (response == 'BROKEN PIPE') {
+        $.snackbar({content: "<strong>Error:</strong> Servers are down."});
       } else {
         $.snackbar({content: "<strong>Success!</strong> Upload complete."});
+        // refresh front-end
+        refreshData();
       }
-      // refresh front-end
-      refreshData();
     },
     error: function(response) {
       // dismiss modal
