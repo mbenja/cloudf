@@ -5,10 +5,12 @@ let current_breadcrumb_parents = 0;
 let current_path_sections = 0;
 let files_div = document.getElementById("files");
 //$.when(refreshData()).done(() => { populateDirectoryListing("/root"); });
+let selected_index = 0;
 
 refreshData();
 
 function populateDirectoryListing(path){
+
   // update current path
   current_path = path;
 
@@ -34,14 +36,15 @@ function populateDirectoryListing(path){
     // set css class and onlick attributes based on file type
     if(cur_type == "parent"){
       file_card.setAttribute("class", "card parent");
-      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + current_path.split('/').splice(0, current_path.split('/').length-1).join('/') + "\");");
+      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + current_path.split('/').splice(0, current_path.split('/').length-1).join('/') + "\"); showHideDownloadDelete(false);");
     }
     else if(cur_type == "directory"){
       file_card.setAttribute("class", "card directory");
-      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + path + "/" + files_in_path[i].filename + "\")")
+      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + path + "/" + files_in_path[i].filename + "\"); showHideDownloadDelete(false);")
     }
     else{
       file_card.setAttribute("class", "card file");
+      //file_card.setAttribute("onclick", "showHideDownloadDelete(true)")
       // set onclick event to show sidebar
       file_card.setAttribute("onclick", "showSidebar(" + files_in_path[i].index + ");")
     }
@@ -129,13 +132,29 @@ function populateBreadcrumbs(path){
     }
 }
 
+//Show Delete and Download floatingButtons
+function showHideDownloadDelete(show){
+  if(show) {
+    document.getElementById('deleteFile').style.visibility = "visible";
+    document.getElementById('downloadFile').style.visibility = "visible";
+  }
+  else {
+    document.getElementById('deleteFile').style.visibility = "hidden";
+    document.getElementById('downloadFile').style.visibility = "hidden";
+  }
+
+}
+
 function showSidebar(index) {
-    populateSidebar(index);
-    document.getElementById("file_sidebar").removeAttribute('disabled')
+  selected_index = index;
+  populateSidebar(index);
+  document.getElementById("file_sidebar").removeAttribute('disabled')
+  showHideDownloadDelete(true);
 }
 
 function hideSidebar() {
-    document.getElementById("file_sidebar").setAttribute('disabled', true)
+  document.getElementById("file_sidebar").setAttribute('disabled', true)
+  showHideDownloadDelete(false);
 }
 
 function populateSidebar(index){
@@ -143,10 +162,75 @@ function populateSidebar(index){
   document.getElementById("data-filetype").innerHTML = current_file_data[index].metadata.content_type;
   document.getElementById("data-adddate").innerHTML = current_file_data[index].metadata.date_added;
 
+
 }
 
-function deleteFile(){
+/**
+  * Sends necessary data to back-end for call to delete file
+*/
+function deleteFile() {
+  // update state variables in back-end
+  sendState();
+  // define object to be sent to back-end
+  const obj = {
+    file_id: current_file_data[selected_index]["_id"]
+  };
+  // perform ajax call
+  $.ajax({
+    url: '/FileInteraction/deleteFile',
+    data: obj,
+    success: function (response) {
+      // dismiss delete modal
+      $('#modal_delete_file').modal('hide');
+      // hide sidebar
+      hideSidebar();
+      // show snackbar dependent upon response
+      if (response == 'BROKEN PIPE') {
+        $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+      } else {
+        $.snackbar({content: "<strong>Success!</strong> The file has been deleted."});
+        // refresh front-end
+        refreshData();
+      }
+    },
+    error: function (data) {
+      console.log(data);
+    }
+  });
+}
 
+/**
+  * Sends necessary data to back-end for call to download file
+*/
+function downloadFile() {
+  // update state variables in back-end
+  sendState();
+  // define object to be sent to back-end
+  const obj = {
+    file_id: current_file_data[selected_index]["_id"],
+    file_name: current_file_data[selected_index]["filename"]
+  };
+  window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name);
+  // // perform ajax call
+  // $.ajax({
+  //   url: '/FileInteraction/downloadFile',
+  //   data: obj,
+  //   success: function (response) {
+  //     // hide sidebar
+  //     hideSidebar();
+  //     // show snackbar dependent upon response
+  //     if (response == 'BROKEN PIPE') {
+  //       $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+  //     } else {
+  //       $.snackbar({content: "<strong>Success!</strong> The file has been downloaded."});
+  //       // refresh front-end
+  //       refreshData();
+  //     }
+  //   },
+  //   error: function (data) {
+  //     console.log(data);
+  //   }
+  // });
 }
 
 function editFileName(){
@@ -174,10 +258,6 @@ function sendState() {
       console.log(data);
     }
   });
-}
-
-function downloadFile(){
-
 }
 
 /**
