@@ -10,6 +10,7 @@ var dateFormat = require('dateformat');
 var Readable = require('stream').Readable;
 const fileUpload = require('express-fileupload');
 var path = require('path');
+var mime = require('mime');
 router.use(fileUpload());
 
 // setting up static folder
@@ -135,6 +136,19 @@ router.get('/deleteFile', function(req, res) {
   console.log("GET /deleteFile");
   deleteFile(req.query.file_id).then((response) => {
     res.send(response);
+  })
+});
+
+/**
+  * Calls for file to be downloaded
+*/
+router.get('/downloadFile', function(req, res) {
+  console.log("GET /downloadFile");
+  downloadFile(req.query).then((response) => {
+    // download
+    res.download(response, req.query.file_name);
+    // purge download directory
+    purgeDownloadDirectory();
   })
 });
 
@@ -293,7 +307,6 @@ async function createDirectory(directory_name) {
   * @param {String} file_id - unique file id of file to be deleted
 */
 async function deleteFile(file_id) {
-  console.log(file_id);
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
       // handle bad connection to mongoDB
@@ -310,6 +323,45 @@ async function deleteFile(file_id) {
       }
     });
   });
+}
+
+/**
+  * Places specified file on Node server and sends path back to router
+  * @param {Object} file_object - unique file to be downloaded
+  * @returns {String} path of file to be downloaded
+*/
+async function downloadFile(file_object) {
+  let promise = new Promise(function(resolve, reject) {
+    mongodb.MongoClient.connect(url, function(err, database) {
+      // handle bad connection to mongoDB
+      if (database == null) {
+        resolve('BROKEN PIPE');
+      } else {
+        console.log("Successfully connected to mongoDB");
+
+        const db = database.db('cloudf');
+        // create name of file for Node server
+        const download_name = file_object["file_name"];
+
+        // define bucket
+        var bucket = new mongodb.GridFSBucket(db, {
+          bucketName: client_state.user_id
+        });
+
+        bucket.openDownloadStream(new mongodb.ObjectID(file_object["file_id"])).
+        pipe(fs.createWriteStream('./routes/download/' + download_name)).
+        on('error', function(error) {
+          assert.ifError(error);
+        }).
+        on('finish', function() {
+          resolve('./routes/download/' + download_name);
+        });
+      }
+    });
+  });
+
+  let download_path = await promise;
+  return download_path;
 }
 
 /**
@@ -362,6 +414,28 @@ function purgeUploadDirectory() {
     for (const file of files) {
       // remove each file
       fs.unlink(path.join('./routes/upload', file), err => {
+        if (err) {
+          throw err;
+        }
+      });
+    }
+  });
+}
+
+/**
+  * Purges the routes/download directory
+  * To be called after each download to ensure no data is left outstanding
+*/
+function purgeDownloadDirectory() {
+  // read the directory
+  fs.readdir('./routes/download', (err, files) => {
+    if (err) {
+      throw err;
+    }
+    // iterate through each file of the directory
+    for (const file of files) {
+      // remove each file
+      fs.unlink(path.join('./routes/download', file), err => {
         if (err) {
           throw err;
         }

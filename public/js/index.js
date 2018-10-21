@@ -166,10 +166,9 @@ function populateSidebar(index){
 }
 
 /**
-  * Sends necessary data to backe-end for call to delete file
+  * Sends necessary data to back-end for call to delete file
 */
 function deleteFile() {
-  console.log(current_file_data[selected_index]);
   // update state variables in back-end
   sendState();
   // define object to be sent to back-end
@@ -200,6 +199,40 @@ function deleteFile() {
   });
 }
 
+/**
+  * Sends necessary data to back-end for call to download file
+*/
+function downloadFile() {
+  // update state variables in back-end
+  sendState();
+  // define object to be sent to back-end
+  const obj = {
+    file_id: current_file_data[selected_index]["_id"],
+    file_name: current_file_data[selected_index]["filename"]
+  };
+  window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name);
+  // // perform ajax call
+  // $.ajax({
+  //   url: '/FileInteraction/downloadFile',
+  //   data: obj,
+  //   success: function (response) {
+  //     // hide sidebar
+  //     hideSidebar();
+  //     // show snackbar dependent upon response
+  //     if (response == 'BROKEN PIPE') {
+  //       $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+  //     } else {
+  //       $.snackbar({content: "<strong>Success!</strong> The file has been downloaded."});
+  //       // refresh front-end
+  //       refreshData();
+  //     }
+  //   },
+  //   error: function (data) {
+  //     console.log(data);
+  //   }
+  // });
+}
+
 function editFileName(){
 
 }
@@ -225,10 +258,6 @@ function sendState() {
       console.log(data);
     }
   });
-}
-
-function downloadFile(){
-
 }
 
 /**
