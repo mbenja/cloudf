@@ -23,12 +23,23 @@ var app = express();
 // setting up route variables
 
 /**
- * backend index functionality
+ * backend connection to login page
  * @type {Object}
  */
 const route_login = require('./routes/login');
+
+/**
+ * backend connection to index page
+ * @type {Object}
+ */
 const route_index = require('./routes/index');
+
+/**
+ * backend connection to file interaction URLs
+ * @type {Object}
+ */
 const route_file_interaction = require('./routes/FileInteraction');
+
 /**
  * port to allow connections on
  * @type {Number}

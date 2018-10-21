@@ -4,7 +4,8 @@
   "description": "Cloud storage system built for EECS 448, Software Engineering I, at the University of Kansas.",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "docgen": "documentation build ./app.js ./public/js/** ./routes/** -f html -o docs -g"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   "homepage": "https://github.com/mbenja/cloudf#readme",
   "dependencies": {
     "dateformat": "^3.0.3",
+    "documentation": "^8.1.2",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-fileupload": "^1.0.0-alpha.1",

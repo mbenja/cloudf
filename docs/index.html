@@ -1,0 +1,4066 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>cloudf 1.0.0 | Documentation</title>
+  <meta name='viewport' content='width=device-width,initial-scale=1'>
+  <link href='assets/bass.css' type='text/css' rel='stylesheet' />
+  <link href='assets/style.css' type='text/css' rel='stylesheet' />
+  <link href='assets/github.css' type='text/css' rel='stylesheet' />
+  <link href='assets/split.css' type='text/css' rel='stylesheet' />
+  <meta name='description' content='Cloud storage system built for EECS 448, Software Engineering I, at the University of Kansas.'>
+</head>
+<body class='documentation m0'>
+    <div class='flex'>
+      <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
+        <div class='py1 px2'>
+          <h3 class='mb0 no-anchor'>cloudf</h3>
+          <div class='mb1'><code>1.0.0</code></div>
+          <input
+            placeholder='Filter'
+            id='filter-input'
+            class='col12 block input'
+            type='text' />
+          <div id='toc'>
+            <ul class='list-reset h5 py1-ul'>
+              
+                
+                <li><a
+                  href='#express'
+                  class="">
+                  express
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#express'
+                  class="">
+                  express
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#express'
+                  class="">
+                  express
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#express'
+                  class="">
+                  express
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#path'
+                  class="">
+                  path
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#path'
+                  class="">
+                  path
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#app'
+                  class="">
+                  app
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#route_login'
+                  class="">
+                  route_login
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#route_index'
+                  class="">
+                  route_index
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#route_file_interaction'
+                  class="">
+                  route_file_interaction
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#port'
+                  class="">
+                  port
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#port'
+                  class="">
+                  port
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#icons_map'
+                  class="">
+                  icons_map
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#current_file_data'
+                  class="">
+                  current_file_data
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#current_path'
+                  class="">
+                  current_path
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#files_div'
+                  class="">
+                  files_div
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#selected_index'
+                  class="">
+                  selected_index
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#populatedirectorylisting'
+                  class="">
+                  populateDirectoryListing
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#populatebreadcrumbs'
+                  class="">
+                  populateBreadcrumbs
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#showhidedownloaddelete'
+                  class="">
+                  showHideDownloadDelete
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#showsidebar'
+                  class="">
+                  showSidebar
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#hidesidebar'
+                  class="">
+                  hideSidebar
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#populatesidebar'
+                  class="">
+                  populateSidebar
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#deletefile'
+                  class="">
+                  deleteFile
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#deletefile'
+                  class="">
+                  deleteFile
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#downloadfile'
+                  class="">
+                  downloadFile
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#downloadfile'
+                  class="">
+                  downloadFile
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#sendstate'
+                  class="">
+                  sendState
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#createdirectory'
+                  class="">
+                  createDirectory
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#createdirectory'
+                  class="">
+                  createDirectory
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#refreshdata'
+                  class="">
+                  refreshData
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#submit'
+                  class="">
+                  submit
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#router'
+                  class="">
+                  router
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#router'
+                  class="">
+                  router
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#router'
+                  class="">
+                  router
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#fs'
+                  class="">
+                  fs
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#mongodb'
+                  class="">
+                  mongodb
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#assert'
+                  class="">
+                  assert
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#dateformat'
+                  class="">
+                  dateFormat
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#readable'
+                  class="">
+                  Readable
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#fileupload'
+                  class="">
+                  fileUpload
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#mime'
+                  class="">
+                  mime
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#client_state'
+                  class="">
+                  client_state
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#url'
+                  class="">
+                  url
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#user_id'
+                  class="">
+                  user_id
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#get'
+                  class="">
+                  get
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#get'
+                  class="">
+                  get
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#get'
+                  class="">
+                  get
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#get'
+                  class="">
+                  get
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#get'
+                  class="">
+                  get
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#get'
+                  class="">
+                  get
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#post'
+                  class="">
+                  post
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getrootdirectory'
+                  class="">
+                  getRootDirectory
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getsubdirectory'
+                  class="">
+                  getSubdirectory
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#uploadfile'
+                  class="">
+                  uploadFile
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#isindirectory'
+                  class="">
+                  isInDirectory
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#purgeuploaddirectory'
+                  class="">
+                  purgeUploadDirectory
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#purgedownloaddirectory'
+                  class="">
+                  purgeDownloadDirectory
+                  
+                </a>
+                
+                </li>
+              
+            </ul>
+          </div>
+          <div class='mt1 h6 quiet'>
+            <a href='http://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
+          </div>
+        </div>
+      </div>
+      <div id='split-right' class='relative overflow-auto height-viewport-100'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='express'>
+      express
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/app.js#L7-L7'>
+      <span>app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>exports of express module</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>express</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='express'>
+      express
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L5-L5'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>exports of express module</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>express</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='express'>
+      express
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/index.js#L5-L5'>
+      <span>routes/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>exports of express module</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>express</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='express'>
+      express
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/login.js#L5-L5'>
+      <span>routes/login.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>exports of express module</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>express</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='path'>
+      path
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/app.js#L13-L13'>
+      <span>app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>exports of path module</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>path</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='path'>
+      path
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L53-L53'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>exports of path module</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>path</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='app'>
+      app
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/app.js#L19-L19'>
+      <span>app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>instance of express</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>app</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='route_login'>
+      route_login
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/app.js#L29-L29'>
+      <span>app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>backend connection to login page</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>route_login</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='route_index'>
+      route_index
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/app.js#L35-L35'>
+      <span>app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>backend connection to index page</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>route_index</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='route_file_interaction'>
+      route_file_interaction
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/app.js#L41-L41'>
+      <span>app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>backend connection to file interaction URLs</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>route_file_interaction</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='port'>
+      port
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/app.js#L47-L47'>
+      <span>app.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>port to allow connections on</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>port</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='port'>
+      port
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L79-L79'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>port to connect to mongoDB on</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>port</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='icons_map'>
+      icons_map
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/icons_map.js#L5-L14'>
+      <span>public/js/icons_map.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>maps MIME types to file icons found in the public/images/icons folder</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>icons_map</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='current_file_data'>
+      current_file_data
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L5-L5'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>stores an array of all the file data received in the last query of the database</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>current_file_data</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='current_path'>
+      current_path
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L11-L11'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>stores path currently being viewed by the user</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>current_path</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='files_div'>
+      files_div
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L22-L22'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>references the file display div for easy addition/removal of files</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>files_div</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='selected_index'>
+      selected_index
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L28-L28'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>tracks the index of the file currently selected in the information sidebar</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>selected_index</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='populatedirectorylisting'>
+      populateDirectoryListing
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L42-L103'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>removes all of the currently displayed files and instead displays those found
+in the given path string. does NOT refresh file data from the database.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>populateDirectoryListing(path: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    directory path to show files in
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='populatebreadcrumbs'>
+      populateBreadcrumbs
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L111-L167'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>updates the breadcrumbs at the top of the page to display the path currentlybeing viewed.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>populateBreadcrumbs(path: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    directory path to display in breadcrumbs
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='showhidedownloaddelete'>
+      showHideDownloadDelete
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L175-L185'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>change the state of the delete and download buttons</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>showHideDownloadDelete(show: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>show</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>)</code>
+	    whether to show the buttons or not
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='showsidebar'>
+      showSidebar
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L193-L198'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>displays the file information sidebar</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>showSidebar(index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    index of the file to show in current_file_data
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='hidesidebar'>
+      hideSidebar
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L205-L208'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>removes the file information sidebar from the page</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>hideSidebar()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='populatesidebar'>
+      populateSidebar
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L216-L220'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>populates the file information sidebar with data about the file in the given index</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>populateSidebar(index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    index of the file whose information to display
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='deletefile'>
+      deleteFile
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L227-L256'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Sends necessary data to back-end for call to delete file</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>deleteFile()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='deletefile'>
+      deleteFile
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L390-L407'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Deletes specified file by ID</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>deleteFile(file_id: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>file_id</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    unique file id of file to be deleted
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='downloadfile'>
+      downloadFile
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L263-L275'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Sends necessary data to back-end for call to download file</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>downloadFile()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='downloadfile'>
+      downloadFile
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L416-L448'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Places specified file on Node server and sends path back to router</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>downloadFile(file_object: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>file_object</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    unique file to be downloaded
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>:
+        path of file to be downloaded
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='sendstate'>
+      sendState
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L286-L304'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Retrieves necessary data from user to perform back-end call to upload file</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>sendState()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='createdirectory'>
+      createDirectory
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L311-L351'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Performs back-end call to create a directory in MongoDB</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>createDirectory()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='createdirectory'>
+      createDirectory
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L337-L382'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Uploads directory from Node server to mongoDB</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>createDirectory(directory_name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>directory_name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    the directory to be uploaded to mongoDB
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='refreshdata'>
+      refreshData
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L359-L392'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Retrieves root directory</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>refreshData(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        a promise that is resolved/rejected when the backend responds with file data or an error
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='submit'>
+      submit
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/public/js/index.js#L399-L434'>
+      <span>public/js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Defining on submit for upload_form so that we can handle on complete, etc.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>submit</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='router'>
+      router
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L11-L11'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>express router for frontend/backend interaction</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>router</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='router'>
+      router
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/index.js#L11-L11'>
+      <span>routes/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>express router for frontend/backend interaction</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>router</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='router'>
+      router
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/login.js#L11-L11'>
+      <span>routes/login.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>express router for frontend/backend interaction</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>router</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='fs'>
+      fs
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L17-L17'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>exports of fs (file system api) module</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>fs</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='mongodb'>
+      mongodb
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L23-L23'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>exports of mongodb interaction module</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>mongodb</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='assert'>
+      assert
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L29-L29'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>exports of assert module</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>assert</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='dateformat'>
+      dateFormat
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L35-L35'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>exports of dateformat module</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>dateFormat</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='readable'>
+      Readable
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L41-L41'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Readable objet pulled from stream module</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>Readable</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='fileupload'>
+      fileUpload
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L47-L47'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>exports of fileupload express module</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>fileUpload</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='mime'>
+      mime
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L59-L59'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>exports of MIME types module</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>mime</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='client_state'>
+      client_state
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L70-L73'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Defining object containing state variables from front-end</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>client_state</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='url'>
+      url
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L85-L85'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>url to connect to mongodb on</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>url</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='user_id'>
+      user_id
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L91-L91'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>userID to connect to mongoDB with
+TODO this is temporarily hard-coded until we implement user authentication</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>user_id</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='get'>
+      get
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L99-L103'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Route for updating client state</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>get</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>client_state</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    the client state to be set as current
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='get'>
+      get
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L112-L117'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Route for getting root directory
+Calls async function to get root directory, sends response</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>get</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>user_id</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    the user id to retrieve root directory for
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='get'>
+      get
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L127-L132'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Route for getting sub directory
+Calls async function to get subdirectory, sends response</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>get</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>user_id</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    the user id to retrieve subdirectory for
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>subdirectory</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    the subdirectory to retrieve
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='get'>
+      get
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L180-L197'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Calls for directory to be created if not duplicate</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>get</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='get'>
+      get
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L204-L209'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Calls for file to be deleted</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>get</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='get'>
+      get
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L216-L224'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Calls for file to be downloaded</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>get</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='post'>
+      post
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L139-L173'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Extracts upload_form data and calls for file to be uploaded if not duplicate</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>post</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getrootdirectory'>
+      getRootDirectory
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L233-L252'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Retrieves an array of all documents within root directory of user collection</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>getRootDirectory(user_id: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>user_id</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    the user id to retrieve root directory for
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>:
+        documents - an array of document objects
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getsubdirectory'>
+      getSubdirectory
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L262-L281'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Retrieves an array of all documents within a specific subdirectory of user collection</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>getSubdirectory(user_id: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, subdirectory: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>user_id</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    the user id to retrieve subdirectory for
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>subdirectory</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    the subdirectory to retrieve
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>:
+        documents - an array of document objects
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='uploadfile'>
+      uploadFile
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L289-L329'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Uploads file from Node server to mongoDB</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>uploadFile(input_upload_file: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>input_upload_file</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    the file object to be uploaded to mongoDB
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='isindirectory'>
+      isInDirectory
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L458-L486'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Determines if the given file already exists in the given directory</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>isInDirectory(path: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, file_name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): Bool</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    the directory in question
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>file_name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    the file name in question
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>Bool</code>:
+        exists - bool of whether or not the file exists
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='purgeuploaddirectory'>
+      purgeUploadDirectory
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L494-L510'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Purges the routes/upload directory
+To be called after each upload to ensure no data is left outstanding</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>purgeUploadDirectory()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='purgedownloaddirectory'>
+      purgeDownloadDirectory
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/a84757fda70b8f7a39d19598db3d59b1476bd9d1/routes/FileInteraction.js#L518-L534'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Purges the routes/download directory
+To be called after each download to ensure no data is left outstanding</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>purgeDownloadDirectory()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+      </div>
+    </div>
+  <script src='assets/anchor.js'></script>
+  <script src='assets/split.js'></script>
+  <script src='assets/site.js'></script>
+</body>
+</html>

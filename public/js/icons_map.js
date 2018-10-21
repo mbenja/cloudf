@@ -1,3 +1,7 @@
+/**
+ * maps MIME types to file icons found in the public/images/icons folder
+ * @type {Object}
+ */
 const icons_map = {
   "directory": "folder.png", // http://yousense.info/33/06889-folder-icon-32x32.html
   "parent": "folder.png",

@@ -1,14 +1,44 @@
+/**
+ * stores an array of all the file data received in the last query of the database
+ * @type {Array}
+ */
 let current_file_data = [];
+
+/**
+ * stores path currently being viewed by the user
+ * @type {String}
+ */
 let current_path = '/root';
+
+
 let current_breadcrumb_path;
 let current_breadcrumb_parents = 0;
 let current_path_sections = 0;
+
+/**
+ * references the file display div for easy addition/removal of files
+ * @type {Object}
+ */
 let files_div = document.getElementById("files");
-//$.when(refreshData()).done(() => { populateDirectoryListing("/root"); });
+
+/**
+ * tracks the index of the file currently selected in the information sidebar
+ * @type {Number}
+ */
 let selected_index = 0;
 
+
+
+// initial call to backend to get file data
 refreshData();
 
+
+
+/**
+ * removes all of the currently displayed files and instead displays those found
+ * in the given path string. does NOT refresh file data from the database.
+ * @param {String} path directory path to show files in
+ */
 function populateDirectoryListing(path){
 
   // update current path
@@ -74,6 +104,10 @@ function populateDirectoryListing(path){
 
 
 
+/**
+ * updates the breadcrumbs at the top of the page to display the path currentlybeing viewed.
+ * @param {String} path directory path to display in breadcrumbs
+ */
 function populateBreadcrumbs(path){
   let partialPath = "";
     let parentCount = 0;
@@ -132,7 +166,12 @@ function populateBreadcrumbs(path){
     }
 }
 
-//Show Delete and Download floatingButtons
+
+
+/**
+ * change the state of the delete and download buttons
+ * @param {Boolean} show whether to show the buttons or not
+ */
 function showHideDownloadDelete(show){
   if(show) {
     document.getElementById('deleteFile').style.visibility = "visible";
@@ -145,6 +184,12 @@ function showHideDownloadDelete(show){
 
 }
 
+
+
+/**
+ * displays the file information sidebar
+ * @param {Number} index index of the file to show in current_file_data
+ */
 function showSidebar(index) {
   selected_index = index;
   populateSidebar(index);
@@ -152,22 +197,33 @@ function showSidebar(index) {
   showHideDownloadDelete(true);
 }
 
+
+
+/**
+ * removes the file information sidebar from the page
+ */
 function hideSidebar() {
   document.getElementById("file_sidebar").setAttribute('disabled', true)
   showHideDownloadDelete(false);
 }
 
+
+
+/**
+ * populates the file information sidebar with data about the file in the given index
+ * @param {Number} index index of the file whose information to display
+ */
 function populateSidebar(index){
   document.getElementById("data-filename").innerHTML = current_file_data[index].filename;
   document.getElementById("data-filetype").innerHTML = current_file_data[index].metadata.content_type;
   document.getElementById("data-adddate").innerHTML = current_file_data[index].metadata.date_added;
-
-
 }
 
+
+
 /**
-  * Sends necessary data to back-end for call to delete file
-*/
+ * Sends necessary data to back-end for call to delete file
+ */
 function deleteFile() {
   // update state variables in back-end
   sendState();
@@ -199,9 +255,11 @@ function deleteFile() {
   });
 }
 
+
+
 /**
-  * Sends necessary data to back-end for call to download file
-*/
+ * Sends necessary data to back-end for call to download file
+ */
 function downloadFile() {
   // update state variables in back-end
   sendState();
@@ -220,9 +278,11 @@ function editFileName(){
 
 }
 
+
+
 /**
-  * Retrieves necessary data from user to perform back-end call to upload file
-*/
+ * Retrieves necessary data from user to perform back-end call to upload file
+ */
 function sendState() {
   // define data needed on backend
   // TODO this is hard-coded until we implement user authentication
@@ -243,9 +303,11 @@ function sendState() {
   });
 }
 
+
+
 /**
-  * Performs back-end call to create a directory in MongoDB
-*/
+ * Performs back-end call to create a directory in MongoDB
+ */
 function createDirectory() {
   // send state
   sendState();
@@ -288,9 +350,12 @@ function createDirectory() {
   document.getElementById("input_directory_name").value = "";
 }
 
+
+
 /**
-  * Retrieves root directory
-*/
+ * Retrieves root directory
+ * @returns {Promise} a promise that is resolved/rejected when the backend responds with file data or an error
+ */
 function refreshData() {
   // define data needed on backend
   // TODO this is hard-coded until we implement user authentication
@@ -324,38 +389,13 @@ function refreshData() {
 
   return callback.promise();
 
-
-  // let callback = $.Deferred();
-  //
-  // // ajax call to backend here
-  // //current_file_data = dummy_data;
-  //
-  // // define data needed on backend
-  // // TODO this is hard-coded until we implement user authentication
-  // const obj = {
-  //   user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx'
-  // };
-  // // perform ajax call
-  // $.ajax({
-  //   url: '/FileInteraction/getRootDirectory',
-  //   data: obj,
-  //   success: function (data) {
-  //     current_file_data = data;
-  //     console.log(current_file_data);
-  //   },
-  //   error: function (data) {
-  //     console.log(data);
-  //   }
-  // }).done(callback.resolve);
-  // // callback.resolve();
-  //
-  // return callback.promise();
-
 }
 
+
+
 /**
-  * Defining on submit for upload_form so that we can handle on complete, etc.
-*/
+ * Defining on submit for upload_form so that we can handle on complete, etc.
+ */
 $('#upload_form').submit(function(e){
   // prevents rerouting of page
   e.preventDefault();

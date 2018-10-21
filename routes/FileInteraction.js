@@ -1,53 +1,114 @@
-/*
-  * Requiring dependencies
-*/
+/**
+ * exports of express module
+ * @type {Object}
+ */
 var express = require('express');
+
+/**
+ * express router for frontend/backend interaction
+ * @type {Function}
+ */
 var router = express.Router();
+
+/**
+ * exports of fs (file system api) module
+ * @type {Object}
+ */
 var fs = require('fs');
+
+/**
+ * exports of mongodb interaction module
+ * @type {Object}
+ */
 var mongodb = require('mongodb');
+
+/**
+ * exports of assert module
+ * @type {Object}
+ */
 var assert = require('assert');
+
+/**
+ * exports of dateformat module
+ * @type {Object}
+ */
 var dateFormat = require('dateformat');
+
+/**
+ * Readable objet pulled from stream module
+ * @type {Object}
+ */
 var Readable = require('stream').Readable;
+
+/**
+ * exports of fileupload express module
+ * @type {Object}
+ */
 const fileUpload = require('express-fileupload');
+
+/**
+ * exports of path module
+ * @type {Object}
+ */
 var path = require('path');
+
+/**
+ * exports of MIME types module
+ * @type {Object}
+ */
 var mime = require('mime');
+
 router.use(fileUpload());
 
 // setting up static folder
 router.use(express.static(path.join(__dirname, 'public')));
 
 /**
-  * Defining object containing state variables from front-end
-*/
+ * Defining object containing state variables from front-end
+ * @type {Object}
+ */
 var client_state = {
   user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
   current_path: ''
 };
 
-// Defining port
+/**
+ * port to connect to mongoDB on
+ * @type {Number}
+ */
 const port = '27017';
 
-// Defining DB URL
+/**
+ * url to connect to mongodb on
+ * @type {String}
+ */
 const url = 'mongodb://mongo:' + port + '/cloudf';
 
-// TODO this is temporarily hard-coded until we implement user authentication
+/**
+ * userID to connect to mongoDB with
+ * TODO this is temporarily hard-coded until we implement user authentication
+ */
 var user_id = 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx';
 
+
+
 /**
-  * Route for updating client state
-  * @param {Object} client_state - the client state to be set as current
-*/
+ * Route for updating client state
+ * @param {Object} client_state - the client state to be set as current
+ */
 router.get('/clientState', function(req, res) {
   console.log("GET /clientState");
   client_state = req.query;
   res.send('success');
 });
 
+
+
 /**
-  * Route for getting root directory
-  * Calls async function to get root directory, sends response
-  * @param {String} user_id - the user id to retrieve root directory for
-*/
+ * Route for getting root directory
+ * Calls async function to get root directory, sends response
+ * @param {String} user_id - the user id to retrieve root directory for
+ */
 router.get('/getRootDirectory', function(req, res) {
   console.log("GET /getRootDirectory");
   getRootDirectory(req.query.user_id).then((response) => {
@@ -55,12 +116,14 @@ router.get('/getRootDirectory', function(req, res) {
   });
 });
 
+
+
 /**
-  * Route for getting sub directory
-  * Calls async function to get subdirectory, sends response
-  * @param {String} user_id - the user id to retrieve subdirectory for
-  * @param {String} subdirectory - the subdirectory to retrieve
-*/
+ * Route for getting sub directory
+ * Calls async function to get subdirectory, sends response
+ * @param {String} user_id - the user id to retrieve subdirectory for
+ * @param {String} subdirectory - the subdirectory to retrieve
+ */
 router.get('/getSubdirectory', function(req, res) {
   console.log("GET /getSubdirectory");
   getSubdirectory(req.query.user_id, req.query.subdirectory).then((response) => {
@@ -68,9 +131,11 @@ router.get('/getSubdirectory', function(req, res) {
   });
 });
 
+
+
 /**
-  * Extracts upload_form data and calls for file to be uploaded if not duplicate
-*/
+ * Extracts upload_form data and calls for file to be uploaded if not duplicate
+ */
 router.post('/uploadFile', function(req, res) {
   console.log("POST /uploadFile");
   if (!req.files) {
@@ -107,9 +172,11 @@ router.post('/uploadFile', function(req, res) {
   });
 });
 
+
+
 /**
-  * Calls for directory to be created if not duplicate
-*/
+ * Calls for directory to be created if not duplicate
+ */
 router.get('/createDirectory', function(req, res) {
   console.log("GET /createDirectory");
   // ensure no duplicate uploads
@@ -129,9 +196,11 @@ router.get('/createDirectory', function(req, res) {
   })
 });
 
+
+
 /**
-  * Calls for file to be deleted
-*/
+ * Calls for file to be deleted
+ */
 router.get('/deleteFile', function(req, res) {
   console.log("GET /deleteFile");
   deleteFile(req.query.file_id).then((response) => {
@@ -139,9 +208,11 @@ router.get('/deleteFile', function(req, res) {
   })
 });
 
+
+
 /**
-  * Calls for file to be downloaded
-*/
+ * Calls for file to be downloaded
+ */
 router.get('/downloadFile', function(req, res) {
   console.log("GET /downloadFile");
   downloadFile(req.query).then((response) => {
@@ -152,11 +223,13 @@ router.get('/downloadFile', function(req, res) {
   })
 });
 
+
+
 /**
-  * Retrieves an array of all documents within root directory of user collection
-  * @param {String} user_id - the user id to retrieve root directory for
-  * @returns {Array} documents - an array of document objects
-*/
+ * Retrieves an array of all documents within root directory of user collection
+ * @param {String} user_id - the user id to retrieve root directory for
+ * @returns {Array} documents - an array of document objects
+ */
 async function getRootDirectory(user_id) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
@@ -178,12 +251,14 @@ async function getRootDirectory(user_id) {
   return documents;
 }
 
+
+
 /**
-  * Retrieves an array of all documents within a specific subdirectory of user collection
-  * @param {String} user_id - the user id to retrieve subdirectory for
-  * @param {String} subdirectory - the subdirectory to retrieve
-  * @returns {Array} documents - an array of document objects
-*/
+ * Retrieves an array of all documents within a specific subdirectory of user collection
+ * @param {String} user_id - the user id to retrieve subdirectory for
+ * @param {String} subdirectory - the subdirectory to retrieve
+ * @returns {Array} documents - an array of document objects
+ */
 async function getSubdirectory(user_id, subdirectory) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
@@ -205,10 +280,12 @@ async function getSubdirectory(user_id, subdirectory) {
   return documents;
 }
 
+
+
 /**
-  * Uploads file from Node server to mongoDB
-  * @param {Object} input_upload_file - the file object to be uploaded to mongoDB
-*/
+ * Uploads file from Node server to mongoDB
+ * @param {Object} input_upload_file - the file object to be uploaded to mongoDB
+ */
 async function uploadFile(input_upload_file) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
@@ -251,10 +328,12 @@ async function uploadFile(input_upload_file) {
   return result;
 }
 
+
+
 /**
-  * Uploads directory from Node server to mongoDB
-  * @param {Object} directory_name - the directory to be uploaded to mongoDB
-*/
+ * Uploads directory from Node server to mongoDB
+ * @param {Object} directory_name - the directory to be uploaded to mongoDB
+ */
 async function createDirectory(directory_name) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
@@ -302,10 +381,12 @@ async function createDirectory(directory_name) {
   return result;
 }
 
+
+
 /**
-  * Deletes specified file by ID
-  * @param {String} file_id - unique file id of file to be deleted
-*/
+ * Deletes specified file by ID
+ * @param {String} file_id - unique file id of file to be deleted
+ */
 async function deleteFile(file_id) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
@@ -325,11 +406,13 @@ async function deleteFile(file_id) {
   });
 }
 
+
+
 /**
-  * Places specified file on Node server and sends path back to router
-  * @param {Object} file_object - unique file to be downloaded
-  * @returns {String} path of file to be downloaded
-*/
+ * Places specified file on Node server and sends path back to router
+ * @param {Object} file_object - unique file to be downloaded
+ * @returns {String} path of file to be downloaded
+ */
 async function downloadFile(file_object) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
@@ -364,12 +447,14 @@ async function downloadFile(file_object) {
   return download_path;
 }
 
+
+
 /**
-  * Determines if the given file already exists in the given directory
-  * @param {String} path - the directory in question
-  * @param {String} file_name - the file name in question
-  * @returns {Bool} exists - bool of whether or not the file exists
-*/
+ * Determines if the given file already exists in the given directory
+ * @param {String} path - the directory in question
+ * @param {String} file_name - the file name in question
+ * @returns {Bool} exists - bool of whether or not the file exists
+ */
 async function isInDirectory(path, file_name) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
@@ -400,10 +485,12 @@ async function isInDirectory(path, file_name) {
   }
 }
 
+
+
 /**
-  * Purges the routes/upload directory
-  * To be called after each upload to ensure no data is left outstanding
-*/
+ * Purges the routes/upload directory
+ * To be called after each upload to ensure no data is left outstanding
+ */
 function purgeUploadDirectory() {
   // read the directory
   fs.readdir('./routes/upload', (err, files) => {
@@ -422,10 +509,12 @@ function purgeUploadDirectory() {
   });
 }
 
+
+
 /**
-  * Purges the routes/download directory
-  * To be called after each download to ensure no data is left outstanding
-*/
+ * Purges the routes/download directory
+ * To be called after each download to ensure no data is left outstanding
+ */
 function purgeDownloadDirectory() {
   // read the directory
   fs.readdir('./routes/download', (err, files) => {
@@ -443,5 +532,7 @@ function purgeDownloadDirectory() {
     }
   });
 }
+
+
 
 module.exports = router;
