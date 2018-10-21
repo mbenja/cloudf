@@ -66,15 +66,14 @@ function populateDirectoryListing(path){
     // set css class and onlick attributes based on file type
     if(cur_type == "parent"){
       file_card.setAttribute("class", "card parent");
-      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + current_path.split('/').splice(0, current_path.split('/').length-1).join('/') + "\"); showHideDownloadDelete(false);");
+      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + current_path.split('/').splice(0, current_path.split('/').length-1).join('/') + "\");");
     }
     else if(cur_type == "directory"){
       file_card.setAttribute("class", "card directory");
-      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + path + "/" + files_in_path[i].filename + "\"); showHideDownloadDelete(false);")
+      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + path + "/" + files_in_path[i].filename + "\");")
     }
     else{
       file_card.setAttribute("class", "card file");
-      //file_card.setAttribute("onclick", "showHideDownloadDelete(true)")
       // set onclick event to show sidebar
       file_card.setAttribute("onclick", "showSidebar(" + files_in_path[i].index + ");")
     }
@@ -167,25 +166,6 @@ function populateBreadcrumbs(path){
 }
 
 
-
-/**
- * change the state of the delete and download buttons
- * @param {Boolean} show whether to show the buttons or not
- */
-function showHideDownloadDelete(show){
-  if(show) {
-    document.getElementById('deleteFile').style.visibility = "visible";
-    document.getElementById('downloadFile').style.visibility = "visible";
-  }
-  else {
-    document.getElementById('deleteFile').style.visibility = "hidden";
-    document.getElementById('downloadFile').style.visibility = "hidden";
-  }
-
-}
-
-
-
 /**
  * displays the file information sidebar
  * @param {Number} index index of the file to show in current_file_data
@@ -193,8 +173,8 @@ function showHideDownloadDelete(show){
 function showSidebar(index) {
   selected_index = index;
   populateSidebar(index);
-  document.getElementById("file_sidebar").removeAttribute('disabled')
-  showHideDownloadDelete(true);
+  document.getElementById("file_sidebar").removeAttribute('disabled');
+  document.getElementById("main_container").setAttribute('small', true);
 }
 
 
@@ -203,8 +183,8 @@ function showSidebar(index) {
  * removes the file information sidebar from the page
  */
 function hideSidebar() {
-  document.getElementById("file_sidebar").setAttribute('disabled', true)
-  showHideDownloadDelete(false);
+  document.getElementById("file_sidebar").setAttribute('disabled', true);
+  document.getElementById("main_container").removeAttribute('small');
 }
 
 

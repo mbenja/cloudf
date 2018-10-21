@@ -19,7 +19,7 @@
       <img src="/images/cloudf.png" style="height:10vh;">
       <!-- put current username and logout button here -->
     </div>
-    <div class="container" id="main_container">
+    <div id="main_container">
       <!-- breadcrumbs Banner -->
       <div class="breadcrumbs" id="banner">
           <div class="pathSection" id="path" onclick="populateDirectoryListing('/root')">
@@ -35,10 +35,8 @@
         <div class="circleButton" id="newFolder" onclick="$('#modal_create_directory').modal('show');"> </div>
 
       </div>
-    </div>
 
-    <div class="container" style="text-align: center;">
-      <p>© 2018 Benjamin Streit, Blake Rieschick, and Evan Brown</p>
+      <p id="copyright">© 2018 Benjamin Streit, Blake Rieschick, and Evan Brown</p>
     </div>
 
     <!--
@@ -171,7 +169,8 @@
       <div class="circleButton" id="deleteFile" onclick="$('#modal_delete_file').modal('show');"> </div>
       <div class="circleButton" id="downloadFile" onclick="downloadFile()"> </div>
       <a href="javascript:void(0)" class="close" onclick="hideSidebar()">&times;</a>
-      <p id="data-filename"></p>
+      <h3 id="data-filename"></h3>
+      <hr>
       <p id="data-filetype"></p>
       <p id="data-adddate"></p>
     </div>

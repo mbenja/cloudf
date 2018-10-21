@@ -17,12 +17,28 @@ body {
 }
 
 #main_container {
+  width: 100vw;
+  padding-right: 15px;
+  padding-left: 15px;
   background-color: white;
   border: 2px solid black;
   padding: 1vw;
+  left: 0px;
   border-radius: 1vw;
   min-height: 80vh;
+  margin-bottom: 10vh;
+  position: relative;
+  transition: max-width 0.5s;
   /*overflow: scroll;*/
+}
+
+#main_container[small] {
+  width: calc(100vw - 200px);
+}
+
+#copyright {
+  position: absolute;
+  bottom: -48px;
 }
 
 .file_icon {
@@ -65,7 +81,7 @@ body {
 
   top: 10px;
   left: 40%;
-  visibility: hidden;
+
 }
 
 #downloadFile {
@@ -73,7 +89,6 @@ body {
 
   top: 10px;
   left: 10%;
-  visibility: hidden;
 }
 
 .circleButton {
@@ -93,21 +108,21 @@ body {
   height: 50px;
   width: 100px;
 
-  position: relative;
-  top: 400px;
-  left: 95%;
+  position: absolute;
+  bottom: 0px;
+  right: -24px;
 }
 
 /* Styling For breadcrumb Banner */
 .breadcrumbs{
 
- }
+}
 
- #banner {
-   display: flex;
- }
+#banner {
+ display: flex;
+}
 
- .pathSection {
+.pathSection {
   height: 25px;
   width: 10%;
   background-color: #c0eafc;
@@ -125,15 +140,18 @@ body {
 
 .sidebar {
   right: 0px;
-  height: 70vh;
+  height: 80vh;
   width: 200px;
   position: fixed;
   z-index: 1;
   top: 10vh;
-  transition: 0.5s;
+  transition: right 0.5s;
   padding-top: 10vh;
-  background-color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: #E9E9E9;
   border: 2px solid black;
+  text-align: center;
   /*padding: 1vw;*/
   border-radius: 1vw;
 }
@@ -142,16 +160,44 @@ body {
 }
 @media (min-width: 576px) {
   .sidebar {
-    right: calc(50vw - 270px); } }
+    right: calc(50vw - 270px); }
+  #main_container {
+    max-width: 540px;
+    left: calc(50vw - 270px);
+  }
+  #main_container[small] {
+    max-width: 340px;
+  } }
 @media (min-width: 768px) {
   .sidebar {
-    right: calc(50vw - 360px); } }
+    right: calc(50vw - 360px); }
+  #main_container {
+    max-width: 720px;
+    left: calc(50vw - 360px);
+  }
+  #main_container[small] {
+    max-width: 520px;
+  } }
 @media (min-width: 992px) {
   .sidebar {
-    right: calc(50vw - 480px); } }
+    right: calc(50vw - 480px); }
+  #main_container {
+    max-width: 960px;
+    left: calc(50vw - 480px);
+  }
+  #main_container[small] {
+    max-width: 760px;
+  } }
 @media (min-width: 1200px) {
   .sidebar {
-    right: calc(50vw - 570px); } }
+    right: calc(50vw - 570px); }
+  #main_container {
+    max-width: 1140px;
+    left: calc(50vw - 570px);
+  }
+  #main_container[small] {
+    max-width: 940px;
+  } }
 
 .sidebar .close {
     position: absolute;
