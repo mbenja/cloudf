@@ -118,7 +118,8 @@ body {
 /**
   * Styling for upload form modal, create directory modal
 */
-#modal_upload_form_content, #modal_create_directory_content, #modal_delete_file_content, #modal_download_file{
+#modal_upload_form_content, #modal_create_directory_content,
+#modal_delete_file_content, #modal_download_file_content {
   background-color: #E6CCBE;
 }
 
