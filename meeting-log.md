@@ -1,5 +1,5 @@
 # Meeting Log
-EECS 448 - Project III (cloudf)
+EECS 448 - Project III/IV (cloudf)
 
 Blake Rieschick, Benjamin Streit, Evan Brown
 
@@ -70,3 +70,16 @@ Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
 
   * Discussed work done so far and work to be done before code freeze
   * Discussed implementation of several back-end functions
+
+## Meeting \#6
+Date: Wednesday, October 24, 2018
+
+Time: 11:30 - 11:50 PM
+
+Location: In-class
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed implementation of user authentication
+  * Discussed other features to be implemented for project IV
+  * Discussed where to spin up the DB containers
