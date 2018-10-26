@@ -83,3 +83,15 @@ Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
   * Discussed implementation of user authentication
   * Discussed other features to be implemented for project IV
   * Discussed where to spin up the DB containers
+
+## Meeting \#7
+Date: Friday, October 26, 2018
+
+Time: 11:30 - 11:50 PM
+
+Location: In-class
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed user manual
+  * Sent email to Professor Gibbons regarding Docker container deployment
