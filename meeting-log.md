@@ -95,3 +95,15 @@ Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
 
   * Discussed user manual
   * Sent email to Professor Gibbons regarding Docker container deployment
+
+## Meeting \#8
+Date: Wednesday, October 31, 2018
+
+Time: 11:30 - 11:50 PM
+
+Location: In-class
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Planned next meeting
+  * Discussed current work being done by team members
