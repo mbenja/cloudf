@@ -40,6 +40,9 @@ const route_index = require('./routes/index');
  */
 const route_file_interaction = require('./routes/FileInteraction');
 
+
+const route_authentication = require('./routes/authenticate');
+
 /**
  * port to allow connections on
  * @type {Number}
@@ -60,6 +63,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/login', route_login);
 app.use('/', route_index);
 app.use('/FileInteraction', route_file_interaction);
+app.use('/authenticate', route_authentication);
 
 // expose public port
 app.listen(port);
