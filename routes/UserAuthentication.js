@@ -11,21 +11,19 @@ class UserAuthentication {
    */
   async authenticate(email, password){
     let promise = new Promise((resolve, reject) => {
-      this.connection.connect((err) => {
+      this.connection.query("SELECT * FROM users WHERE email=? AND password=?", [email, password], (err, results, fields) => {
         if(err){
           reject(err);
         }
+        else if (results.length == 1){
+          // return session id
+          resolve([results, fields]);
+        }
         else{
-          this.connection.query("SELECT * FROM users WHERE email=? AND password=?", [email, password], (err, results, fields) => {
-            if(err){
-              reject(err);
-            }
-            else{
-              resolve([results, fields]);
-            }
-          });
+          reject("invalid user")
         }
       });
+
     });
 
     try{
