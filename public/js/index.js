@@ -70,7 +70,8 @@ function populateDirectoryListing(path){
     }
     else if(cur_type == "directory"){
       file_card.setAttribute("class", "card directory");
-      file_card.setAttribute("onclick", "populateDirectoryListing(\"" + path + "/" + files_in_path[i].filename + "\");")
+      file_card.setAttribute("ondblclick", "is_single=0;populateDirectoryListing(\"" + path + "/" + files_in_path[i].filename + "\");");
+      file_card.setAttribute("onclick", "is_single=1;setTimeout(function() { if (is_single) showSidebar(" + files_in_path[i].index + ");},300);");
     }
     else{
       file_card.setAttribute("class", "card file");
