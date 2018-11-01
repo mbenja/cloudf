@@ -537,7 +537,6 @@ async function downloadDirectory(subdirectory) {
             count++
             // only resolve if last file
             if (count == subdirectory.contents.length) {
-              console.log("RESOLVING");
               database.close();
               resolve('done');
             }

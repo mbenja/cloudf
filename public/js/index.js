@@ -239,9 +239,9 @@ function deleteFile() {
 
 
 /**
- * Sends necessary data to back-end for call to download file
+ * Sends necessary data to back-end for call to download file/directory
  */
-function downloadFile() {
+function download() {
   // update state variables in back-end
   sendState();
   // check content_type
