@@ -519,8 +519,8 @@ async function downloadDirectory(subdirectory) {
         for (var i = 0; i < subdirectory.contents.length; i++) {
           // create names for files on server
           const file_name = subdirectory.contents[i]["filename"];
-          const download_name = subdirectory.contents[i]["metadata"]["path"].replace(subdirectory.directory_path, "") +
-          '/' + subdirectory.directory_name + '/' + file_name;
+          const download_name = subdirectory.contents[i]["metadata"]["path"].replace(subdirectory.directory_path, subdirectory.directory_name) +
+          '/' + file_name;
           // write file to server
           bucket.openDownloadStream(new mongodb.ObjectID(subdirectory.contents[i]["_id"])).
           pipe(fs.createWriteStream('./routes/download/' + file_name)).
