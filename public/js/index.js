@@ -244,13 +244,28 @@ function deleteFile() {
 function downloadFile() {
   // update state variables in back-end
   sendState();
+  // check content_type
   // define object to be sent to back-end
-  const obj = {
-    file_id: current_file_data[selected_index]["_id"],
-    file_name: current_file_data[selected_index]["filename"]
-  };
-  // making call to back-end
-  window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name);
+  if (current_file_data[selected_index]["metadata"]["content_type"] == "directory") {
+    // is directory
+    const obj = {
+      directory_id: current_file_data[selected_index]["_id"],
+      directory_name: current_file_data[selected_index]["filename"],
+      directory_path: current_file_data[selected_index]["metadata"]["path"] + '/' +
+      current_file_data[selected_index]["filename"]
+    };
+    // making call to back-end
+    window.open('/FileInteraction/downloadDirectory?directory_id=' + obj.directory_id +
+    '&directory_name=' + obj.directory_name + '&directory_path=' + obj.directory_path);
+  } else {
+    // is singular file
+    const obj = {
+      file_id: current_file_data[selected_index]["_id"],
+      file_name: current_file_data[selected_index]["filename"]
+    };
+    // making call to back-end
+    window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name);
+  }
   // hide sidebar
   hideSidebar();
 }

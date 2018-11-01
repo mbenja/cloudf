@@ -47,6 +47,12 @@ var Readable = require('stream').Readable;
 const fileUpload = require('express-fileupload');
 
 /**
+ * Exports of zip express module
+ * @type {Object}
+ */
+const zip = require('express-zip');
+
+/**
  * exports of path module
  * @type {Object}
  */
@@ -226,6 +232,37 @@ router.get('/downloadFile', function(req, res) {
 
 
 /**
+  * Calls for directory to be downloaded
+  */
+router.get('/downloadDirectory', function(req, res) {
+  console.log("GET /downloadDirectory");
+  // get directory
+  getSubdirectory(client_state.user_id, req.query.directory_path).then((response) => {
+    var subdirectory = [];
+    // filter out placeholder inner directory documents
+    for (var i = 0; i < response.length; i++) {
+      if (response[i]["metadata"]["content_type"] != 'directory') {
+        subdirectory.push(response[i]);
+      }
+    }
+    const obj = {
+      contents: subdirectory,
+      directory_path: req.query.directory_path,
+      directory_name: req.query.directory_name
+    };
+    // call for download
+    downloadDirectory(obj).then((response) => {
+      // download
+      res.zip(response, req.query.directory_name + '.zip');
+      // purge download directory
+      //purgeDownloadDirectory();
+    })
+  });
+});
+
+
+
+/**
  * Retrieves an array of all documents within root directory of user collection
  * @param {String} user_id - the user id to retrieve root directory for
  * @returns {Array} documents - an array of document objects
@@ -269,7 +306,7 @@ async function getSubdirectory(user_id, subdirectory) {
         console.log("Successfully connected to mongoDB");
 
         const db = database.db('cloudf');
-        db.collection(user_id + '.files').find({'metadata.path': subdirectory}).toArray(function(err, documents) {
+        db.collection(user_id + '.files').find().toArray(function(err, documents) {
           database.close();
           resolve(documents);
         });
@@ -277,7 +314,14 @@ async function getSubdirectory(user_id, subdirectory) {
     });
   });
   let documents = await promise;
-  return documents;
+  // filter out files that don't meet subdirectory path requirement
+  var files = [];
+  for (var i = 0; i < documents.length; i++) {
+    if (documents[i]["metadata"]["path"].includes(subdirectory)) {
+      files.push(documents[i]);
+    }
+  }
+  return files;
 }
 
 
@@ -445,6 +489,65 @@ async function downloadFile(file_object) {
 
   let download_path = await promise;
   return download_path;
+}
+
+/**
+* Places all files within directory on NodeJS server
+* @param {Array} subdirectory - array of files to be downloaded
+* @returns {Array} Array of file objects with all files within directory
+*/
+async function downloadDirectory(subdirectory) {
+  // array to be sent back
+  var node_directory = [];
+  let promise = new Promise(function(resolve, reject) {
+    mongodb.MongoClient.connect(url, function(err, database) {
+      // handle bad connection to mongoDB
+      if (database == null) {
+        resolve('BROKEN PIPE');
+      } else {
+        console.log("Successfully connected to mongoDB");
+
+        const db = database.db('cloudf');
+
+        // define bucket
+        var bucket = new mongodb.GridFSBucket(db, {
+          bucketName: client_state.user_id
+        });
+
+        // iterate through subdirectory, placing each file on NodeJS server
+        var count = 0;
+        for (var i = 0; i < subdirectory.contents.length; i++) {
+          // create names for files on server
+          const file_name = subdirectory.contents[i]["filename"];
+          const download_name = subdirectory.contents[i]["metadata"]["path"].replace(subdirectory.directory_path, "") +
+          '/' + subdirectory.directory_name + '/' + file_name;
+          // write file to server
+          bucket.openDownloadStream(new mongodb.ObjectID(subdirectory.contents[i]["_id"])).
+          pipe(fs.createWriteStream('./routes/download/' + file_name)).
+          on('error', function(error) {
+            assert.ifError(error);
+          }).
+          on('finish', function() {
+            // push object to array
+            var obj = {
+              path: './routes/download/' + file_name,
+              name: download_name
+            };
+            node_directory.push(obj);
+            count++
+            // only resolve if last file
+            if (count == subdirectory.contents.length) {
+              console.log("RESOLVING");
+              database.close();
+              resolve('done');
+            }
+          });
+        }
+      }
+    });
+  });
+  let done = await promise;
+  return node_directory;
 }
 
 
