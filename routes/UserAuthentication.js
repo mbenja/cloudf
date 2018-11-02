@@ -1,6 +1,9 @@
+let sessions = require("./SessionManager.js");
+
 class UserAuthentication {
   constructor(connection){
     this.connection = connection;
+    this.sessions = new sessions.SessionManager(connection);
   }
 
   /**
@@ -17,7 +20,15 @@ class UserAuthentication {
         }
         else if (results.length == 1){
           // return session id
-          resolve([results, fields]);
+          let user_id = results[0].user_id;
+          this.sessions.createSession(user_id).then((results) => {
+            if(results.status){
+              resolve(results.session_id);
+            }
+            else{
+              reject(results.error)
+            }
+          });
         }
         else{
           reject("invalid user")
@@ -30,8 +41,8 @@ class UserAuthentication {
       let session_id = await promise;
       return {success: true, session_id: session_id};
     }
-    catch(excep){
-      return {success: false, error: excep};
+    catch(err){
+      return {success: false, error: err};
     }
   }
 

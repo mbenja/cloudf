@@ -1,7 +1,7 @@
 class SessionManager {
 
-  constructor(){
-
+  constructor(connection){
+    this.connection = connection;
   }
 
   /**
@@ -18,8 +18,33 @@ class SessionManager {
    * @param {String} user_id user id associated with a session
    * @returns {Promise} containing random session id string
    */
-  createSession(user_id){
+  async createSession(user_id){
 
+    let gen_id = "";
+    for(let i = 0; i < 32; i++){
+      let charcode = Math.floor(Math.random()*68)
+      charcode += (charcode < 10 ? 48 : 55);
+      gen_id += String.fromCharCode(charcode);
+    }
+    //results[index].column
+    let promise = new Promise((resolve, reject) => {
+      this.connection.query("INSERT INTO sessions VALUES (?, ?, ?);", [gen_id, user_id, new Date()], (err, results, fields) => {
+        if(err){
+          reject(err);
+        }
+        else{
+          resolve();
+        }
+      })
+    });
+
+    try{
+      let results = await promise;
+      return {success: true, session_id: gen_id};
+    }
+    catch(err){
+      return {success: false, error: err};
+    }
   }
 
   /**
@@ -28,7 +53,9 @@ class SessionManager {
    * @returns {Promise} indicating status of logout
    */
   logout(session_id){
-    
+
   }
 
 }
+
+exports.SessionManager = SessionManager;
