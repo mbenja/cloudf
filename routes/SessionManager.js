@@ -28,21 +28,26 @@ class SessionManager {
     }
     //results[index].column
     let promise = new Promise((resolve, reject) => {
-      this.connection.query("INSERT INTO sessions VALUES (?, ?, ?);", [gen_id, user_id, new Date()], (err, results, fields) => {
+      console.log("in session promise");
+      this.connection.query("INSERT INTO sessions VALUES (?, ?, ?)", [gen_id, user_id, new Date()], (err, results, fields) => {
         if(err){
+          console.log("reject for error");
           reject(err);
         }
         else{
+          console.log("resolve");
           resolve();
         }
-      })
+      });
     });
 
     try{
       let results = await promise;
+      console.log("return success");
       return {success: true, session_id: gen_id};
     }
     catch(err){
+      console.log("return failure");
       return {success: false, error: err};
     }
   }

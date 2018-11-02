@@ -27,11 +27,14 @@ function doLogin(form){
   }).then((session_id) => {
     console.log("success");
     console.log(session_id);
+    document.cookie = "cloudf_session="+session_id+";max-age=3600";
+    Logger.log(document.cookie);
     alert("Login Successful, session id " + session_id);
     form.submit();
   }, (error) => {
     console.log("failure");
-    $.snackbar({content: "<strong>Error:</strong> " + error.code + "."});
+    console.log(error);
+    $.snackbar({content: "<strong>Error:</strong> " + "."});
   });
 
 
