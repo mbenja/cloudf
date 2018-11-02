@@ -107,3 +107,15 @@ Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
 
   * Planned next meeting
   * Discussed current work being done by team members
+
+## Meeting \#9
+Date: Friday, November 2, 2018
+
+Time: 11:35 - 11:50 PM
+
+Location: In-class
+
+Attendees: Evan Brown, Blake Rieschick
+
+  * Discussed next meeting
+  * Talked about work being done - Evan doing user authentication, Blake doing breadcrumbs & click/drag move file functionality
