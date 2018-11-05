@@ -219,7 +219,6 @@ router.get('/deleteFile', function(req, res) {
  */
 router.get('/deleteDirectory', function(req, res) {
   console.log("GET /deleteDirectory");
-  console.log(req.query);
   // get directory
   getSubdirectory(client_state.user_id, req.query.directory_path).then((response) => {
     const obj = {
@@ -227,7 +226,6 @@ router.get('/deleteDirectory', function(req, res) {
     };
     // add directory itself
     obj.contents.push({ _id: req.query.directory_id });
-    console.log(JSON.stringify(obj));
     // call for delete
     deleteDirectory(obj).then((response) => {
       // download
