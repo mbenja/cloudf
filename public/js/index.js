@@ -213,6 +213,7 @@ function deleteItem() {
     // is directory
     // define object to be sent to back-end
     const obj = {
+      directory_id: current_file_data[selected_index]["_id"],
       directory_path: current_file_data[selected_index]["metadata"]["path"] + '/' +
       current_file_data[selected_index]["filename"]
     };
