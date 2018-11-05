@@ -205,35 +205,68 @@ function populateSidebar(index){
 /**
  * Sends necessary data to back-end for call to delete file
  */
-function delete() {
+function deleteItem() {
   // update state variables in back-end
   sendState();
-  // define object to be sent to back-end
-  const obj = {
-    file_id: current_file_data[selected_index]["_id"]
-  };
-  // perform ajax call
-  $.ajax({
-    url: '/FileInteraction/deleteFile',
-    data: obj,
-    success: function (response) {
-      // dismiss delete modal
-      $('#modal_delete_file').modal('hide');
-      // hide sidebar
-      hideSidebar();
-      // show snackbar dependent upon response
-      if (response == 'BROKEN PIPE') {
-        $.snackbar({content: "<strong>Error:</strong> Servers are down."});
-      } else {
-        $.snackbar({content: "<strong>Success!</strong> The file has been deleted."});
-        // refresh front-end
-        refreshData();
+  // check content type
+  if (current_file_data[selected_index]["metadata"]["content_type"] == "directory") {
+    // is directory
+    // define object to be sent to back-end
+    const obj = {
+      directory_path: current_file_data[selected_index]["metadata"]["path"] + '/' +
+      current_file_data[selected_index]["filename"]
+    };
+    // perform ajax call
+    $.ajax({
+      url: '/FileInteraction/deleteDirectory',
+      data: obj,
+      success: function (response) {
+        // dismiss delete modal
+        $('#modal_delete').modal('hide');
+        // hide sidebar
+        hideSidebar();
+        // show snackbar dependent upon response
+        if (response == 'BROKEN PIPE') {
+          $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+        } else {
+          $.snackbar({content: "<strong>Success!</strong> The folder has been deleted."});
+          // refresh front-end
+          refreshData();
+        }
+      },
+      error: function (data) {
+        console.log(data);
       }
-    },
-    error: function (data) {
-      console.log(data);
-    }
-  });
+    });
+  } else {
+    // is file
+    // define object to be sent to back-end
+    const obj = {
+      file_id: current_file_data[selected_index]["_id"]
+    };
+    // perform ajax call
+    $.ajax({
+      url: '/FileInteraction/deleteFile',
+      data: obj,
+      success: function (response) {
+        // dismiss delete modal
+        $('#modal_delete').modal('hide');
+        // hide sidebar
+        hideSidebar();
+        // show snackbar dependent upon response
+        if (response == 'BROKEN PIPE') {
+          $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+        } else {
+          $.snackbar({content: "<strong>Success!</strong> The file has been deleted."});
+          // refresh front-end
+          refreshData();
+        }
+      },
+      error: function (data) {
+        console.log(data);
+      }
+    });
+  }
 }
 
 

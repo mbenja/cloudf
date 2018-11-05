@@ -224,6 +224,7 @@ router.get('/deleteDirectory', function(req, res) {
     const obj = {
       contents: response,
     };
+    console.log(obj);)
     // call for delete
     deleteDirectory(obj).then((response) => {
       // download
@@ -485,10 +486,15 @@ async function deleteDirectory(subdirectory) {
 
         const db = database.db('cloudf');
 
-        for (var i = 0; i < subdirectory.length; i++) {
-          db.collection(client_state.user_id + '.files').deleteOne({_id: new mongodb.ObjectID(subdirectory[i]["_id"])}, function(err, response) {
-            database.close();
-            resolve(response);
+        var count = 0;
+        for (var i = 0; i < subdirectory.contents.length; i++) {
+          db.collection(client_state.user_id + '.files').deleteOne({_id: new mongodb.ObjectID(subdirectory.contents[i]["_id"])}, function(err, response) {
+            count++;
+            // only resolve if last file
+            if (count == subdirectory.contents.length) {
+              database.close();
+              resolve('done');
+            }
           });
         }
       }
