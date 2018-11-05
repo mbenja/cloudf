@@ -119,8 +119,8 @@
           <div class="modal-body">
             <form class="form">
               <div class="form-group">
-                <button type="button" class="btn btn-raised btn-success" onclick="deleteFile();">Yes</button>
-                <button type="button" class="btn btn-danger" onclick="$('#modal_delete_file').modal('hide');">No</button>
+                <button type="button" class="btn btn-raised btn-success" onclick="delete();">Yes</button>
+                <button type="button" class="btn btn-danger" onclick="$('#modal_delete').modal('hide');">No</button>
               </div>
             </form>
           </div>
@@ -131,7 +131,7 @@
     <!-- div for file data display sidebar -->
     <div id="file_sidebar" class="sidebar" disabled>
       <!-- <div class="circleButton" id="deleteFile" onclick="$('#modal_delete_file').modal('show');"> </div> -->
-      <div class="circleButton" id="deleteFile" onclick="$('#modal_delete_file').modal('show');"> </div>
+      <div class="circleButton" id="deleteFile" onclick="$('#modal_delete').modal('show');"> </div>
       <div class="circleButton" id="downloadFile" onclick="download()"> </div>
       <a href="javascript:void(0)" class="close" onclick="hideSidebar()">&times;</a>
       <h3 id="data-filename"></h3>

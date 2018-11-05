@@ -205,7 +205,7 @@ function populateSidebar(index){
 /**
  * Sends necessary data to back-end for call to delete file
  */
-function deleteFile() {
+function delete() {
   // update state variables in back-end
   sendState();
   // define object to be sent to back-end

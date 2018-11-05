@@ -214,6 +214,24 @@ router.get('/deleteFile', function(req, res) {
   })
 });
 
+/**
+ * Calls for directory to be deleted
+ */
+router.get('/deleteDirectory', function(req, res) {
+  console.log("GET /deleteDirectory");
+  // get directory
+  getSubdirectory(client_state.user_id, req.query.directory_path).then((response) => {
+    const obj = {
+      contents: response,
+    };
+    // call for delete
+    deleteDirectory(obj).then((response) => {
+      // download
+      res.send(response);
+    })
+  });
+});
+
 
 
 /**
@@ -445,6 +463,34 @@ async function deleteFile(file_id) {
           database.close();
           resolve(response);
         });
+      }
+    });
+  });
+}
+
+
+
+/**
+ * Deletes specified files by ID
+ * @param {Object} subdirectory - files to be deleted
+ */
+async function deleteDirectory(subdirectory) {
+  let promise = new Promise(function(resolve, reject) {
+    mongodb.MongoClient.connect(url, function(err, database) {
+      // handle bad connection to mongoDB
+      if (database == null) {
+        resolve('BROKEN PIPE');
+      } else {
+        console.log("Successfully connected to mongoDB");
+
+        const db = database.db('cloudf');
+
+        for (var i = 0; i < subdirectory.length; i++) {
+          db.collection(client_state.user_id + '.files').deleteOne({_id: new mongodb.ObjectID(subdirectory[i]["_id"])}, function(err, response) {
+            database.close();
+            resolve(response);
+          });
+        }
       }
     });
   });
