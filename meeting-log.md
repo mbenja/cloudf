@@ -119,3 +119,17 @@ Attendees: Evan Brown, Blake Rieschick
 
   * Discussed next meeting
   * Talked about work being done - Evan doing user authentication, Blake doing breadcrumbs & click/drag move file functionality
+
+## Meeting \#10
+Date: Monday, November 5, 2018
+
+Time: 11:40 - 11:50 PM
+
+Location: In-class
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed current work being done by team members
+  * Discussed issues currently observed during directory downloads
+  * Discussed integration of user authentication
+  * Planned next meeting
