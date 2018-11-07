@@ -71,9 +71,16 @@ function populateDirectoryListing(path){
     else if(cur_type == "directory"){
       file_card.setAttribute("class", "card directory");
       file_card.setAttribute("onclick", "populateDirectoryListing(\"" + path + "/" + files_in_path[i].filename + "\");")
+      file_card.setAttribute("ondrop", "drop(event)");
+      file_card.setAttribute("ondragover", "allowDrop(event)");
+
     }
     else{
       file_card.setAttribute("class", "card file");
+      file_card.setAttribute("id", "file" + i);
+
+      file_card.setAttribute("draggable", "true");
+      file_card.setAttribute("ondragstart", "drag(event)");
       // set onclick event to show sidebar
       file_card.setAttribute("onclick", "showSidebar(" + files_in_path[i].index + ");")
     }
@@ -164,6 +171,35 @@ function populateBreadcrumbs(path){
 
     }
 }
+
+/**
+ * allows the file_card to be dragged
+ * @param {event} the drag event on file_card being moved
+ */
+ function drag(ev) {
+    ev.dataTransfer.setData("id", ev.target.id);
+}
+
+/**
+ * changes file_card path to new path and updates page
+ * @param {event} the drop event between the folder and file_card being moved
+ */
+ function drop(ev) {
+     ev.preventDefault();
+     let targetID = ev.dataTransfer.getData("id");
+     console.log("TargetID: " + targetID);
+     file_card = document.getElementById(targetID);
+     file_card.style.visibility = "hidden";
+     console.log("fileName: " + file_card.metadata.path);
+ }
+
+ /**
+  * allows drop event to occur on folder
+  * @param {event} the div that is having drop event occur on it
+  */
+ function allowDrop(ev) {
+     ev.preventDefault();
+ }
 
 
 /**
