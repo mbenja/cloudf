@@ -11,6 +11,7 @@ let current_file_data = [];
 let current_path = '/root';
 
 
+
 let current_breadcrumb_path;
 let current_breadcrumb_parents = 0;
 let current_path_sections = 0;
@@ -145,6 +146,11 @@ function populateBreadcrumbs(path){
           container_block = document.getElementById( 'banner' );
           container_block.appendChild( block_to_insert );
 
+          //check if overflow in elements occurs
+          if(isOverflown(document.getElementById("banner"))) {
+            console.log("overflow has occured");
+          }
+
           partialPath = "";
           break;
         }
@@ -165,6 +171,9 @@ function populateBreadcrumbs(path){
     }
 }
 
+function isOverflown(element) {
+    return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+}
 
 /**
  * displays the file information sidebar

@@ -119,15 +119,25 @@ body {
 }
 
 #banner {
- display: flex;
+  width: auto;
+  display: block;
+  position: absolute;
+  top: -26px;
+  left: 150px;
+  z-index: -1;
 }
 
 .pathSection {
   height: 25px;
-  width: 10%;
-  background-color: #c0eafc;
-  flex: 1;
+  width: 100px;
+  background-color: #947982;
   cursor: pointer;
+  float: left;
+  margin: 2px;
+  border-radius: 3px;
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
 }
 
 /**
