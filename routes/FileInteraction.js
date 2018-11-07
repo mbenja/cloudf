@@ -58,10 +58,29 @@ var path = require('path');
  */
 var mime = require('mime');
 
+let connection = require('./connection.js').connection;
+let sessions = require("./SessionManager.js");
+let session_mgr = new sessions.SessionManager(connection);
+
 router.use(fileUpload());
 
 // setting up static folder
 router.use(express.static(path.join(__dirname, 'public')));
+
+router.use(function valSession(req, res, next){
+  console.log("in valSession");
+  session_mgr.validateSession(req.query.session).then((results) => {
+    if(results.success){
+      console.log("validated session");
+      next();
+    }
+    else{
+      console.log("FAILED LOGIN");
+      res.status(401).send({error: "invalid session"});
+      //res.redirect('/login');
+    }
+  });
+});
 
 /**
  * Defining object containing state variables from front-end

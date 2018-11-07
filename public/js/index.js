@@ -199,7 +199,9 @@ function populateSidebar(index){
   document.getElementById("data-adddate").innerHTML = current_file_data[index].metadata.date_added;
 }
 
-
+function getCookie(){
+  return document.cookie.split('=')[1];
+}
 
 /**
  * Sends necessary data to back-end for call to delete file
@@ -209,7 +211,8 @@ function deleteFile() {
   sendState();
   // define object to be sent to back-end
   const obj = {
-    file_id: current_file_data[selected_index]["_id"]
+    file_id: current_file_data[selected_index]["_id"],
+    session: getCookie()
   };
   // perform ajax call
   $.ajax({
@@ -268,7 +271,8 @@ function sendState() {
   // TODO this is hard-coded until we implement user authentication
   const obj = {
     user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
-    current_path: current_path
+    current_path: current_path,
+    session: getCookie()
   };
   // perform ajax call
   $.ajax({
@@ -299,7 +303,8 @@ function createDirectory() {
     directory_name = 'New Folder';
   }
   const obj = {
-    directory_name: directory_name
+    directory_name: directory_name,
+    session: getCookie()
   };
   // perform ajax call
   $.ajax({
@@ -346,7 +351,7 @@ function refreshData() {
     user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx'
   };
   // perform ajax call
-  $.ajax({
+  authenticatedRequest({
     url: '/FileInteraction/getRootDirectory',
     data: obj,
     success: function (data) {
@@ -371,6 +376,27 @@ function refreshData() {
 
 }
 
+
+
+function authenticatedRequest(settings){
+  settings.data.session = getCookie();
+
+  let promise = $.Deferred()
+
+  $.ajax(settings).then((data, textStatus, jqXHR) => {
+    promise.resolve(data, textStatus, jqXHR);
+  },
+  (jqXHR, textStatus, errorThrown) => {
+    if(errorThrown == "Unauthorized"){
+      window.location.replace("/login");
+    }
+    else{
+      promise.reject(jqXHR, textStatus, errorThrown);
+    }
+  }
+
+  return promise;
+}
 
 
 /**

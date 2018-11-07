@@ -9,8 +9,36 @@ class SessionManager {
    * @param {String} session_id random string associated with a session
    * @returns {Promise} containing {user_id: ___, expires: ___}
    */
-  validateSession(session_id){
+  async validateSession(session_id){
 
+    console.log("in validateSession");
+
+    let promise = new Promise((resolve, reject) => {
+      this.connection.query("SELECT * FROM sessions WHERE session_id=?", [session_id], (err, results, fields) => {
+        if(err){
+          console.log("error from mysql");
+          reject(err.code);
+        }
+        else if (results.length == 1){
+          console.log(results[0].session_id);
+          console.log(results[0].expiration);
+          // return session id
+          resolve();
+        }
+        else{
+          console.log("invalid session");
+          reject("invalid session")
+        }
+      });
+    });
+
+    try{
+      let session_id = await promise;
+      return {success: true};
+    }
+    catch(err){
+      return {success: false, error: err};
+    }
   }
 
   /**
@@ -32,7 +60,7 @@ class SessionManager {
       this.connection.query("INSERT INTO sessions VALUES (?, ?, ?)", [gen_id, user_id, new Date()], (err, results, fields) => {
         if(err){
           console.log("reject for error");
-          reject(err);
+          reject(err.code);
         }
         else{
           console.log("resolve");

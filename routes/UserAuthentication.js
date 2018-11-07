@@ -19,7 +19,7 @@ class UserAuthentication {
       this.connection.query("SELECT * FROM users WHERE email=? AND password=?", [email, password], (err, results, fields) => {
         if(err){
           console.log("reject for error");
-          reject(err);
+          reject(err.code);
         }
         else if (results.length == 1){
           // return session id
