@@ -133,3 +133,17 @@ Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
   * Discussed issues currently observed during directory downloads
   * Discussed integration of user authentication
   * Planned next meeting
+
+## Meeting \#11
+Date: Monday, November 7, 2018
+
+Time: 11:40 - 11:50 PM
+
+Location: In-class
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed current work being done by team members
+  * Discussed integration of moving files implementation with back-end
+  * Discussed implementing of testing suite
+  * Discussed issues currently observed during directory downloads
