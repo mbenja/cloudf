@@ -63,21 +63,30 @@ function populateDirectoryListing(path){
 
     // create enclosing div for file
     let file_card = document.createElement('div');
+
+    //Assign File ID
+    file_card.setAttribute("id", "file" + i);
+
     // set css class and onlick attributes based on file type
     if(cur_type == "parent"){
       file_card.setAttribute("class", "card parent");
       file_card.setAttribute("onclick", "populateDirectoryListing(\"" + current_path.split('/').splice(0, current_path.split('/').length-1).join('/') + "\");");
+
+      file_card.setAttribute("ondrop", "drop(event)");
+      file_card.setAttribute("ondragover", "allowDrop(event)");
     }
     else if(cur_type == "directory"){
       file_card.setAttribute("class", "card directory");
       file_card.setAttribute("onclick", "populateDirectoryListing(\"" + path + "/" + files_in_path[i].filename + "\");")
+
+      file_card.setAttribute("draggable", "true");
+      file_card.setAttribute("ondragstart", "drag(event)");
       file_card.setAttribute("ondrop", "drop(event)");
       file_card.setAttribute("ondragover", "allowDrop(event)");
 
     }
     else{
       file_card.setAttribute("class", "card file");
-      file_card.setAttribute("id", "file" + i);
 
       file_card.setAttribute("draggable", "true");
       file_card.setAttribute("ondragstart", "drag(event)");
@@ -88,6 +97,9 @@ function populateDirectoryListing(path){
     // create body for file type image and name
     let card_body = document.createElement('div');
     card_body.setAttribute("class", "card-body");
+
+    //Assign File ID
+    card_body.setAttribute("id", "file" + i);
 
     // create file type image
     let file_icon = document.createElement('img');
@@ -144,7 +156,8 @@ function populateBreadcrumbs(path){
           block_to_insert.classList.add('pathSection');
           block_to_insert.path = path;
           block_to_insert.setAttribute("onclick", "populateDirectoryListing(this.path)");
-          //block_to_insert.addEventListener("click", populateDirectoryListing(this.path))
+          block_to_insert.setAttribute("ondrop", "drop(event)");
+          block_to_insert.setAttribute("ondragover", "allowDrop(event)");
           block_to_insert.innerHTML = partialPath ;
           block_to_insert.pathNum = current_path_sections;
 
@@ -186,11 +199,20 @@ function populateBreadcrumbs(path){
  */
  function drop(ev) {
      ev.preventDefault();
-     let targetID = ev.dataTransfer.getData("id");
-     console.log("TargetID: " + targetID);
-     file_card = document.getElementById(targetID);
-     file_card.style.visibility = "hidden";
-     console.log("fileName: " + file_card.metadata.path);
+
+     let id = ev.dataTransfer.getData("id");
+     file_card = document.getElementById(id);
+
+     if(id != ev.target.id) {
+       //file_card.style.visibility = "hidden";
+
+       //Possible Events
+        //File or Folder Drop on Directory
+        //File or Folder Drop on Parent Directory
+        //File or Folder Drop on Breadcrumb Banner
+      //Backend Function Call To Rename
+
+    }
  }
 
  /**
