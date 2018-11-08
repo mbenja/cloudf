@@ -84,6 +84,8 @@ function populateDirectoryListing(path){
       file_card.setAttribute("ondrop", "drop(event)");
       file_card.setAttribute("ondragover", "allowDrop(event)");
 
+      file_card.setAttribute("ondblclick", "is_single=0;populateDirectoryListing(\"" + path + "/" + files_in_path[i].filename + "\");");
+      file_card.setAttribute("onclick", "is_single=1;setTimeout(function() { if (is_single) showSidebar(" + files_in_path[i].index + ");},300);");
     }
     else{
       file_card.setAttribute("class", "card file");
@@ -262,52 +264,101 @@ function populateSidebar(index){
 /**
  * Sends necessary data to back-end for call to delete file
  */
-function deleteFile() {
+function deleteItem() {
   // update state variables in back-end
   sendState();
-  // define object to be sent to back-end
-  const obj = {
-    file_id: current_file_data[selected_index]["_id"]
-  };
-  // perform ajax call
-  $.ajax({
-    url: '/FileInteraction/deleteFile',
-    data: obj,
-    success: function (response) {
-      // dismiss delete modal
-      $('#modal_delete_file').modal('hide');
-      // hide sidebar
-      hideSidebar();
-      // show snackbar dependent upon response
-      if (response == 'BROKEN PIPE') {
-        $.snackbar({content: "<strong>Error:</strong> Servers are down."});
-      } else {
-        $.snackbar({content: "<strong>Success!</strong> The file has been deleted."});
-        // refresh front-end
-        refreshData();
+  // check content type
+  if (current_file_data[selected_index]["metadata"]["content_type"] == "directory") {
+    // is directory
+    // define object to be sent to back-end
+    const obj = {
+      directory_id: current_file_data[selected_index]["_id"],
+      directory_path: current_file_data[selected_index]["metadata"]["path"] + '/' +
+      current_file_data[selected_index]["filename"]
+    };
+    // perform ajax call
+    $.ajax({
+      url: '/FileInteraction/deleteDirectory',
+      data: obj,
+      success: function (response) {
+        // dismiss delete modal
+        $('#modal_delete').modal('hide');
+        // hide sidebar
+        hideSidebar();
+        // show snackbar dependent upon response
+        if (response == 'BROKEN PIPE') {
+          $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+        } else {
+          $.snackbar({content: "<strong>Success!</strong> The folder has been deleted."});
+          // refresh front-end
+          refreshData();
+        }
+      },
+      error: function (data) {
+        console.log(data);
       }
-    },
-    error: function (data) {
-      console.log(data);
-    }
-  });
+    });
+  } else {
+    // is file
+    // define object to be sent to back-end
+    const obj = {
+      file_id: current_file_data[selected_index]["_id"]
+    };
+    // perform ajax call
+    $.ajax({
+      url: '/FileInteraction/deleteFile',
+      data: obj,
+      success: function (response) {
+        // dismiss delete modal
+        $('#modal_delete').modal('hide');
+        // hide sidebar
+        hideSidebar();
+        // show snackbar dependent upon response
+        if (response == 'BROKEN PIPE') {
+          $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+        } else {
+          $.snackbar({content: "<strong>Success!</strong> The file has been deleted."});
+          // refresh front-end
+          refreshData();
+        }
+      },
+      error: function (data) {
+        console.log(data);
+      }
+    });
+  }
 }
 
 
 
 /**
- * Sends necessary data to back-end for call to download file
+ * Sends necessary data to back-end for call to download file/directory
  */
-function downloadFile() {
+function download() {
   // update state variables in back-end
   sendState();
+  // check content_type
   // define object to be sent to back-end
-  const obj = {
-    file_id: current_file_data[selected_index]["_id"],
-    file_name: current_file_data[selected_index]["filename"]
-  };
-  // making call to back-end
-  window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name);
+  if (current_file_data[selected_index]["metadata"]["content_type"] == "directory") {
+    // is directory
+    const obj = {
+      directory_id: current_file_data[selected_index]["_id"],
+      directory_name: current_file_data[selected_index]["filename"],
+      directory_path: current_file_data[selected_index]["metadata"]["path"] + '/' +
+      current_file_data[selected_index]["filename"]
+    };
+    // making call to back-end
+    window.open('/FileInteraction/downloadDirectory?directory_id=' + obj.directory_id +
+    '&directory_name=' + obj.directory_name + '&directory_path=' + obj.directory_path);
+  } else {
+    // is singular file
+    const obj = {
+      file_id: current_file_data[selected_index]["_id"],
+      file_name: current_file_data[selected_index]["filename"]
+    };
+    // making call to back-end
+    window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name);
+  }
   // hide sidebar
   hideSidebar();
 }

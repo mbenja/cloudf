@@ -74,9 +74,9 @@
     </div>
 
     <!--
-    Upload form modal
+    Create directory modal
     -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="modal_create_directory">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_create_directory" onkeypress="javascript: if(event.keyCode == 13) createDirectory();">
       <div class="modal-dialog" role="document">
         <div class="modal-content" id="modal_create_directory_content">
           <div class="modal-header">
@@ -105,12 +105,12 @@
     <!--
     Delete File form modal
     -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="modal_delete_file">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_delete">
       <div class="modal-dialog" role="document">
         <div class="modal-content" id="modal_delete_file_content">
           <div class="modal-header">
             <h5 class="modal-title">
-              Are you sure you want to delete this file?
+              Are you sure you want to delete this item?
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -119,43 +119,8 @@
           <div class="modal-body">
             <form class="form">
               <div class="form-group">
-                <button type="button" class="btn btn-raised btn-success" onclick="deleteFile();">Yes</button>
-                <button type="button" class="btn btn-danger" onclick="$('#modal_delete_file').modal('hide');">No</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!--
-    Download File form modal
-    -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="modal_download_file">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content" id="modal_download_file_content">
-          <div class="modal-header">
-            <h5 class="modal-title">
-              Download Location
-            </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form ref='download_form' class="form-inline justify-content-between"
-              id='upload_form'
-              action='/FileInteraction/uploadFile'
-              method='post'
-              encType="multipart/form-data">
-              <div class="form-group">
-                <div class="custom-file">
-                  <input type="file" class="form-control-file" id="input_upload_file" name="input_upload_file" onchange="sendState();">
-                </div>
-              </div>
-              <div class="form-group">
-                <button type="submit" class="btn btn-raised btn-success" onclick="downloadFile">Upload</button>
-                <button type="button" class="btn btn-danger" onclick="$('#modal_download_file').modal('hide');">Cancel</button>
+                <button type="button" class="btn btn-raised btn-success" onclick="deleteItem();">Yes</button>
+                <button type="button" class="btn btn-danger" onclick="$('#modal_delete').modal('hide');">No</button>
               </div>
             </form>
           </div>
@@ -166,8 +131,8 @@
     <!-- div for file data display sidebar -->
     <div id="file_sidebar" class="sidebar" disabled>
       <!-- <div class="circleButton" id="deleteFile" onclick="$('#modal_delete_file').modal('show');"> </div> -->
-      <div class="circleButton" id="deleteFile" onclick="$('#modal_delete_file').modal('show');"> </div>
-      <div class="circleButton" id="downloadFile" onclick="downloadFile()"> </div>
+      <div class="circleButton" id="deleteFile" onclick="$('#modal_delete').modal('show');"> </div>
+      <div class="circleButton" id="downloadFile" onclick="download()"> </div>
       <a href="javascript:void(0)" class="close" onclick="hideSidebar()">&times;</a>
       <h3 id="data-filename"></h3>
       <hr>
