@@ -4,6 +4,18 @@ class SessionManager {
     this.connection = connection;
   }
 
+  getRandomString(length){
+    let ranstr = "";
+    for(let i = 0; i < length; i++){
+      let charcode = Math.floor(Math.random()*61)
+      charcode += (charcode < 10 ? 48 : 55);
+      charcode += (charcode > 90 ? 7 : 0);
+      ranstr += String.fromCharCode(charcode);
+    }
+
+    return ranstr;
+  }
+
   /**
    * queries mysql for the user data associated with a session id
    * @param {String} session_id random string associated with a session
@@ -23,7 +35,7 @@ class SessionManager {
           console.log(results[0].session_id);
           console.log(results[0].expiration);
           // return session id
-          resolve();
+          resolve(results[0].user_id);
         }
         else{
           console.log("invalid session");
@@ -33,8 +45,8 @@ class SessionManager {
     });
 
     try{
-      let session_id = await promise;
-      return {success: true};
+      let user_id = await promise;
+      return {success: true, user_id: user_id};
     }
     catch(err){
       return {success: false, error: err};
@@ -48,12 +60,8 @@ class SessionManager {
    */
   async createSession(user_id){
 
-    let gen_id = "";
-    for(let i = 0; i < 32; i++){
-      let charcode = Math.floor(Math.random()*68)
-      charcode += (charcode < 10 ? 48 : 55);
-      gen_id += String.fromCharCode(charcode);
-    }
+    let gen_id = this.getRandomString(32);
+
     //results[index].column
     let promise = new Promise((resolve, reject) => {
       console.log("in session promise");
@@ -80,12 +88,56 @@ class SessionManager {
     }
   }
 
+  async refreshSession(session_id){
+
+    let promise = new Promise((resolve, reject) => {
+      this.connection.query("UPDATE sessions SET expiration = ? WHERE session_id = ?", [new Date(), session_id], (err, results, fields) => {
+        if(err){
+          console.log("refresh error: " + err);
+          reject(err.code);
+        }
+        else{
+          console.log("refreshed session");
+          resolve();
+        }
+      });
+    });
+
+    try{
+      let results = await promise;
+      return {success: true};
+    }
+    catch(err){
+      return {success: false, error: err};
+    }
+
+  }
+
   /**
    * logs out user by removing session
    * @param {String} session_id random string associated with session
    * @returns {Promise} indicating status of logout
    */
-  logout(session_id){
+  async logout(session_id){
+
+    let promise = new Promise((resolve, reject) => {
+      this.connection.query("DELETE FROM sessions WHERE session_id = ?", [session_id], (err, results, fields) => {
+        if(err){
+          reject(err.code);
+        }
+        else{
+          resolve();
+        }
+      });
+    });
+
+    try{
+      let results = await promise;
+      return {success: true};
+    }
+    catch(err){
+      return {success: false, error: err};
+    }
 
   }
 

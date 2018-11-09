@@ -208,14 +208,13 @@ function getCookie(){
  */
 function deleteFile() {
   // update state variables in back-end
-  sendState();
+  //sendState();
   // define object to be sent to back-end
   const obj = {
-    file_id: current_file_data[selected_index]["_id"],
-    session: getCookie()
+    file_id: current_file_data[selected_index]["_id"]
   };
   // perform ajax call
-  $.ajax({
+  authenticatedRequest({
     url: '/FileInteraction/deleteFile',
     data: obj,
     success: function (response) {
@@ -245,14 +244,14 @@ function deleteFile() {
  */
 function downloadFile() {
   // update state variables in back-end
-  sendState();
+  //sendState();
   // define object to be sent to back-end
   const obj = {
     file_id: current_file_data[selected_index]["_id"],
     file_name: current_file_data[selected_index]["filename"]
   };
   // making call to back-end
-  window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name);
+  window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name + '&session=' + getCookie());
   // hide sidebar
   hideSidebar();
 }
@@ -270,12 +269,10 @@ function sendState() {
   // define data needed on backend
   // TODO this is hard-coded until we implement user authentication
   const obj = {
-    user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
-    current_path: current_path,
-    session: getCookie()
+    current_path: current_path
   };
   // perform ajax call
-  $.ajax({
+  authenticatedRequest({
     url: '/FileInteraction/clientState',
     data: obj,
     success: function (data) {
@@ -294,7 +291,7 @@ function sendState() {
  */
 function createDirectory() {
   // send state
-  sendState();
+  //sendState();
 
   // get data for back-end
   // account for empty folder name
@@ -303,11 +300,10 @@ function createDirectory() {
     directory_name = 'New Folder';
   }
   const obj = {
-    directory_name: directory_name,
-    session: getCookie()
+    directory_name: directory_name
   };
   // perform ajax call
-  $.ajax({
+  authenticatedRequest({
     url: '/FileInteraction/createDirectory',
     data: obj,
     success: function(response) {
@@ -347,13 +343,12 @@ function refreshData() {
 
   let callback = $.Deferred();
 
-  const obj = {
-    user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx'
-  };
+  // const obj = {
+  //   user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx'
+  // };
   // perform ajax call
   authenticatedRequest({
     url: '/FileInteraction/getRootDirectory',
-    data: obj,
     success: function (data) {
       // present error if broken pipe
       if (data == 'BROKEN PIPE') {
@@ -362,15 +357,16 @@ function refreshData() {
         current_file_data = data.map((val, ind) => { val.index = ind; return val; });
         populateDirectoryListing('/root');
       }
+      console.log(data);
       callback.resolve();
     },
     error: function (data) {
-      console.log(data);
+      console.log("error:" + data);
       callback.reject();
     }
   });
   // call to send client state
-  sendState();
+  //sendState();
 
   return callback.promise();
 
@@ -379,21 +375,24 @@ function refreshData() {
 
 
 function authenticatedRequest(settings){
+  if(!settings.data){
+    settings.data = {};
+  }
   settings.data.session = getCookie();
 
   let promise = $.Deferred()
 
   $.ajax(settings).then((data, textStatus, jqXHR) => {
-    promise.resolve(data, textStatus, jqXHR);
-  },
-  (jqXHR, textStatus, errorThrown) => {
-    if(errorThrown == "Unauthorized"){
+    if(data == 'INVALID SESSION'){
       window.location.replace("/login");
     }
     else{
-      promise.reject(jqXHR, textStatus, errorThrown);
+      promise.resolve(data, textStatus, jqXHR);
     }
-  }
+  },
+  (jqXHR, textStatus, errorThrown) => {
+    promise.reject(jqXHR, textStatus, errorThrown);
+  });
 
   return promise;
 }
@@ -408,7 +407,7 @@ $('#upload_form').submit(function(e){
 
   // serialize the form
   var form_data = $('#upload_form').serialize();
-
+  form_data.session = getCookie();
   // submit the form
   $(this).ajaxSubmit({
     data: form_data,

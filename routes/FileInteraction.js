@@ -71,15 +71,36 @@ router.use(function valSession(req, res, next){
   console.log("in valSession");
   session_mgr.validateSession(req.query.session).then((results) => {
     if(results.success){
+      client_state.user_id = results.user_id;
       console.log("validated session");
-      next();
+      session_mgr.refreshSession(req.query.session).then((results) => {
+        if(results.success){
+          next();
+        }
+        else{
+          console.log("ERROR REFRESING");
+          res.send('REFRESH ERROR');
+        }
+      });
     }
     else{
       console.log("FAILED LOGIN");
-      res.status(401).send({error: "invalid session"});
+      res.send('INVALID SESSION');
       //res.redirect('/login');
     }
   });
+});
+
+
+router.get('/logout', function(req, res) {
+  session_mgr.logout(req.query.session).then((results) => {
+    if(results.success){
+      res.send('SUCCESSFUL LOGOUT');
+    }
+    else{
+      res.send('LOGOUT FAILED');
+    }
+  })
 });
 
 /**
@@ -87,7 +108,7 @@ router.use(function valSession(req, res, next){
  * @type {Object}
  */
 var client_state = {
-  user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
+  user_id: '', //'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
   current_path: ''
 };
 
@@ -107,7 +128,7 @@ const url = 'mongodb://mongo:' + port + '/cloudf';
  * userID to connect to mongoDB with
  * TODO this is temporarily hard-coded until we implement user authentication
  */
-var user_id = 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx';
+//var user_id = 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx';
 
 
 
@@ -130,7 +151,7 @@ router.get('/clientState', function(req, res) {
  */
 router.get('/getRootDirectory', function(req, res) {
   console.log("GET /getRootDirectory");
-  getRootDirectory(req.query.user_id).then((response) => {
+  getRootDirectory().then((response) => {
     res.send(response);
   });
 });
@@ -145,7 +166,7 @@ router.get('/getRootDirectory', function(req, res) {
  */
 router.get('/getSubdirectory', function(req, res) {
   console.log("GET /getSubdirectory");
-  getSubdirectory(req.query.user_id, req.query.subdirectory).then((response) => {
+  getSubdirectory(req.query.subdirectory).then((response) => {
     res.send(response);
   });
 });
@@ -249,7 +270,8 @@ router.get('/downloadFile', function(req, res) {
  * @param {String} user_id - the user id to retrieve root directory for
  * @returns {Array} documents - an array of document objects
  */
-async function getRootDirectory(user_id) {
+async function getRootDirectory() {
+  console.log(client_state.user_id);
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
       // handle bad connection to mongoDB
@@ -259,7 +281,7 @@ async function getRootDirectory(user_id) {
         console.log("Successfully connected to mongoDB");
 
         const db = database.db('cloudf');
-        db.collection(user_id + '.files').find().toArray(function(err, documents) {
+        db.collection(client_state.user_id + '.files').find().toArray(function(err, documents) {
           database.close();
           resolve(documents);
         });
@@ -278,7 +300,7 @@ async function getRootDirectory(user_id) {
  * @param {String} subdirectory - the subdirectory to retrieve
  * @returns {Array} documents - an array of document objects
  */
-async function getSubdirectory(user_id, subdirectory) {
+async function getSubdirectory(subdirectory) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
       // handle bad connection to mongoDB
@@ -288,7 +310,7 @@ async function getSubdirectory(user_id, subdirectory) {
         console.log("Successfully connected to mongoDB");
 
         const db = database.db('cloudf');
-        db.collection(user_id + '.files').find({'metadata.path': subdirectory}).toArray(function(err, documents) {
+        db.collection(client_state.user_id + '.files').find({'metadata.path': subdirectory}).toArray(function(err, documents) {
           database.close();
           resolve(documents);
         });

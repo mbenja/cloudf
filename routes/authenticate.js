@@ -31,8 +31,4 @@ router.get('/initiateLogin', function(req, res) {
   );
 });
 
-router.get('/logout', function(req, res) {
-
-});
-
 module.exports = router;
