@@ -147,3 +147,17 @@ Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
   * Discussed integration of moving files implementation with back-end
   * Discussed implementing of testing suite
   * Discussed issues currently observed during directory downloads
+
+## Meeting \#12
+Date: Monday, November 9, 2018
+
+Time: 11:40 - 11:50 PM
+
+Location: In-class
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed current work being done by team members
+  * Discussed issues currently being observed during directory uploads
+  * Discussed integration of moving files implementation with back-end
+  * Discussed current status of user authentication
