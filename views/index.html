@@ -15,9 +15,22 @@
   </head>
 
   <body>
+    <div class="modal" tabindex="-1" role="dialog" id="loading_modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              Loading files, please wait...
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="container">
       <img src="/images/cloudf.png" style="height:10vh;">
       <!-- put current username and logout button here -->
+      <button type="button" class="btn btn-raised btn-secondary" onclick="doLogout();">Log Out</button>
     </div>
     <div id="main_container">
       <!-- breadcrumbs Banner -->
@@ -61,7 +74,7 @@
               encType="multipart/form-data">
               <div class="form-group">
                 <div class="custom-file">
-                  <input type="file" class="form-control-file" id="input_upload_file" name="input_upload_file" onchange="sendState();">
+                  <input type="file" class="form-control-file" id="input_upload_file" name="input_upload_file"><!-- onchange="sendState();"> -->
                 </div>
               </div>
               <div class="form-group">

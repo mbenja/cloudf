@@ -31,9 +31,11 @@ class SessionManager {
           console.log("error from mysql");
           reject(err.code);
         }
-        else if (results.length == 1){
+        else if (results.length == 1 && (new Date()) < (new Date(results[0].expiration))){
           console.log(results[0].session_id);
           console.log(results[0].expiration);
+          // console.log(new Date(results[0].expiration));
+          // console.log(new Date());
           // return session id
           resolve(results[0].user_id);
         }
@@ -65,7 +67,12 @@ class SessionManager {
     //results[index].column
     let promise = new Promise((resolve, reject) => {
       console.log("in session promise");
-      this.connection.query("INSERT INTO sessions VALUES (?, ?, ?)", [gen_id, user_id, new Date()], (err, results, fields) => {
+
+      // create expiration date for one hour in the future
+      let exp_date = new Date();
+      exp_date.setHours(exp_date.getHours()+1);
+
+      this.connection.query("INSERT INTO sessions VALUES (?, ?, ?)", [gen_id, user_id, exp_date], (err, results, fields) => {
         if(err){
           console.log("reject for error");
           reject(err.code);
@@ -91,7 +98,12 @@ class SessionManager {
   async refreshSession(session_id){
 
     let promise = new Promise((resolve, reject) => {
-      this.connection.query("UPDATE sessions SET expiration = ? WHERE session_id = ?", [new Date(), session_id], (err, results, fields) => {
+
+      // create expiration date for one hour in the future
+      let exp_date = new Date();
+      exp_date.setHours(exp_date.getHours()+1);
+
+      this.connection.query("UPDATE sessions SET expiration = ? WHERE session_id = ?", [exp_date, session_id], (err, results, fields) => {
         if(err){
           console.log("refresh error: " + err);
           reject(err.code);

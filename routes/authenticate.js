@@ -31,4 +31,15 @@ router.get('/initiateLogin', function(req, res) {
   );
 });
 
+router.get('/logout', function(req, res) {
+  user_auth.sessions.logout(req.query.session).then((results) => {
+    if(results.success){
+      res.send('SUCCESSFUL LOGOUT');
+    }
+    else{
+      res.send('LOGOUT FAILED');
+    }
+  })
+});
+
 module.exports = router;

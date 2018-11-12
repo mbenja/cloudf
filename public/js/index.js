@@ -30,7 +30,8 @@ let selected_index = 0;
 
 
 // initial call to backend to get file data
-refreshData();
+$('#loading_modal').modal('show');
+refreshData().then(() => { $('#loading_modal').modal('hide'); });
 
 
 
@@ -214,7 +215,7 @@ function deleteFile() {
     file_id: current_file_data[selected_index]["_id"]
   };
   // perform ajax call
-  authenticatedRequest({
+  $.ajax(authenticateAjaxData({
     url: '/FileInteraction/deleteFile',
     data: obj,
     success: function (response) {
@@ -234,7 +235,7 @@ function deleteFile() {
     error: function (data) {
       console.log(data);
     }
-  });
+  }));
 }
 
 
@@ -272,7 +273,7 @@ function sendState() {
     current_path: current_path
   };
   // perform ajax call
-  authenticatedRequest({
+  $.ajax(authenticateAjaxData({
     url: '/FileInteraction/clientState',
     data: obj,
     success: function (data) {
@@ -281,7 +282,7 @@ function sendState() {
     error: function (data) {
       console.log(data);
     }
-  });
+  }));
 }
 
 
@@ -300,10 +301,11 @@ function createDirectory() {
     directory_name = 'New Folder';
   }
   const obj = {
+    current_path: current_path,
     directory_name: directory_name
   };
   // perform ajax call
-  authenticatedRequest({
+  $.ajax(authenticateAjaxData({
     url: '/FileInteraction/createDirectory',
     data: obj,
     success: function(response) {
@@ -326,7 +328,7 @@ function createDirectory() {
       // present snackbar
       $.snackbar({content: "<strong>Error:</strong> Folder creation was not completed."});
      }
-  });
+  }));
   // reset input
   document.getElementById("input_directory_name").value = "";
 }
@@ -347,7 +349,7 @@ function refreshData() {
   //   user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx'
   // };
   // perform ajax call
-  authenticatedRequest({
+  $.ajax(authenticateAjaxData({
     url: '/FileInteraction/getRootDirectory',
     success: function (data) {
       // present error if broken pipe
@@ -355,7 +357,7 @@ function refreshData() {
         $.snackbar({content: "<strong>Error:</strong> Servers are down."});
       } else {
         current_file_data = data.map((val, ind) => { val.index = ind; return val; });
-        populateDirectoryListing('/root');
+        populateDirectoryListing(current_path);
       }
       console.log(data);
       callback.resolve();
@@ -364,7 +366,7 @@ function refreshData() {
       console.log("error:" + data);
       callback.reject();
     }
-  });
+  }));
   // call to send client state
   //sendState();
 
@@ -373,29 +375,56 @@ function refreshData() {
 }
 
 
+function authenticateAjaxData(settings){
 
-function authenticatedRequest(settings){
   if(!settings.data){
     settings.data = {};
   }
   settings.data.session = getCookie();
 
-  let promise = $.Deferred()
+  let orig_success = settings.success;
 
-  $.ajax(settings).then((data, textStatus, jqXHR) => {
+  settings.success = (data, textStatus, jqXHR) => {
     if(data == 'INVALID SESSION'){
       window.location.replace("/login");
     }
     else{
-      promise.resolve(data, textStatus, jqXHR);
+      document.cookie = "cloudf_session="+getCookie()+";max-age=3600";
+      if(orig_success){
+        orig_success(data, textStatus, jqXHR);
+      }
     }
-  },
-  (jqXHR, textStatus, errorThrown) => {
-    promise.reject(jqXHR, textStatus, errorThrown);
-  });
+  }
 
-  return promise;
+  return settings;
+
 }
+
+
+// function authenticatedRequest(settings){
+//   if(!settings.data){
+//     settings.data = {};
+//   }
+//   settings.data.session = getCookie();
+//
+//   let promise = $.Deferred()
+//
+//   $.ajax(settings).then((data, textStatus, jqXHR) => {
+//     if(data == 'INVALID SESSION'){
+//       window.location.replace("/login");
+//     }
+//     else{
+//       // refresh cookie
+//       document.cookie = "cloudf_session="+getCookie()+";max-age=3600";
+//       promise.resolve(data, textStatus, jqXHR);
+//     }
+//   },
+//   (jqXHR, textStatus, errorThrown) => {
+//     promise.reject(jqXHR, textStatus, errorThrown);
+//   });
+//
+//   return promise;
+// }
 
 
 /**
@@ -407,9 +436,8 @@ $('#upload_form').submit(function(e){
 
   // serialize the form
   var form_data = $('#upload_form').serialize();
-  form_data.session = getCookie();
   // submit the form
-  $(this).ajaxSubmit({
+  $(this).ajaxSubmit(authenticateAjaxData({
     data: form_data,
     contentType: 'application/json',
     success: function(response) {
@@ -432,8 +460,25 @@ $('#upload_form').submit(function(e){
       // present snackbar
       $.snackbar({content: "<strong>Error:</strong> Upload was not completed."});
      }
-  });
+  }));
   // reset input
   document.getElementById("input_upload_file").value = "";
   return false;
 });
+
+
+
+function doLogout(){
+  $.ajax({url: '/authenticate/logout',
+          data: {session: getCookie()},
+          success: (data) => {
+            if(data == 'SUCCESSFUL LOGOUT'){
+              window.location.replace("/login");
+            }
+            else{
+              console.log('error logging out');
+              // todo
+            }
+          }
+  });
+}

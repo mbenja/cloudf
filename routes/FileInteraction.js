@@ -71,16 +71,11 @@ router.use(function valSession(req, res, next){
   console.log("in valSession");
   session_mgr.validateSession(req.query.session).then((results) => {
     if(results.success){
-      client_state.user_id = results.user_id;
+      client_user = results.user_id;
+      //client_state.current_path = req.query.current_path;
       console.log("validated session");
       session_mgr.refreshSession(req.query.session).then((results) => {
-        if(results.success){
-          next();
-        }
-        else{
-          console.log("ERROR REFRESING");
-          res.send('REFRESH ERROR');
-        }
+        next();
       });
     }
     else{
@@ -92,17 +87,6 @@ router.use(function valSession(req, res, next){
 });
 
 
-router.get('/logout', function(req, res) {
-  session_mgr.logout(req.query.session).then((results) => {
-    if(results.success){
-      res.send('SUCCESSFUL LOGOUT');
-    }
-    else{
-      res.send('LOGOUT FAILED');
-    }
-  })
-});
-
 /**
  * Defining object containing state variables from front-end
  * @type {Object}
@@ -111,6 +95,8 @@ var client_state = {
   user_id: '', //'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
   current_path: ''
 };
+
+let client_user = '';
 
 /**
  * port to connect to mongoDB on
@@ -136,11 +122,11 @@ const url = 'mongodb://mongo:' + port + '/cloudf';
  * Route for updating client state
  * @param {Object} client_state - the client state to be set as current
  */
-router.get('/clientState', function(req, res) {
-  console.log("GET /clientState");
-  client_state = req.query;
-  res.send('success');
-});
+// router.get('/clientState', function(req, res) {
+//   console.log("GET /clientState");
+//   client_state = req.query;
+//   res.send('success');
+// });
 
 
 
@@ -178,6 +164,7 @@ router.get('/getSubdirectory', function(req, res) {
  */
 router.post('/uploadFile', function(req, res) {
   console.log("POST /uploadFile");
+  console.log(req);
   if (!req.files) {
     return res.status(400).send('No files were uploaded.');
   }
@@ -194,7 +181,7 @@ router.post('/uploadFile', function(req, res) {
       return res.status(500).send(err);
     } else {
       // ensure no duplicate uploads
-      isInDirectory(client_state.current_path, input_upload_file.name).then((response) => {
+      isInDirectory(req.query.current_path, input_upload_file.name).then((response) => {
         if (response === true) {
           // already exists
           res.send('FILE ALREADY EXISTS');
@@ -220,7 +207,7 @@ router.post('/uploadFile', function(req, res) {
 router.get('/createDirectory', function(req, res) {
   console.log("GET /createDirectory");
   // ensure no duplicate uploads
-  isInDirectory(client_state.current_path, req.query.directory_name).then((response) => {
+  isInDirectory(req.query.current_path, req.query.directory_name).then((response) => {
     if (response === true) {
       // already exists
       res.send('DIRECTORY ALREADY EXISTS');
@@ -229,7 +216,7 @@ router.get('/createDirectory', function(req, res) {
     } else {
       // proceed
       // now call async function that uploads to mongoDB
-      createDirectory(req.query.directory_name).then((response) => {
+      createDirectory(req.query.current_path, req.query.directory_name).then((response) => {
         res.send(response);
       })
     }
@@ -271,7 +258,7 @@ router.get('/downloadFile', function(req, res) {
  * @returns {Array} documents - an array of document objects
  */
 async function getRootDirectory() {
-  console.log(client_state.user_id);
+  console.log(client_user);
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
       // handle bad connection to mongoDB
@@ -281,7 +268,7 @@ async function getRootDirectory() {
         console.log("Successfully connected to mongoDB");
 
         const db = database.db('cloudf');
-        db.collection(client_state.user_id + '.files').find().toArray(function(err, documents) {
+        db.collection(client_user + '.files').find().toArray(function(err, documents) {
           database.close();
           resolve(documents);
         });
@@ -310,7 +297,7 @@ async function getSubdirectory(subdirectory) {
         console.log("Successfully connected to mongoDB");
 
         const db = database.db('cloudf');
-        db.collection(client_state.user_id + '.files').find({'metadata.path': subdirectory}).toArray(function(err, documents) {
+        db.collection(client_user + '.files').find({'metadata.path': subdirectory}).toArray(function(err, documents) {
           database.close();
           resolve(documents);
         });
@@ -339,7 +326,7 @@ async function uploadFile(input_upload_file) {
         const db = database.db('cloudf');
         // define bucket
         var bucket = new mongodb.GridFSBucket(db, {
-          bucketName: client_state.user_id
+          bucketName: client_user
         });
         // create upload stream
         upload_stream = bucket.openUploadStream(input_upload_file.name);
@@ -375,7 +362,7 @@ async function uploadFile(input_upload_file) {
  * Uploads directory from Node server to mongoDB
  * @param {Object} directory_name - the directory to be uploaded to mongoDB
  */
-async function createDirectory(directory_name) {
+async function createDirectory(enclosing_path, directory_name) {
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(url, function(err, database) {
       // handle bad connection to mongoDB
@@ -387,13 +374,13 @@ async function createDirectory(directory_name) {
         const db = database.db('cloudf');
         // define bucket
         var bucket = new mongodb.GridFSBucket(db, {
-          bucketName: client_state.user_id
+          bucketName: client_user
         });
         // create upload stream
         upload_stream = bucket.openUploadStream(directory_name);
         upload_stream.options.metadata = {
           date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
-          path: client_state.current_path,
+          path: enclosing_path,
           content_type: 'directory'
         };
         // create new readable stream
@@ -438,7 +425,7 @@ async function deleteFile(file_id) {
         console.log("Successfully connected to mongoDB");
 
         const db = database.db('cloudf');
-        db.collection(client_state.user_id + '.files').deleteOne({_id: new mongodb.ObjectID(file_id)}, function(err, response) {
+        db.collection(client_user + '.files').deleteOne({_id: new mongodb.ObjectID(file_id)}, function(err, response) {
           database.close();
           resolve(response);
         });
@@ -469,7 +456,7 @@ async function downloadFile(file_object) {
 
         // define bucket
         var bucket = new mongodb.GridFSBucket(db, {
-          bucketName: client_state.user_id
+          bucketName: client_user
         });
 
         bucket.openDownloadStream(new mongodb.ObjectID(file_object["file_id"])).
@@ -506,7 +493,7 @@ async function isInDirectory(path, file_name) {
         console.log("Successfully connected to mongoDB");
 
         const db = database.db('cloudf');
-        db.collection(client_state.user_id + '.files').find({'metadata.path': path, 'filename': file_name}).toArray(function(err, documents) {
+        db.collection(client_user + '.files').find({'metadata.path': path, 'filename': file_name}).toArray(function(err, documents) {
           database.close();
           resolve(documents);
         });
