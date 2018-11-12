@@ -16,6 +16,15 @@ body {
   width: 50%;
 }
 
+/**
+ * Styling for file cards
+ */
+.card {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  border-radius: 1vw;
+}
+
 #main_container {
   width: 100vw;
   padding-right: 15px;
@@ -115,7 +124,8 @@ body {
 
 /* Styling For breadcrumb Banner */
 .breadcrumbs{
-
+  background-color: #c0eafc;
+  border-radius: 1vw;
 }
 
 #banner {
@@ -125,9 +135,10 @@ body {
 .pathSection {
   height: 25px;
   width: 10%;
-  background-color: #c0eafc;
+  /* background-color: #c0eafc; */
   flex: 1;
   cursor: pointer;
+  /* border-radius: 1vw; */
 }
 
 /**
