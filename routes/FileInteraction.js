@@ -191,13 +191,9 @@ router.post('/uploadDirectory', function(req, res) {
   // create folder on backend
   // ensure no duplicate uploads
   // adjust client state variables
-  console.log('Current path before adjust: ' + client_state.current_path);
   const client_state_original = client_state.current_path;
   client_state.current_path = client_state.current_path.split('/');
-  console.log('Current path after split:');
-  console.log(client_state.current_path);
   client_state.current_path = '/' + client_state.current_path[1];
-  console.log('Current path after adjust: ' + client_state.current_path);
   isInDirectory(client_state.current_path, client_state.current_upload_path_local).then((response) => {
     if (response === true) {
       // already exists
@@ -206,23 +202,12 @@ router.post('/uploadDirectory', function(req, res) {
       res.send(response);
     } else {
       // proceed
-      // // adjust client state variables
-      // console.log('Current path before adjust: ' + client_state.current_path);
-      // const client_state_original = client_state.current_path;
-      // client_state.current_path = client_state.current_path.split('/');
-      // console.log('Current path after split:');
-      // console.log(client_state.current_path);
-      // client_state.current_path = '/' + client_state.current_path[1];
-      // console.log('Current path after adjust: ' + client_state.current_path);
-      // now call async function that uploads to mongoDB
       createDirectory(client_state.current_upload_path_local).then((response) => {
         // adjust client state variables
         client_state.current_path = client_state_original;
-        console.log('Current path readjusted: ' + client_state.current_path);
         // now place all files within upload directory onto NodeJS server
         // get folder
         let input_upload_directory = req.files.input_upload_directory;
-        console.log(input_upload_directory);
         var count = 0;
         for (var i = 0; i < input_upload_directory.length; i++) {
           // get file
@@ -231,8 +216,6 @@ router.post('/uploadDirectory', function(req, res) {
           // place within temp dir on server
           const upload_file_name = input_upload_file.name;
           const upload_path = './routes/upload/' + upload_file_name;
-          console.log(upload_file_name);
-          console.log(upload_path);
           input_upload_file.mv(upload_path, function(err) {
             if (err) {
               console.log(err);

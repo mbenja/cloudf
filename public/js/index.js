@@ -554,7 +554,6 @@ $('#upload_form_directory').submit(function(event) {
     data: form_data,
     contentType: 'application/json',
     success: function(response) {
-      console.log('here');
       // dismiss modal upon success
       $('#modal_upload_form').modal('hide');
       // show snackbar dependent upon response
