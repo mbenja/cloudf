@@ -190,6 +190,14 @@ router.post('/uploadDirectory', function(req, res) {
 
   // create folder on backend
   // ensure no duplicate uploads
+  // adjust client state variables
+  console.log('Current path before adjust: ' + client_state.current_path);
+  const client_state_original = client_state.current_path;
+  client_state.current_path = client_state.current_path.split('/');
+  console.log('Current path after split:');
+  console.log(client_state.current_path);
+  client_state.current_path = '/' + client_state.current_path[1];
+  console.log('Current path after adjust: ' + client_state.current_path);
   isInDirectory(client_state.current_path, client_state.current_upload_path_local).then((response) => {
     if (response === true) {
       // already exists
@@ -198,14 +206,14 @@ router.post('/uploadDirectory', function(req, res) {
       res.send(response);
     } else {
       // proceed
-      // adjust client state variables
-      console.log('Current path before adjust: ' + client_state.current_path);
-      const client_state_original = client_state.current_path;
-      client_state.current_path = client_state.current_path.split('/');
-      console.log('Current path after split:');
-      console.log(client_state.current_path);
-      client_state.current_path = '/' + client_state.current_path[1];
-      console.log('Current path after adjust: ' + client_state.current_path);
+      // // adjust client state variables
+      // console.log('Current path before adjust: ' + client_state.current_path);
+      // const client_state_original = client_state.current_path;
+      // client_state.current_path = client_state.current_path.split('/');
+      // console.log('Current path after split:');
+      // console.log(client_state.current_path);
+      // client_state.current_path = '/' + client_state.current_path[1];
+      // console.log('Current path after adjust: ' + client_state.current_path);
       // now call async function that uploads to mongoDB
       createDirectory(client_state.current_upload_path_local).then((response) => {
         // adjust client state variables
