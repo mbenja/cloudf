@@ -5,6 +5,12 @@
 let current_file_data = [];
 
 /**
+ * Current directory being uploaded by user
+ * @type {String}
+ */
+let current_upload_path_local = '';
+
+/**
  * stores path currently being viewed by the user
  * @type {String}
  */
@@ -377,7 +383,8 @@ function sendState() {
   // TODO this is hard-coded until we implement user authentication
   const obj = {
     user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
-    current_path: current_path
+    current_path: current_path,
+    current_upload_path_local: current_upload_path_local
   };
   // perform ajax call
   $.ajax({
@@ -481,13 +488,25 @@ function refreshData() {
 }
 
 
+/**
+ * On change listener for upload directory form so that back-end can know name of
+ * folder that is being uploaded
+ */
+document.getElementById("input_upload_directory").addEventListener("change", function(event) {
+  let files = event.target.files;
+  var directory = files[0].webkitRelativePath;
+  directory = directory.split('/');
+  current_upload_path_local = directory[0];
+  current_path = current_path + '/' + current_upload_path_local;
+  sendState();
+}, false);
 
 /**
  * Defining on submit for upload_form so that we can handle on complete, etc.
  */
-$('#upload_form').submit(function(e){
+$('#upload_form').submit(function(event) {
   // prevents rerouting of page
-  e.preventDefault();
+  event.preventDefault();
 
   // serialize the form
   var form_data = $('#upload_form').serialize();
@@ -519,5 +538,47 @@ $('#upload_form').submit(function(e){
   });
   // reset input
   document.getElementById("input_upload_file").value = "";
+  document.getElementById("input_upload_directory").value = "";
+  return false;
+});
+
+$('#upload_form_directory').submit(function(event) {
+  // prevents rerouting of page
+  event.preventDefault();
+
+  // serialize the form
+  var form_data = $('#upload_form').serialize();
+
+  // submit the form
+  $(this).ajaxSubmit({
+    data: form_data,
+    contentType: 'application/json',
+    success: function(response) {
+      console.log('here');
+      // dismiss modal upon success
+      $('#modal_upload_form').modal('hide');
+      // show snackbar dependent upon response
+      if (response == 'FILE ALREADY EXISTS') {
+        $.snackbar({content: "<strong>Error:</strong> A file of that name already exists within this directory."});
+      } else if (response == 'DIRECTORY ALREADY EXISTS') {
+        $.snackbar({content: "<strong>Error:</strong> A folder of that name already exists within this directory."});
+      } else if (response == 'BROKEN PIPE') {
+        $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+      } else {
+        $.snackbar({content: "<strong>Success!</strong> Upload complete."});
+        // refresh front-end
+        refreshData();
+      }
+    },
+    error: function(response) {
+      // dismiss modal
+      $('#modal_upload_form').modal('hide');
+      // present snackbar
+      $.snackbar({content: "<strong>Error:</strong> Upload was not completed."});
+     }
+  });
+  // reset input
+  document.getElementById("input_upload_file").value = "";
+  document.getElementById("input_upload_directory").value = "";
   return false;
 });

@@ -68,14 +68,14 @@
                 <button type="submit" class="btn btn-raised btn-success">Upload File</button>
               </div>
             </form>
-            <form ref='upload_form' class="form-inline justify-content-between"
-              id='upload_form'
-              action='/FileInteraction/uploadFolder'
+            <form ref='upload_form_directory' class="form-inline justify-content-between"
+              id='upload_form_directory'
+              action='/FileInteraction/uploadDirectory'
               method='post'
               encType="multipart/form-data">
               <div class="form-group">
                 <div class="custom-file">
-                  <input type="file" class="form-control-file" id="input_upload_folder" name="input_upload_folder" onchange="sendState();" webkitdirectory directory multiple>
+                  <input type="file" class="form-control-file" id="input_upload_directory" name="input_upload_directory" onchange="sendState();" webkitdirectory directory multiple>
                 </div>
               </div>
               <div class="form-group">
