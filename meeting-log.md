@@ -161,3 +161,16 @@ Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
   * Discussed issues currently being observed during directory uploads
   * Discussed integration of moving files implementation with back-end
   * Discussed current status of user authentication
+
+## Meeting \#13
+Date: Tuesday, November 13, 2018
+
+Time: 1:00 - 2:50 PM
+
+Location: Spahr
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed current work being done by team members
+  * Discussed integration of user authentication with front and back-end
+  * Discussed implementation of moving files in back-end
