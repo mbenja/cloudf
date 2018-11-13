@@ -58,7 +58,10 @@ var path = require('path');
  */
 var mime = require('mime');
 
-let connection = require('./connection.js').connection;
+let conn_info = require('./connection.js');
+let connection = conn_info.connection;
+let mongo_url = conn_info.mongo_url;
+
 let sessions = require("./SessionManager.js");
 let session_mgr = new sessions.SessionManager(connection);
 
@@ -67,23 +70,32 @@ router.use(fileUpload());
 // setting up static folder
 router.use(express.static(path.join(__dirname, 'public')));
 
+
 router.use(function valSession(req, res, next){
   console.log("in valSession");
-  session_mgr.validateSession(req.query.session).then((results) => {
-    if(results.success){
-      client_user = results.user_id;
-      //client_state.current_path = req.query.current_path;
-      console.log("validated session");
-      session_mgr.refreshSession(req.query.session).then((results) => {
-        next();
-      });
-    }
-    else{
-      console.log("FAILED LOGIN");
-      res.send('INVALID SESSION');
-      //res.redirect('/login');
-    }
-  });
+
+  try{
+    let session_id = req.headers.cookie.split('=')[1];
+    session_mgr.validateSession(session_id).then((results) => {
+      if(results.success){
+        client_user = results.user_id;
+        //client_state.current_path = req.query.current_path;
+        console.log("validated session");
+        session_mgr.refreshSession(session_id).then((results) => {
+          next();
+        });
+      }
+      else{
+        console.log("FAILED LOGIN");
+        res.send('INVALID SESSION');
+        //res.redirect('/login');
+      }
+    });
+  }
+  catch(err){
+    console.log("FAILED LOGIN");
+    res.send('INVALID SESSION');
+  }
 });
 
 
@@ -91,24 +103,12 @@ router.use(function valSession(req, res, next){
  * Defining object containing state variables from front-end
  * @type {Object}
  */
-var client_state = {
-  user_id: '', //'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
-  current_path: ''
-};
+// var client_state = {
+//   user_id: '', //'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
+//   current_path: ''
+// };
 
 let client_user = '';
-
-/**
- * port to connect to mongoDB on
- * @type {Number}
- */
-const port = '27017';
-
-/**
- * url to connect to mongodb on
- * @type {String}
- */
-const url = 'mongodb://mongo:' + port + '/cloudf';
 
 /**
  * userID to connect to mongoDB with
@@ -164,7 +164,7 @@ router.get('/getSubdirectory', function(req, res) {
  */
 router.post('/uploadFile', function(req, res) {
   console.log("POST /uploadFile");
-  console.log(req);
+  console.log(req.query);
   if (!req.files) {
     return res.status(400).send('No files were uploaded.');
   }
@@ -190,7 +190,7 @@ router.post('/uploadFile', function(req, res) {
         } else {
           // proceed
           // now call async function that uploads to mongoDB
-          uploadFile(input_upload_file).then((response) => {
+          uploadFile(input_upload_file, req.query.current_path).then((response) => {
             res.send(response);
           })
         }
@@ -260,7 +260,7 @@ router.get('/downloadFile', function(req, res) {
 async function getRootDirectory() {
   console.log(client_user);
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -289,7 +289,7 @@ async function getRootDirectory() {
  */
 async function getSubdirectory(subdirectory) {
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -314,9 +314,9 @@ async function getSubdirectory(subdirectory) {
  * Uploads file from Node server to mongoDB
  * @param {Object} input_upload_file - the file object to be uploaded to mongoDB
  */
-async function uploadFile(input_upload_file) {
+async function uploadFile(input_upload_file, moveto_path) {
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -332,7 +332,7 @@ async function uploadFile(input_upload_file) {
         upload_stream = bucket.openUploadStream(input_upload_file.name);
         upload_stream.options.metadata = {
           date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
-          path: client_state.current_path,
+          path: moveto_path,
           content_type: input_upload_file.mimetype
         };
         // create read stream and pipe
@@ -364,7 +364,7 @@ async function uploadFile(input_upload_file) {
  */
 async function createDirectory(enclosing_path, directory_name) {
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -417,7 +417,7 @@ async function createDirectory(enclosing_path, directory_name) {
  */
 async function deleteFile(file_id) {
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -443,7 +443,7 @@ async function deleteFile(file_id) {
  */
 async function downloadFile(file_object) {
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -485,7 +485,7 @@ async function downloadFile(file_object) {
  */
 async function isInDirectory(path, file_name) {
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');

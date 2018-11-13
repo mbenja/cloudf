@@ -10,11 +10,13 @@ var express = require('express');
  */
 var router = express.Router();
 
-let connection = require('./connection.js').connection;
+let conn_info = require('./connection.js')
+let connection = conn_info.connection;
+let mongo_url = conn_info.mongo_url;
 
 var authentication = require('./UserAuthentication.js')
 
-var user_auth = new authentication.UserAuthentication(connection);
+var user_auth = new authentication.UserAuthentication(connection, mongo_url);
 
 /*
 create database authentication;
@@ -40,6 +42,15 @@ router.get('/logout', function(req, res) {
       res.send('LOGOUT FAILED');
     }
   })
+});
+
+router.get('/register', function(req, res) {
+  console.log(req.query);
+
+  user_auth.createUser(req.query.reg_email, req.query.reg_pass1)
+  console.log(req.query.reg_email);
+  console.log(req.query.reg_pass1);
+  res.send("okay");
 });
 
 module.exports = router;

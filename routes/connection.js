@@ -8,4 +8,17 @@ let connection = mysql.createConnection({
   database: "authentication"
 });
 
+/**
+ * port to connect to mongoDB on
+ * @type {Number}
+ */
+const port = '27017';
+
+/**
+ * url to connect to mongodb on
+ * @type {String}
+ */
+const url = 'mongodb://mongo:' + port + '/cloudf';
+
 exports.connection = connection;
+exports.mongo_url = url;

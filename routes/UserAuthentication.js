@@ -1,8 +1,15 @@
 let sessions = require("./SessionManager.js");
 
+/**
+ * exports of mongodb interaction module
+ * @type {Object}
+ */
+var mongodb = require('mongodb');
+
 class UserAuthentication {
-  constructor(connection){
+  constructor(connection, mongo_url){
     this.connection = connection;
+    this.mongo_url = mongo_url;
     this.sessions = new sessions.SessionManager(connection);
   }
 
@@ -61,6 +68,46 @@ class UserAuthentication {
    * @returns {Promise} containing user id
    */
   async createUser(email, password){
+
+    let new_user_id = this.sessions.getRandomString(32);
+
+    let promise = new Promise((resolve, reject) => {
+      this.connection.query("INSERT INTO users VALUES (?, ?, ?)", [new_user_id, email, password], (err, results, fields) => {
+        if(err){
+          reject(err);
+        }
+        else{
+          mongodb.MongoClient.connect(this.mongo_url, function(err, database) {
+            // handle bad connection to mongoDB
+            if (database == null) {
+              reject('BROKEN PIPE');
+            } else {
+              console.log("Successfully connected to mongoDB");
+
+              const db = database.db('cloudf');
+              db.createCollection(new_user_id, function(err, res) {
+                if (err){
+                  reject(err);
+                }
+                else{
+                  console.log("Collection created!");
+                  database.close();
+                  resolve();
+                }
+              });
+            }
+          });
+        }
+      });
+    });
+
+    try{
+      let result = await promise;
+      return {success: true};
+    }
+    catch(err){
+      return {success: false, error: err};
+    }
 
   }
 

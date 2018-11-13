@@ -8,7 +8,8 @@ let current_file_data = [];
  * stores path currently being viewed by the user
  * @type {String}
  */
-let current_path = '/root';
+let current_path;
+setCurrentPath('/root');
 
 
 let current_breadcrumb_path;
@@ -43,7 +44,7 @@ refreshData().then(() => { $('#loading_modal').modal('hide'); });
 function populateDirectoryListing(path){
 
   // update current path
-  current_path = path;
+  setCurrentPath(path);
 
   // remove all of the files currently displayed
   while(files_div.firstChild){
@@ -465,6 +466,12 @@ $('#upload_form').submit(function(e){
   document.getElementById("input_upload_file").value = "";
   return false;
 });
+
+
+function setCurrentPath(new_path){
+  current_path = new_path;
+  document.getElementById('upload_form').setAttribute('action', '/FileInteraction/uploadFile?current_path=' + current_path);
+}
 
 
 
