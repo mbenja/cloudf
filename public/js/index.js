@@ -216,7 +216,7 @@ function deleteFile() {
     file_id: current_file_data[selected_index]["_id"]
   };
   // perform ajax call
-  $.ajax(authenticateAjaxData({
+  $.ajax({
     url: '/FileInteraction/deleteFile',
     data: obj,
     success: function (response) {
@@ -233,10 +233,8 @@ function deleteFile() {
         refreshData();
       }
     },
-    error: function (data) {
-      console.log(data);
-    }
-  }));
+    error: (data) => { checkInvalidSession(data); }
+  });
 }
 
 
@@ -263,31 +261,6 @@ function editFileName(){
 }
 
 
-
-/**
- * Retrieves necessary data from user to perform back-end call to upload file
- */
-function sendState() {
-  // define data needed on backend
-  // TODO this is hard-coded until we implement user authentication
-  const obj = {
-    current_path: current_path
-  };
-  // perform ajax call
-  $.ajax(authenticateAjaxData({
-    url: '/FileInteraction/clientState',
-    data: obj,
-    success: function (data) {
-      //console.log(data);
-    },
-    error: function (data) {
-      console.log(data);
-    }
-  }));
-}
-
-
-
 /**
  * Performs back-end call to create a directory in MongoDB
  */
@@ -306,7 +279,7 @@ function createDirectory() {
     directory_name: directory_name
   };
   // perform ajax call
-  $.ajax(authenticateAjaxData({
+  $.ajax({
     url: '/FileInteraction/createDirectory',
     data: obj,
     success: function(response) {
@@ -324,12 +297,13 @@ function createDirectory() {
       }
     },
     error: function(response) {
+      checkInvalidSession(response);
       // dismiss modal
       $('#modal_create_directory').modal('hide');
       // present snackbar
       $.snackbar({content: "<strong>Error:</strong> Folder creation was not completed."});
      }
-  }));
+  });
   // reset input
   document.getElementById("input_directory_name").value = "";
 }
@@ -350,7 +324,7 @@ function refreshData() {
   //   user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx'
   // };
   // perform ajax call
-  $.ajax(authenticateAjaxData({
+  $.ajax({
     url: '/FileInteraction/getRootDirectory',
     success: function (data) {
       // present error if broken pipe
@@ -364,10 +338,11 @@ function refreshData() {
       callback.resolve();
     },
     error: function (data) {
+      checkInvalidSession(data);
       console.log("error:" + data);
       callback.reject();
     }
-  }));
+  });
   // call to send client state
   //sendState();
 
@@ -376,56 +351,16 @@ function refreshData() {
 }
 
 
-function authenticateAjaxData(settings){
 
-  if(!settings.data){
-    settings.data = {};
+function checkInvalidSession(data){
+  if(data.responseText == 'INVALID SESSION'){
+    window.location.replace("/login");
+    return;
   }
-  settings.data.session = getCookie();
-
-  let orig_success = settings.success;
-
-  settings.success = (data, textStatus, jqXHR) => {
-    if(data == 'INVALID SESSION'){
-      window.location.replace("/login");
-    }
-    else{
-      document.cookie = "cloudf_session="+getCookie()+";max-age=3600";
-      if(orig_success){
-        orig_success(data, textStatus, jqXHR);
-      }
-    }
+  else{
+    document.cookie = "cloudf_session="+getCookie()+";max-age=3600";
   }
-
-  return settings;
-
 }
-
-
-// function authenticatedRequest(settings){
-//   if(!settings.data){
-//     settings.data = {};
-//   }
-//   settings.data.session = getCookie();
-//
-//   let promise = $.Deferred()
-//
-//   $.ajax(settings).then((data, textStatus, jqXHR) => {
-//     if(data == 'INVALID SESSION'){
-//       window.location.replace("/login");
-//     }
-//     else{
-//       // refresh cookie
-//       document.cookie = "cloudf_session="+getCookie()+";max-age=3600";
-//       promise.resolve(data, textStatus, jqXHR);
-//     }
-//   },
-//   (jqXHR, textStatus, errorThrown) => {
-//     promise.reject(jqXHR, textStatus, errorThrown);
-//   });
-//
-//   return promise;
-// }
 
 
 /**
@@ -438,7 +373,7 @@ $('#upload_form').submit(function(e){
   // serialize the form
   var form_data = $('#upload_form').serialize();
   // submit the form
-  $(this).ajaxSubmit(authenticateAjaxData({
+  $(this).ajaxSubmit({
     data: form_data,
     contentType: 'application/json',
     success: function(response) {
@@ -456,12 +391,13 @@ $('#upload_form').submit(function(e){
       }
     },
     error: function(response) {
+      checkInvalidSession(response);
       // dismiss modal
       $('#modal_upload_form').modal('hide');
       // present snackbar
       $.snackbar({content: "<strong>Error:</strong> Upload was not completed."});
      }
-  }));
+  });
   // reset input
   document.getElementById("input_upload_file").value = "";
   return false;

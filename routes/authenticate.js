@@ -27,30 +27,62 @@ insert into users values ("Mo190PgQtcI6FyRF3gNAge8whXhdtRMx", "evanbrown@ku.edu"
 */
 router.get('/initiateLogin', function(req, res) {
   user_auth.authenticate(req.query.email, req.query.password).then(
-    (results) => {
-      res.send(results);
+    (session_id) => {
+      res.send(session_id);
+    },
+    (error) => {
+      if(error.type == 'auth'){
+        res.status(401).send(error.contents);
+      }
+      else{
+        res.status(500).send(error.contents.code);
+      }
     }
   );
 });
 
 router.get('/logout', function(req, res) {
-  user_auth.sessions.logout(req.query.session).then((results) => {
-    if(results.success){
+
+  try{
+    let session_id = req.headers.cookie.split('=')[1];
+  }
+  catch(err){
+    res.status(401).send('NOT LOGGED IN');
+    return;
+  }
+
+  user_auth.sessions.logout(req.query.session).then(
+    () => {
       res.send('SUCCESSFUL LOGOUT');
+    },
+    (error) => {
+      if(error.type == 'auth'){
+        res.status(401).send(error.contents);
+      }
+      else{
+        res.status(500).send(error.contents.code);
+      }
     }
-    else{
-      res.send('LOGOUT FAILED');
-    }
-  })
+  );
+
 });
 
-router.get('/register', function(req, res) {
+router.get('/register', function(req, res){
   console.log(req.query);
 
-  user_auth.createUser(req.query.reg_email, req.query.reg_pass1)
-  console.log(req.query.reg_email);
-  console.log(req.query.reg_pass1);
-  res.send("okay");
+  user_auth.createUser(req.query.email, req.query.password).then(
+    () => {
+      res.send('SUCCESSFUL REGISTRATION');
+    },
+    (error) => {
+      if(error.type == 'auth'){
+        res.status(401).send(error.contents);
+      }
+      else{
+        res.status(500).send(error.contents.code);
+      }
+    }
+  );
 });
 
 module.exports = router;

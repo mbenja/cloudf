@@ -74,60 +74,50 @@ router.use(express.static(path.join(__dirname, 'public')));
 router.use(function valSession(req, res, next){
   console.log("in valSession");
 
+  let session_id;
+
   try{
-    let session_id = req.headers.cookie.split('=')[1];
-    session_mgr.validateSession(session_id).then((results) => {
-      if(results.success){
-        client_user = results.user_id;
-        //client_state.current_path = req.query.current_path;
-        console.log("validated session");
-        session_mgr.refreshSession(session_id).then((results) => {
-          next();
-        });
-      }
-      else{
-        console.log("FAILED LOGIN");
-        res.send('INVALID SESSION');
-        //res.redirect('/login');
-      }
-    });
+    session_id = req.headers.cookie.split('=')[1];
   }
   catch(err){
     console.log("FAILED LOGIN");
-    res.send('INVALID SESSION');
+    res.status(401).send('NOT LOGGED IN');
+    return;
   }
+
+  session_mgr.validateSession(session_id).then(
+    (user_id) => {
+      client_user = user_id;
+      console.log("validated session");
+      session_mgr.refreshSession(session_id).then(
+        () => {
+          next();
+        },
+        (error) => {
+          if(error.type == 'auth'){
+            res.status(401).send(error.contents);
+          }
+          else{
+            res.status(500).send(error.contents.code);
+          }
+        }
+      );
+    },
+    (error) => {
+      if(error.type == 'auth'){
+        res.status(401).send(error.contents);
+      }
+      else{
+        res.status(500).send(error.contents.code);
+      }
+    }
+  );
+
 });
 
 
-/**
- * Defining object containing state variables from front-end
- * @type {Object}
- */
-// var client_state = {
-//   user_id: '', //'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
-//   current_path: ''
-// };
 
 let client_user = '';
-
-/**
- * userID to connect to mongoDB with
- * TODO this is temporarily hard-coded until we implement user authentication
- */
-//var user_id = 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx';
-
-
-
-/**
- * Route for updating client state
- * @param {Object} client_state - the client state to be set as current
- */
-// router.get('/clientState', function(req, res) {
-//   console.log("GET /clientState");
-//   client_state = req.query;
-//   res.send('success');
-// });
-
 
 
 /**
