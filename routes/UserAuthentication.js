@@ -1,6 +1,19 @@
+/**
+ * import sessions manager
+ * @type {Object}
+ */
 let sessions = require("./SessionManager.js");
 
+/**
+ * import bcrypt, used for hashing Passwords
+ * @type {Object}
+ */
 const bcrypt = require('bcrypt');
+
+/**
+ * number of salt rounds to use for password hashing
+ * @type {Number}
+ */
 const saltRounds = 10;
 
 /**
@@ -9,7 +22,15 @@ const saltRounds = 10;
  */
 var mongodb = require('mongodb');
 
+/**
+ * contains methods for authenticating and creating new users
+ */
 class UserAuthentication {
+
+  /**
+   * @param {Object} connection a mysql connection object, created using mysql.createConnection
+   * @param {String} mongo_url url of the mongo server that files are stored in
+   */
   constructor(connection, mongo_url){
     this.connection = connection;
     this.mongo_url = mongo_url;
@@ -19,16 +40,15 @@ class UserAuthentication {
   /**
    * authenticates a given user and hashed password
    * @param {String} email user email
-   * @param {String} password hashed password
-   * @returns {Promise} containing user id
+   * @param {String} password the user's password
+   * @returns {Promise} a promise containing a session id
    */
   authenticate(email, password){
-    console.log("in user promise");
-
-    //let hashed = bcrypt.hash(password, saltRounds)., null, (err, hash) => { console.log(hash); });
+    console.log("authenticating user");
 
     let promise = new Promise((resolve, reject) => {
 
+      // query users for people with the given email
       this.connection.query("SELECT * FROM users WHERE email=?", [email], (err, results, fields) => {
         if(err){
           console.log("reject for error");
@@ -36,14 +56,18 @@ class UserAuthentication {
         }
         else if (results.length == 1){
 
+          // a user with this email exists.
+          // compare the given password with the hashed password stored in the db
           bcrypt.compare(password, results[0].password).then((res) => {
-
+            // if the passwords match...
             if(res){
-              // return session id
+
               let user_id = results[0].user_id;
+              // create a session with the user id retrieved from the table
               this.sessions.createSession(user_id).then(
                 (session_id) => {
-                  console.log("resolve with session");
+
+                  // return the session id obtained
                   resolve(session_id);
                 },
                 (error) => {
@@ -59,7 +83,7 @@ class UserAuthentication {
 
         }
         else{
-          console.log("reject for invalid user");
+          //console.log("reject for invalid user");
           reject({type: 'auth', contents: 'INVALID USER'});
         }
       });
@@ -73,35 +97,36 @@ class UserAuthentication {
   /**
    * creates a user with the given username and hashed pass
    * @param {String} email user email
-   * @param {String} password hashed password
-   * @returns {Promise} containing user id
+   * @param {String} password the user's password
+   * @returns {Promise}
    */
   createUser(email, password){
+
+    console.log("creating user");
 
     let new_user_id = this.sessions.getRandomString(32);
 
     let promise = new Promise((resolve, reject) => {
-      console.log(1);
+
+      // check if the given email has been used already
       this.connection.query("SELECT * FROM users WHERE email = ?", [email], (err, results, fields) => {
         if(err){
-          console.log(2);
           reject({type: 'mysql', contents: err});
         }
         else if(results.length == 0){
 
-          console.log(3);
+          // hash the password
           bcrypt.hash(password, saltRounds).then((hash) => {
 
-            console.log(4);
+            // put the new user into the users table
             this.connection.query("INSERT INTO users VALUES (?, ?, ?)", [new_user_id, email, hash], (err, results, fields) => {
               if(err){
-                console.log(5);
                 reject({type: 'mysql', contents: err});
               }
               else{
-                console.log(6);
+                // connect to the mongo database
                 mongodb.MongoClient.connect(this.mongo_url, function(err, database){
-                  console.log(7);
+
                   // handle bad connection to mongoDB
                   if (database == null) {
                     database.close();
@@ -110,12 +135,14 @@ class UserAuthentication {
                     console.log("Successfully connected to mongoDB");
 
                     const db = database.db('cloudf');
+                    // create chunks collection for this user
                     db.createCollection(new_user_id + ".chunks", function(err, res) {
                       if (err){
                         database.close();
                         reject({type: 'mongo', contents: err});
                       }
                       else{
+                        // create files collection for this user
                         db.createCollection(new_user_id + ".files", function(err, res) {
                           if (err){
                             database.close();

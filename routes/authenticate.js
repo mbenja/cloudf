@@ -10,24 +10,42 @@ var express = require('express');
  */
 var router = express.Router();
 
-let conn_info = require('./connection.js')
+/**
+ * exports of connection definition file
+ * @type {Object}
+ */
+let conn_info = require('./connection.js');
+
+/**
+ * contains the mysql connection information
+ * @type {Object}
+ */
 let connection = conn_info.connection;
+
+/**
+ * contains the mongo connection url
+ * @type {String}
+ */
 let mongo_url = conn_info.mongo_url;
 
+/**
+ * contains exports of user authentication file
+ * @type {Object}
+ */
 var authentication = require('./UserAuthentication.js')
 
+/**
+ * create an instance of the user authentication class
+ * @type {UserAuthentication}
+ */
 var user_auth = new authentication.UserAuthentication(connection, mongo_url);
 
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
-
-/*
-create database authentication;
-use authentication;
-create table users (user_id varchar(32) not null, email varchar(128) not null, password varchar(64) not null, primary key (user_id));
-create table sessions (session_id varchar(32) not null, user_id varchar(32) not null, expiration datetime not null, foreign key (user_id) references users(user_id));
-insert into users values ("Mo190PgQtcI6FyRF3gNAge8whXhdtRMx", "evanbrown@ku.edu", "test-pass");
-*/
+/**
+ * route for logging into cloudf
+ * @param {String} email user's email
+ * @param {String} password user's password
+ * @returns {String} session id of a session created for the user that logged in
+ */
 router.get('/initiateLogin', function(req, res) {
   user_auth.authenticate(req.query.email, req.query.password).then(
     (session_id) => {
@@ -44,8 +62,12 @@ router.get('/initiateLogin', function(req, res) {
   );
 });
 
+/**
+ * route for logging out of cloudf
+ */
 router.get('/logout', function(req, res) {
 
+  // get the session id of the user from their cookies
   try{
     let session_id = req.headers.cookie.split('=')[1];
   }
@@ -70,9 +92,12 @@ router.get('/logout', function(req, res) {
 
 });
 
-
+/**
+ * route for registering a new user in cloudf
+ * @param {String} email email of the new user
+ * @param {String} password password of the new user
+ */
 router.get('/register', function(req, res){
-  console.log(req.query);
 
   user_auth.createUser(req.query.email, req.query.password).then(
     () => {
@@ -90,15 +115,5 @@ router.get('/register', function(req, res){
 });
 
 
-router.get('/crypto', function(req, res){
-  let hashed = bcrypt.hash(req.query.password, saltRounds).then(
-    (hash) => {
-      res.send("hashed:" + hash);
-    },
-    (err) => {
-      res.send("hash error:" + err);
-    }
-  );
-});
 
 module.exports = router;

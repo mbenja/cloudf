@@ -58,11 +58,34 @@ var path = require('path');
  */
 var mime = require('mime');
 
+/**
+ * exports of connection definition file
+ * @type {Object}
+ */
 let conn_info = require('./connection.js');
+
+/**
+ * contains the mysql connection information
+ * @type {Object}
+ */
 let connection = conn_info.connection;
+
+/**
+ * contains the mongo connection url
+ * @type {String}
+ */
 let mongo_url = conn_info.mongo_url;
 
+/**
+ * contains exports of session manager file
+ * @type {Object}
+ */
 let sessions = require("./SessionManager.js");
+
+/**
+ * create instance of SessionManager class
+ * @type {SessionManager}
+ */
 let session_mgr = new sessions.SessionManager(connection);
 
 router.use(fileUpload());
@@ -70,27 +93,34 @@ router.use(fileUpload());
 // setting up static folder
 router.use(express.static(path.join(__dirname, 'public')));
 
-
+/**
+ * middleware function - before any call to file interaction backend, we
+ * should validate the session.
+ */
 router.use(function valSession(req, res, next){
   console.log("in valSession");
 
   let session_id;
 
+  // get session id from cookies in the headers, return error code if one isn't present
   try{
     session_id = req.headers.cookie.split('=')[1];
   }
   catch(err){
-    console.log("FAILED LOGIN");
     res.status(401).send('NOT LOGGED IN');
     return;
   }
 
+  // call validatesession to check session in sql data
   session_mgr.validateSession(session_id).then(
     (user_id) => {
+      // update the user in the client for next() callback functions
       client_user = user_id;
-      console.log("validated session");
+
+      // refresh the session
       session_mgr.refreshSession(session_id).then(
         () => {
+          // if everything succeeded, go to the next response function for this request
           next();
         },
         (error) => {
@@ -116,7 +146,9 @@ router.use(function valSession(req, res, next){
 });
 
 
-
+/**
+ * tracks the client's user id for requests after the session is validated
+ */
 let client_user = '';
 
 

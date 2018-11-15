@@ -30,8 +30,9 @@ let selected_index = 0;
 
 
 
-// initial call to backend to get file data
+// display loading modal
 $('#loading_modal').modal('show');
+// initial call to backend to get file data, then hide modal if it succeeds
 refreshData().then(() => { $('#loading_modal').modal('hide'); });
 
 
@@ -347,7 +348,12 @@ function refreshData() {
 }
 
 
-
+/**
+ * checks the data returned from a request to see if there was an authentication error
+ * if there was an authenticaion error, redirect to the login page
+ * if there wasn't, update the cookies to refersh the current session for another hour
+ * @param {Object} data data returns from an ajax request
+ */
 function checkInvalidSession(data){
   alert(data.responseText);
   if(data.responseText == 'INVALID SESSION' || data.responseText == 'NOT LOGGED IN'){
@@ -401,13 +407,22 @@ $('#upload_form').submit(function(e){
 });
 
 
+/**
+ * updates the path the user is currently viewing
+ * @param {String} new_path the updated path
+ */
 function setCurrentPath(new_path){
+  // update path variable
   current_path = new_path;
+  // update the upload file action path so that the current path gets passed along with the upload request
   document.getElementById('upload_form').setAttribute('action', '/FileInteraction/uploadFile?current_path=' + current_path);
 }
 
 
-
+/**
+ * makes an ajax call to logout the user
+ * redirect to the login page if the logout was successful.
+ */
 function doLogout(){
   $.ajax({url: '/authenticate/logout',
           data: {session: Cookies.get('cloudf_session')},
@@ -416,8 +431,7 @@ function doLogout(){
               window.location.replace("/login");
             }
             else{
-              console.log('error logging out');
-              // todo
+              $.snackbar({content: "<strong>Error:</strong> Logout failed, please try again."});
             }
           }
   });
