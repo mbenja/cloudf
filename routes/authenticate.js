@@ -18,6 +18,9 @@ var authentication = require('./UserAuthentication.js')
 
 var user_auth = new authentication.UserAuthentication(connection, mongo_url);
 
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 /*
 create database authentication;
 use authentication;
@@ -67,6 +70,7 @@ router.get('/logout', function(req, res) {
 
 });
 
+
 router.get('/register', function(req, res){
   console.log(req.query);
 
@@ -81,6 +85,18 @@ router.get('/register', function(req, res){
       else{
         res.status(500).send(error.contents.code);
       }
+    }
+  );
+});
+
+
+router.get('/crypto', function(req, res){
+  let hashed = bcrypt.hash(req.query.password, saltRounds).then(
+    (hash) => {
+      res.send("hashed:" + hash);
+    },
+    (err) => {
+      res.send("hash error:" + err);
     }
   );
 });

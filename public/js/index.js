@@ -201,10 +201,6 @@ function populateSidebar(index){
   document.getElementById("data-adddate").innerHTML = current_file_data[index].metadata.date_added;
 }
 
-function getCookie(){
-  return document.cookie.split('=')[1];
-}
-
 /**
  * Sends necessary data to back-end for call to delete file
  */
@@ -251,7 +247,7 @@ function downloadFile() {
     file_name: current_file_data[selected_index]["filename"]
   };
   // making call to back-end
-  window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name + '&session=' + getCookie());
+  window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name + '&session=' + Cookies.get('cloudf_session'));
   // hide sidebar
   hideSidebar();
 }
@@ -339,7 +335,7 @@ function refreshData() {
     },
     error: function (data) {
       checkInvalidSession(data);
-      console.log("error:" + data);
+      //console.log("error:" + data);
       callback.reject();
     }
   });
@@ -353,12 +349,13 @@ function refreshData() {
 
 
 function checkInvalidSession(data){
-  if(data.responseText == 'INVALID SESSION'){
+  alert(data.responseText);
+  if(data.responseText == 'INVALID SESSION' || data.responseText == 'NOT LOGGED IN'){
     window.location.replace("/login");
     return;
   }
   else{
-    document.cookie = "cloudf_session="+getCookie()+";max-age=3600";
+    Cookies.set('cloudf_session', Cookies.get('cloudf_session'), {expires: 1/24}); // one hour = 1/24 of a day
   }
 }
 
@@ -413,7 +410,7 @@ function setCurrentPath(new_path){
 
 function doLogout(){
   $.ajax({url: '/authenticate/logout',
-          data: {session: getCookie()},
+          data: {session: Cookies.get('cloudf_session')},
           success: (data) => {
             if(data == 'SUCCESSFUL LOGOUT'){
               window.location.replace("/login");

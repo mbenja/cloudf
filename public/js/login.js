@@ -17,7 +17,8 @@ function doLogin(form, email, pass){
     (session_id) => {
       console.log("success");
       console.log(session_id);
-      document.cookie = "cloudf_session="+session_id+";max-age=3600";
+      Cookies.set('cloudf_session', session_id, {expires: 1/24});
+      // document.cookie = "cloudf_session="+session_id+";max-age=3600";
       form.submit();
     },
     (error) => {
