@@ -119,12 +119,12 @@ body {
 }
 
 #banner {
-  width: auto;
+  width: 80%;
+  height: 30px;
   display: block;
   position: absolute;
-  top: -26px;
-  left: 150px;
-  z-index: -1;
+  top: -27.5px;
+  left: 20%;
 }
 
 .pathSection {
@@ -138,6 +138,10 @@ body {
   border-color: black;
   border-width: 2px;
   border-style: solid;
+}
+
+#path {
+  background-color: #c8cd8f;
 }
 
 /**

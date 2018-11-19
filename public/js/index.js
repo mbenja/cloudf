@@ -15,6 +15,7 @@ let current_path = '/root';
 let current_breadcrumb_path;
 let current_breadcrumb_parents = 0;
 let current_path_sections = 0;
+let elementsRemoved = 0;
 
 /**
  * references the file display div for easy addition/removal of files
@@ -133,12 +134,11 @@ function populateBreadcrumbs(path){
           var block_to_insert ;
           var container_block ;
 
-          block_to_insert = document.createElement( 'div' );
+          block_to_insert = document.createElement( 'span' );
           block_to_insert.id = 'pathSection'+current_path_sections;
           block_to_insert.classList.add('pathSection');
           block_to_insert.path = path;
           block_to_insert.setAttribute("onclick", "populateDirectoryListing(this.path)");
-          //block_to_insert.addEventListener("click", populateDirectoryListing(this.path))
           block_to_insert.innerHTML = partialPath ;
           block_to_insert.pathNum = current_path_sections;
 
@@ -147,8 +147,24 @@ function populateBreadcrumbs(path){
           container_block.appendChild( block_to_insert );
 
           //check if overflow in elements occurs
-          if(isOverflown(document.getElementById("banner"))) {
+          let currentPxFilled = (current_path_sections-elementsRemoved+1) * 100;
+          let currentPrecentFilled = currentPxFilled/document.getElementById('main_container').clientWidth;
+          console.log("Current Precent: " + currentPrecentFilled);
+          if(currentPrecentFilled > .8) {
             console.log("overflow has occured");
+            while(currentPrecentFilled > .8) {
+              elementsRemoved++;
+              console.log('pathSection'+elementsRemoved);
+              removedTab = document.getElementById('pathSection'+elementsRemoved);
+              removedTab.parentElement.removeChild(removedTab);
+              currentPxFilled = (current_path_sections-elementsRemoved+1) * 100;
+              currentPrecentFilled = currentPxFilled/document.getElementById('main_container').clientWidth;
+              console.log("Current Precent: " + currentPrecentFilled);
+            }
+          }
+          else if(currentPrecentFilled <= .8 && elementsRemoved > 0) {
+
+
           }
 
           partialPath = "";
@@ -169,10 +185,6 @@ function populateBreadcrumbs(path){
      }
 
     }
-}
-
-function isOverflown(element) {
-    return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
 }
 
 /**
