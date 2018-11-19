@@ -174,3 +174,17 @@ Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
   * Discussed current work being done by team members
   * Discussed integration of user authentication with front and back-end
   * Discussed implementation of moving files in back-end
+
+## Meeting \#14
+Date: Monday, November 19, 2018
+
+Time: 11:00 - 11:50 PM
+
+Location: In-class
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed current work being done by team members
+  * Trouble-shooting of issues with mysql container
+  * Discussed future work to be done
+  * Discussed division of labor concerning test suite
