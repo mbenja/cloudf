@@ -14,8 +14,7 @@ function testBackend() {
   var result;
 
   testSendState();
-  result = testGetRootDirectory();
-  console.log("getRootDirectory: " + result);
+  testGetRootDirectory();
   testGetSubDirectory();
   testCreateDirectory();
   testDeleteDirectory();
@@ -49,9 +48,9 @@ function testSendState() {
 function testGetRootDirectory() {
   refreshData();
   if (current_file_data.length != 0) {
-    return "PASSED";
+    console.log("getRootDirectory: " + "PASSED");
   } else {
-    return "FAILED";
+    console.log("getRootDirectory: " + "FAILED");
   }
 }
 
