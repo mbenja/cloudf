@@ -19,6 +19,7 @@ function testBackend() {
   testCreateDirectory();
   testDeleteDirectory();
   testDeleteFile();
+  testUploadFile();
 }
 
 /**
@@ -146,15 +147,10 @@ function testDeleteFile() {
     url: '/FileInteraction/deleteFile',
     data: obj,
     success: function (response) {
-      // dismiss delete modal
-      $('#modal_delete').modal('hide');
-      // hide sidebar
-      hideSidebar();
-      // show snackbar dependent upon response
       if (response == 'BROKEN PIPE') {
         console.log("deleteFile: " + "FAILED");
       } else {
-        console.log("deleteFile: " + "FAILED");
+        console.log("deleteFile: " + "PASSED");
         refreshData();
       }
     },
@@ -163,3 +159,40 @@ function testDeleteFile() {
     }
   });
 }
+
+/**
+  * Testing uploadFile
+*/
+function testUploadFile() {
+  console.log('here');
+  $('#modal_upload_form_test').modal('show');
+}
+
+/**
+ * Defining on submit for upload_form so that we can handle on complete, etc.
+ */
+$('#upload_form_test').submit(function(event) {
+  event.preventDefault();
+  var form_data = $('#upload_form_test').serialize();
+  $(this).ajaxSubmit({
+    data: form_data,
+    contentType: 'application/json',
+    success: function(response) {
+      $('#modal_upload_form_test').modal('hide');
+      if (response == 'FILE ALREADY EXISTS') {
+        console.log("uploadFile: " + "FAILED");
+      } else if (response == 'BROKEN PIPE') {
+        console.log("uploadFile: " + "FAILED");
+      } else {
+        console.log("uploadFile: " + "PASSED");
+        refreshData();
+      }
+    },
+    error: function(response) {
+      console.log("uploadFile: " + "FAILED");
+     }
+  });
+  document.getElementById("input_upload_file").value = "";
+  document.getElementById("input_upload_directory").value = "";
+  return false;
+});

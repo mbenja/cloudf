@@ -89,6 +89,54 @@
     </div>
 
     <!--
+    Upload form modal
+    -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_upload_form_test">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modal_upload_form_content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              Upload Selection
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form ref='upload_form_test' class="form-inline justify-content-between"
+              id='upload_form_test'
+              action='/FileInteraction/uploadFile'
+              method='post'
+              encType="multipart/form-data">
+              <div class="form-group">
+                <div class="custom-file">
+                  <input type="file" class="form-control-file" id="input_upload_file" name="input_upload_file" onchange="sendState();" multiple>
+                </div>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-raised btn-success">Upload File</button>
+              </div>
+            </form>
+            <form ref='upload_form_directory_test' class="form-inline justify-content-between"
+              id='upload_form_directory_test'
+              action='/FileInteraction/uploadDirectory'
+              method='post'
+              encType="multipart/form-data">
+              <div class="form-group">
+                <div class="custom-file">
+                  <input type="file" class="form-control-file" id="input_upload_directory" name="input_upload_directory" onchange="sendState();" webkitdirectory directory multiple>
+                </div>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-raised btn-success">Upload Folder</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--
     Create directory modal
     -->
     <div class="modal fade" tabindex="-1" role="dialog" id="modal_create_directory" onkeypress="javascript: if(event.keyCode == 13) createDirectory();">
