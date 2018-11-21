@@ -13,12 +13,33 @@ function runTestSuite() {
 function testBackend() {
   var result;
 
+  testSendState();
   result = testGetRootDirectory();
   console.log("getRootDirectory: " + result);
-
   testGetSubDirectory();
   testCreateDirectory();
   testDeleteDirectory();
+}
+
+/**
+  * Testing sendState
+*/
+function testSendState() {
+  const obj = {
+    user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
+    current_path: current_path,
+    current_upload_path_local: current_upload_path_local
+  };
+  $.ajax({
+    url: '/FileInteraction/clientState',
+    data: obj,
+    success: function (data) {
+      console.log("sendState: " + "PASSED");
+    },
+    error: function (data) {
+      console.log("sendState: " + "FAILED");
+    }
+  });
 }
 
 /**
