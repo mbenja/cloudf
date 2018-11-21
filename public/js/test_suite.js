@@ -15,6 +15,8 @@ function testBackend() {
 
   result = testGetRootDirectory();
   console.log("getRootDirectory: " + result);
+
+  result = testGetSubDirectory();
 }
 
 /**
@@ -27,4 +29,30 @@ function testGetRootDirectory() {
   } else {
     return "FAILED";
   }
+}
+
+/**
+  * Testing getSubdirectory
+*/
+function testGetSubDirectory() {
+  // define data object for back-end
+  const obj = {
+    user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
+    subdirectory: 'test'
+  };
+  // perform ajax call
+  $.ajax({
+    url: '/FileInteraction/getSubdirectory',
+    data: obj,
+    success: function (response) {
+      if (response == 'BROKEN PIPE') {
+        console.log("getRootDirectory: " + "FAILED");
+      } else {
+        console.log("getRootDirectory: " + "PASSED");
+      }
+    },
+    error: function (data) {
+      console.log("getRootDirectory: " + "FAILED");
+    }
+  });
 }
