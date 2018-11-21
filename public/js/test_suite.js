@@ -16,7 +16,8 @@ function testBackend() {
   result = testGetRootDirectory();
   console.log("getRootDirectory: " + result);
 
-  result = testGetSubDirectory();
+  testGetSubDirectory();
+  testCreateDirectory();
 }
 
 /**
@@ -38,7 +39,7 @@ function testGetSubDirectory() {
   // define data object for back-end
   const obj = {
     user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
-    subdirectory: 'test'
+    subdirectory: 'FOR_TEST_SUITE'
   };
   // perform ajax call
   $.ajax({
@@ -54,5 +55,29 @@ function testGetSubDirectory() {
     error: function (data) {
       console.log("getRootDirectory: " + "FAILED");
     }
+  });
+}
+
+/**
+  * Testing createDirectory
+*/
+function testCreateDirectory() {
+  const obj = {
+    directory_name: 'test_create_directory'
+  };
+  // perform ajax call
+  $.ajax({
+    url: '/FileInteraction/createDirectory',
+    data: obj,
+    success: function(response) {
+      if (response == 'BROKEN PIPE') {
+        console.log("createDirectory: " + "FAILED");
+      } else {
+        console.log("createDirectory: " + "PASSED");
+      }
+    },
+    error: function(response) {
+      console.log("createDirectory: " + "FAILED");
+     }
   });
 }
