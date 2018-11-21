@@ -20,6 +20,7 @@ function testBackend() {
   testDeleteDirectory();
   testDeleteFile();
   testUploadFile();
+  testUploadDirectory();
 }
 
 /**
@@ -164,7 +165,6 @@ function testDeleteFile() {
   * Testing uploadFile
 */
 function testUploadFile() {
-  console.log('here');
   $('#modal_upload_form_test').modal('show');
 }
 
@@ -178,7 +178,6 @@ $('#upload_form_test').submit(function(event) {
     data: form_data,
     contentType: 'application/json',
     success: function(response) {
-      $('#modal_upload_form_test').modal('hide');
       if (response == 'FILE ALREADY EXISTS') {
         console.log("uploadFile: " + "FAILED");
       } else if (response == 'BROKEN PIPE') {
@@ -190,6 +189,44 @@ $('#upload_form_test').submit(function(event) {
     },
     error: function(response) {
       console.log("uploadFile: " + "FAILED");
+     }
+  });
+  document.getElementById("input_upload_file").value = "";
+  document.getElementById("input_upload_directory").value = "";
+  return false;
+});
+
+/**
+  * Testing uploadFile
+*/
+function testUploadDirectory() {
+  $('#modal_upload_form_test').modal('show');
+}
+
+/**
+ * Defining on submit for upload_form_test_directory so that we can handle on complete, etc.
+ */
+$('#upload_form_directory_test').submit(function(event) {
+  event.preventDefault();
+  var form_data = $('#upload_form_directory_test').serialize();
+  $(this).ajaxSubmit({
+    data: form_data,
+    contentType: 'application/json',
+    success: function(response) {
+      $('#modal_upload_form_test').modal('hide');
+      if (response == 'FILE ALREADY EXISTS') {
+        console.log("uploadDirectory: " + "FAILED");
+      } else if (response == 'DIRECTORY ALREADY EXISTS') {
+        console.log("uploadDirectory: " + "FAILED");
+      } else if (response == 'BROKEN PIPE') {
+        console.log("uploadDirectory: " + "FAILED");
+      } else {
+        console.log("uploadDirectory: " + "PASSED");
+        refreshData();
+      }
+    },
+    error: function(response) {
+      console.log("uploadDirectory: " + "FAILED");
      }
   });
   document.getElementById("input_upload_file").value = "";
