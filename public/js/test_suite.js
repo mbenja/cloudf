@@ -19,6 +19,7 @@ function testBackend() {
   testGetSubDirectory();
   testCreateDirectory();
   testDeleteDirectory();
+  testDeleteFile();
 }
 
 /**
@@ -129,6 +130,37 @@ function testDeleteDirectory() {
     },
     error: function (data) {
       console.log("deleteDirectory: " + "FAILED");
+    }
+  });
+}
+
+/**
+  * Testing deleteFile
+*/
+function testDeleteFile() {
+  index = current_file_data.findIndex(x => x.filename == "test_delete_file.rtf");
+  const obj = {
+    file_id: current_file_data[index]["_id"]
+  };
+  // perform ajax call
+  $.ajax({
+    url: '/FileInteraction/deleteFile',
+    data: obj,
+    success: function (response) {
+      // dismiss delete modal
+      $('#modal_delete').modal('hide');
+      // hide sidebar
+      hideSidebar();
+      // show snackbar dependent upon response
+      if (response == 'BROKEN PIPE') {
+        console.log("deleteFile: " + "FAILED");
+      } else {
+        console.log("deleteFile: " + "FAILED");
+        refreshData();
+      }
+    },
+    error: function (data) {
+      console.log("deleteFile: " + "FAILED");
     }
   });
 }
