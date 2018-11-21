@@ -18,6 +18,7 @@ function testBackend() {
 
   testGetSubDirectory();
   testCreateDirectory();
+  testDeleteDirectory();
 }
 
 /**
@@ -74,10 +75,39 @@ function testCreateDirectory() {
         console.log("createDirectory: " + "FAILED");
       } else {
         console.log("createDirectory: " + "PASSED");
+        refreshData();
       }
     },
     error: function(response) {
       console.log("createDirectory: " + "FAILED");
      }
+  });
+}
+
+/**
+  * Testing deleteDirectory
+*/
+function testDeleteDirectory() {
+  index = current_file_data.findIndex(x => x.filename == "test_delete_directory");
+  const obj = {
+    directory_id: current_file_data[index]["_id"],
+    directory_path: current_file_data[index]["metadata"]["path"] + '/' +
+    current_file_data[index]["filename"]
+  };
+  // perform ajax call
+  $.ajax({
+    url: '/FileInteraction/deleteDirectory',
+    data: obj,
+    success: function (response) {
+      if (response == 'BROKEN PIPE') {
+        console.log("deleteDirectory: " + "FAILED");
+      } else {
+        console.log("deleteDirectory: " + "PASSED");
+        refreshData();
+      }
+    },
+    error: function (data) {
+      console.log("deleteDirectory: " + "FAILED");
+    }
   });
 }
