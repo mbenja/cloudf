@@ -510,7 +510,7 @@ document.getElementById("input_upload_directory").addEventListener("change", fun
  * @param {Object} data data returns from an ajax request
  */
 function checkInvalidSession(data){
-  alert(data.responseText);
+  //alert(data.responseText);
   if(data.responseText == 'INVALID SESSION' || data.responseText == 'NOT LOGGED IN'){
     window.location.replace("/login");
     return;
