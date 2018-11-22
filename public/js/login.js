@@ -30,11 +30,10 @@ const reg_pass_input2 = document.getElementById('reg_pass_input2');
 
 /**
  * does user login based on entered credentials
- * @param {Object} form the form to submit if login was successful
  * @param {String} email email of the user
  * @param {String} pass password of the user
  */
-function doLogin(form, email, pass){
+function doLogin(email, pass){
 
   $.ajax({
     url: '/authenticate/initiateLogin',
@@ -44,8 +43,8 @@ function doLogin(form, email, pass){
     (session_id) => {
       // update the cookies with the returned session
       Cookies.set('cloudf_session', session_id, {expires: 1/24});
-      // submit login form to proceed to main page
-      form.submit();
+      // redirect to main page
+      window.location.replace("..");
     },
     (error) => {
       $.snackbar({content: "<strong>Error:</strong> " + error.responseText + "."});
@@ -57,9 +56,8 @@ function doLogin(form, email, pass){
 
 /**
  * does user registration based on entered credentials
- * @param {Object} form the form to submit if login was successful
  */
-function registerUser(form){
+function registerUser(){
 
   // if the passwords don't match, show an error
   if(reg_pass_input1.value != reg_pass_input2.value){
@@ -79,7 +77,7 @@ function registerUser(form){
   }).then(
     () => {
       // login the user if registration was successful
-      doLogin(form, reg_email_input.value, reg_pass_input1.value);
+      doLogin(reg_email_input.value, reg_pass_input1.value);
     },
     (error) => {
       $.snackbar({content: "<strong>Error:</strong> " + error.responseText + "."});

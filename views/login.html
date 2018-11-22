@@ -19,7 +19,7 @@
     <div class="card shadow-lg " id="card_login">
       <img class="card-img-top" src="/images/cloudf.png" style="width:50%;margin:auto;" alt="Card image cap">
       <div class="card-body">
-        <form id="loginform" action="../" method="get" onsubmit="doLogin(this, email_input.value, password_input.value); return false;">
+        <form id="loginform" action="../" method="get" onsubmit="doLogin(email_input.value, password_input.value); return false;">
           <div class="form-group">
             <label for="input_login_email" class="bmd-label-floating">email address</label>
             <input type="email" class="form-control" id="input_login_email">
@@ -49,7 +49,7 @@
           </div>
           <div class="modal-body">
 
-            <form action='../' method='get' onsubmit="registerUser(this); return false;">
+            <form action='../' method='get' onsubmit="registerUser(); return false;">
 
               <div class="form-group">
                 <label for="reg_email_input" onsubmit="return true;" class='sr-only'>Email address</label>
