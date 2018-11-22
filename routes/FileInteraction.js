@@ -393,6 +393,17 @@ router.get('/downloadDirectory', function(req, res) {
   });
 });
 
+/**
+  * Calls for files to be moved
+  */
+router.get('/moveFiles', function(req, res) {
+  console.log("GET /moveFiles");
+  // call for files to be moved
+  moveFiles(req.query.source_ids, req.query.destination_path).then((response) => {
+      res.send(response);
+    })
+});
+
 
 
 /**
@@ -717,6 +728,60 @@ async function downloadDirectory(subdirectory) {
   let done = await promise;
   return node_directory;
 }
+
+/**
+ * Moves files according to specification
+ * @param {Array} source_ids - the ids of the files to be moved
+ * @param {String} destination_path - the path to set for each file
+ */
+ async function moveFiles(source_ids, destination_path) {
+   let promise = new Promise(function(resolve, reject) {
+     mongodb.MongoClient.connect(mongo_url, function(err, database) {
+       // handle bad connection to mongoDB
+       if (database == null) {
+         resolve('BROKEN PIPE');
+       } else {
+         console.log("Successfully connected to mongoDB");
+
+         const db = database.db('cloudf');
+
+         // define bucket
+         var bucket = new mongodb.GridFSBucket(db, {
+           bucketName: client_user
+         });
+
+         // create object to be set as document update
+         const update_obj = {
+           $set: {
+             metadata: {
+               path: destination_path
+             }
+           }
+         };
+
+         // iterate through source_ids and modify each one with the destination path
+         var count = 0;
+         for (var i = 0; i < source_ids.length; i++) {
+           db.collection(client_user + '.files').updateOne({ _id: new mongodb.ObjectID(source_ids[i]) }, update_obj, function(err, res) {
+             if (err) {
+               console.log(err);
+             } else {
+               console.log(res);
+             }
+             count++;
+             // only close and resolve if final document
+             if (count == source_ids.length) {
+               database.close();
+               resolve(res);
+             }
+           });
+         }
+       }
+     });
+   });
+   let result = await promise;
+   return result;
+ }
 
 
 
