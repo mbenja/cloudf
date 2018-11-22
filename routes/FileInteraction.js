@@ -617,6 +617,8 @@ async function deleteDirectory(subdirectory) {
       }
     });
   });
+
+  return promise;
 }
 
 
