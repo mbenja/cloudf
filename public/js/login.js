@@ -28,6 +28,21 @@ const reg_pass_input1 = document.getElementById('reg_pass_input1');
  */
 const reg_pass_input2 = document.getElementById('reg_pass_input2');
 
+
+
+// do initial check - if the user is already logged in, redirect to main page
+$.ajax({
+  url: '/authenticate/checkLogin',
+}).then(
+  () => {
+    // if success from checking login, redirect to main page
+    window.location.replace("..");
+  }
+);
+
+
+
+
 /**
  * does user login based on entered credentials
  * @param {String} email email of the user

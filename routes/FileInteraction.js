@@ -87,6 +87,8 @@ let connection = conn_info.connection;
  */
 let mongo_url = conn_info.mongo_url;
 
+let cookieParser = require('cookie-parser');
+
 /**
  * contains exports of session manager file
  * @type {Object}
@@ -100,6 +102,7 @@ let sessions = require("./SessionManager.js");
 let session_mgr = new sessions.SessionManager(connection);
 
 router.use(fileUpload());
+router.use(cookieParser());
 
 // setting up static folder
 router.use(express.static(path.join(__dirname, 'public')));
@@ -111,13 +114,8 @@ router.use(express.static(path.join(__dirname, 'public')));
 router.use(function valSession(req, res, next){
   console.log("in valSession");
 
-  let session_id;
-
-  // get session id from cookies in the headers, return error code if one isn't present
-  try{
-    session_id = req.headers.cookie.split('=')[1];
-  }
-  catch(err){
+  let session_id = req.cookies['cloudf_session'];
+  if(!session_id){
     res.status(401).send('NOT LOGGED IN');
     return;
   }

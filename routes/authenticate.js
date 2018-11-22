@@ -40,6 +40,12 @@ var authentication = require('./UserAuthentication.js')
  */
 var user_auth = new authentication.UserAuthentication(connection, mongo_url);
 
+
+var cookieParser = require('cookie-parser');
+
+
+router.use(cookieParser());
+
 /**
  * route for logging into cloudf
  * @param {String} email user's email
@@ -50,6 +56,49 @@ router.get('/initiateLogin', function(req, res) {
   user_auth.authenticate(req.query.email, req.query.password).then(
     (session_id) => {
       res.send(session_id);
+    },
+    (error) => {
+      if(error.type == 'auth'){
+        res.status(401).send(error.contents);
+      }
+      else{
+        res.status(500).send(error.contents.code);
+      }
+    }
+  );
+});
+
+/**
+ * route for checking if user is logged in
+ */
+router.get('/checkLogin', function(req, res) {
+
+  console.log("check login");
+  let session_id = req.cookies['cloudf_session'];
+  if(!session_id){
+    res.status(401).send('NOT LOGGED IN');
+    return;
+  }
+
+  // call validatesession to check session in sql data
+  user_auth.sessions.validateSession(session_id).then(
+    (user_id) => {
+
+      // refresh the session
+      user_auth.sessions.refreshSession(session_id).then(
+        () => {
+          // if everything succeeded, go to the next response function for this request
+          res.send('LOGGED IN');
+        },
+        (error) => {
+          if(error.type == 'auth'){
+            res.status(401).send(error.contents);
+          }
+          else{
+            res.status(500).send(error.contents.code);
+          }
+        }
+      );
     },
     (error) => {
       if(error.type == 'auth'){
