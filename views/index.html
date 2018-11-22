@@ -15,9 +15,22 @@
   </head>
 
   <body>
+    <div class="modal" tabindex="-1" role="dialog" data-backdrop='static' data-keyboard='false' id="loading_modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              Loading files, please wait...
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="container">
       <img src="/images/cloudf.png" style="height:10vh;">
       <!-- put current username and logout button here -->
+      <button type="button" class="btn btn-raised btn-secondary" onclick="doLogout();">Log Out</button>
     </div>
     <div id="main_container">
       <!-- breadcrumbs Banner -->
@@ -27,7 +40,6 @@
           </div>
       </div>
       <div id="files">
-        <p>Loading files, please wait...</p>
       </div>
       <!-- Floating Buttons -->
       <div class="floatingButtons">
@@ -61,7 +73,7 @@
               encType="multipart/form-data">
               <div class="form-group">
                 <div class="custom-file">
-                  <input type="file" class="form-control-file" id="input_upload_file" name="input_upload_file" onchange="sendState();" multiple>
+                  <input type="file" class="form-control-file" id="input_upload_file" name="input_upload_file" multiple><!-- onchange="sendState();"> -->
                 </div>
               </div>
               <div class="form-group">
@@ -156,6 +168,7 @@
 
     <!-- jQuery first, then Popper.js, SnackbarJS, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
     <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
     <!-- SnackbarJS plugin -->
