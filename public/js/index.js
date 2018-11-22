@@ -586,7 +586,7 @@ $('#upload_form_directory').submit(function(event) {
       } else {
         $.snackbar({content: "<strong>Success!</strong> Upload complete."});
         // refresh front-end
-        setCurrentPath(current_path + '/' + current_upload_path_local);
+        //setCurrentPath(current_path + '/' + current_upload_path_local);
         setCurrentUploadPathLocal("");
         refreshData();
       }
