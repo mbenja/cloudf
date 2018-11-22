@@ -14,7 +14,8 @@ let current_upload_path_local = '';
  * stores path currently being viewed by the user
  * @type {String}
  */
-let current_path = '/root';
+let current_path;
+setCurrentPath('/root');
 
 
 let current_breadcrumb_path;
@@ -35,8 +36,10 @@ let selected_index = 0;
 
 
 
-// initial call to backend to get file data
-refreshData();
+// display loading modal
+$('#loading_modal').modal('show');
+// initial call to backend to get file data, then hide modal if it succeeds
+refreshData().then(() => { $('#loading_modal').modal('hide'); });
 
 
 
@@ -48,7 +51,7 @@ refreshData();
 function populateDirectoryListing(path){
 
   // update current path
-  current_path = path;
+  setCurrentPath(path);
 
   // remove all of the files currently displayed
   while(files_div.firstChild){
@@ -265,14 +268,12 @@ function populateSidebar(index){
   document.getElementById("data-adddate").innerHTML = current_file_data[index].metadata.date_added;
 }
 
-
-
 /**
  * Sends necessary data to back-end for call to delete file
  */
 function deleteItem() {
   // update state variables in back-end
-  sendState();
+  //sendState();
   // check content type
   if (current_file_data[selected_index]["metadata"]["content_type"] == "directory") {
     // is directory
@@ -300,9 +301,7 @@ function deleteItem() {
           refreshData();
         }
       },
-      error: function (data) {
-        console.log(data);
-      }
+      error: (data) => { checkInvalidSession(data); }
     });
   } else {
     // is file
@@ -328,9 +327,7 @@ function deleteItem() {
           refreshData();
         }
       },
-      error: function (data) {
-        console.log(data);
-      }
+      error: (data) => { checkInvalidSession(data); }
     });
   }
 }
@@ -342,7 +339,7 @@ function deleteItem() {
  */
 function download() {
   // update state variables in back-end
-  sendState();
+  //sendState();
   // check content_type
   // define object to be sent to back-end
   if (current_file_data[selected_index]["metadata"]["content_type"] == "directory") {
@@ -364,6 +361,7 @@ function download() {
     };
     // making call to back-end
     window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name);
+    // window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name + '&session=' + Cookies.get('cloudf_session'));
   }
   // hide sidebar
   hideSidebar();
@@ -378,26 +376,26 @@ function editFileName(){
 /**
  * Retrieves necessary data from user to perform back-end call to upload file
  */
-function sendState() {
-  // define data needed on backend
-  // TODO this is hard-coded until we implement user authentication
-  const obj = {
-    user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
-    current_path: current_path,
-    current_upload_path_local: current_upload_path_local
-  };
-  // perform ajax call
-  $.ajax({
-    url: '/FileInteraction/clientState',
-    data: obj,
-    success: function (data) {
-      //console.log(data);
-    },
-    error: function (data) {
-      console.log(data);
-    }
-  });
-}
+// function sendState() {
+//   // define data needed on backend
+//   // TODO this is hard-coded until we implement user authentication
+//   const obj = {
+//     user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
+//     current_path: current_path,
+//     current_upload_path_local: current_upload_path_local
+//   };
+//   // perform ajax call
+//   $.ajax({
+//     url: '/FileInteraction/clientState',
+//     data: obj,
+//     success: function (data) {
+//       //console.log(data);
+//     },
+//     error: function (data) {
+//       console.log(data);
+//     }
+//   });
+// }
 
 
 
@@ -406,7 +404,7 @@ function sendState() {
  */
 function createDirectory() {
   // send state
-  sendState();
+  //sendState();
 
   // get data for back-end
   // account for empty folder name
@@ -415,6 +413,7 @@ function createDirectory() {
     directory_name = 'New Folder';
   }
   const obj = {
+    current_path: current_path,
     directory_name: directory_name
   };
   // perform ajax call
@@ -436,6 +435,7 @@ function createDirectory() {
       }
     },
     error: function(response) {
+      checkInvalidSession(response);
       // dismiss modal
       $('#modal_create_directory').modal('hide');
       // present snackbar
@@ -458,30 +458,31 @@ function refreshData() {
 
   let callback = $.Deferred();
 
-  const obj = {
-    user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx'
-  };
+  // const obj = {
+  //   user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx'
+  // };
   // perform ajax call
   $.ajax({
     url: '/FileInteraction/getRootDirectory',
-    data: obj,
     success: function (data) {
       // present error if broken pipe
       if (data == 'BROKEN PIPE') {
         $.snackbar({content: "<strong>Error:</strong> Servers are down."});
       } else {
         current_file_data = data.map((val, ind) => { val.index = ind; return val; });
-        populateDirectoryListing('/root');
+        populateDirectoryListing(current_path);
       }
+      console.log(data);
       callback.resolve();
     },
     error: function (data) {
-      console.log(data);
+      checkInvalidSession(data);
+      //console.log("error:" + data);
       callback.reject();
     }
   });
   // call to send client state
-  sendState();
+  //sendState();
 
   return callback.promise();
 
@@ -496,10 +497,29 @@ document.getElementById("input_upload_directory").addEventListener("change", fun
   let files = event.target.files;
   var directory = files[0].webkitRelativePath;
   directory = directory.split('/');
-  current_upload_path_local = directory[0];
-  current_path = current_path + '/' + current_upload_path_local;
-  sendState();
+  setCurrentUploadPathLocal(directory[0]);
+  //setCurrentPath(current_path + '/' + current_upload_path_local);
+  //sendState();
 }, false);
+
+
+/**
+ * checks the data returned from a request to see if there was an authentication error
+ * if there was an authenticaion error, redirect to the login page
+ * if there wasn't, update the cookies to refersh the current session for another hour
+ * @param {Object} data data returns from an ajax request
+ */
+function checkInvalidSession(data){
+  alert(data.responseText);
+  if(data.responseText == 'INVALID SESSION' || data.responseText == 'NOT LOGGED IN'){
+    window.location.replace("/login");
+    return;
+  }
+  else{
+    Cookies.set('cloudf_session', Cookies.get('cloudf_session'), {expires: 1/24}); // one hour = 1/24 of a day
+  }
+}
+
 
 /**
  * Defining on submit for upload_form so that we can handle on complete, etc.
@@ -510,7 +530,6 @@ $('#upload_form').submit(function(event) {
 
   // serialize the form
   var form_data = $('#upload_form').serialize();
-
   // submit the form
   $(this).ajaxSubmit({
     data: form_data,
@@ -530,6 +549,7 @@ $('#upload_form').submit(function(event) {
       }
     },
     error: function(response) {
+      checkInvalidSession(response);
       // dismiss modal
       $('#modal_upload_form').modal('hide');
       // present snackbar
@@ -566,6 +586,8 @@ $('#upload_form_directory').submit(function(event) {
       } else {
         $.snackbar({content: "<strong>Success!</strong> Upload complete."});
         // refresh front-end
+        setCurrentPath(current_path + '/' + current_upload_path_local);
+        setCurrentUploadPathLocal("");
         refreshData();
       }
     },
@@ -581,3 +603,40 @@ $('#upload_form_directory').submit(function(event) {
   document.getElementById("input_upload_directory").value = "";
   return false;
 });
+
+
+/**
+ * updates the path the user is currently viewing
+ * @param {String} new_path the updated path
+ */
+function setCurrentPath(new_path){
+  // update path variable
+  current_path = new_path;
+  // update the upload file action path so that the current path gets passed along with the upload request
+  document.getElementById('upload_form').setAttribute('action', '/FileInteraction/uploadFile?current_path=' + current_path);
+  document.getElementById('upload_form_directory').setAttribute('action', '/FileInteraction/uploadDirectory?current_path=' + current_path + "&current_upload_path_local=" + current_upload_path_local);
+}
+
+function setCurrentUploadPathLocal(new_path){
+  current_upload_path_local = new_path;
+  document.getElementById('upload_form_directory').setAttribute('action', '/FileInteraction/uploadDirectory?current_path=' + current_path + "&current_upload_path_local=" + current_upload_path_local);
+}
+
+
+/**
+ * makes an ajax call to logout the user
+ * redirect to the login page if the logout was successful.
+ */
+function doLogout(){
+  $.ajax({url: '/authenticate/logout',
+          data: {session: Cookies.get('cloudf_session')},
+          success: (data) => {
+            if(data == 'SUCCESSFUL LOGOUT'){
+              window.location.replace("/login");
+            }
+            else{
+              $.snackbar({content: "<strong>Error:</strong> Logout failed, please try again."});
+            }
+          }
+  });
+}
