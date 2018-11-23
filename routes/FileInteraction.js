@@ -405,6 +405,16 @@ router.get('/moveFiles', function(req, res) {
 });
 
 
+/**
+  * Calls for upload directory to be purged
+  */
+router.get('/purgeUploadDirectory', function(req, res) {
+  console.log("GET /purgeUploadDirectory");
+  purgeUploadDirectory();
+  res.send('done');
+});
+
+
 
 /**
  * Retrieves an array of all documents within root directory of user collection

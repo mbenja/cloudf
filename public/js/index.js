@@ -617,6 +617,19 @@ $('#upload_form').submit(function(event) {
         $.snackbar({content: "<strong>Error:</strong> Servers are down."});
       } else {
         $.snackbar({content: "<strong>Success!</strong> Upload complete."});
+        // purge upload directory
+        $.ajax({
+          url: '/FileInteraction/purgeUploadDirectory',
+          success: function (data) {
+            // present error if broken pipe
+            if (data == 'BROKEN PIPE') {
+              $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+            }
+          },
+          error: function (data) {
+            checkInvalidSession(data);
+          }
+        });
         // refresh front-end
         refreshData();
       }
@@ -662,6 +675,19 @@ $('#upload_form_directory').submit(function(event) {
         //setCurrentPath(current_path + '/' + current_upload_path_local);
         setCurrentUploadPathLocal("");
         refreshData();
+        // purge upload directory
+        $.ajax({
+          url: '/FileInteraction/purgeUploadDirectory',
+          success: function (data) {
+            // present error if broken pipe
+            if (data == 'BROKEN PIPE') {
+              $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+            }
+          },
+          error: function (data) {
+            checkInvalidSession(data);
+          }
+        });
       }
     },
     error: function(response) {
