@@ -21,6 +21,7 @@ function testBackend() {
   testDeleteFile();
   testUploadFile();
   testUploadDirectory();
+  testAuth();
 }
 
 /**
@@ -233,3 +234,66 @@ $('#upload_form_directory_test').submit(function(event) {
   document.getElementById("input_upload_directory").value = "";
   return false;
 });
+
+async function testAuth(){
+  // initially logout the user
+  Cookies.remove('cloudf_session')
+  let testUser = 'example' + Math.floor(Math.random()*1000000) + '@example.com';
+
+  await testNewRegistration(testUser);
+  await testExistingRegistration(testUser);
+}
+
+/**
+ * test the registration of a new user is successful
+ */
+async function testNewRegistration(testUser){
+
+  let promise = new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/authenticate/register',
+      data: {email: testUser,
+             password: 'examplepass'},
+      success: () => {
+        console.log("register PASSED");
+        resolve();
+      },
+      error: (error) => {
+        console.log("register FAILED");
+        resolve();
+      }
+    });
+  });
+
+  return promise;
+
+}
+
+/**
+ * test that registration fails when a user already exists
+ */
+ async function testExistingRegistration(testUser){
+
+   let promise = new Promise((resolve, reject) => {
+     $.ajax({
+       url: '/authenticate/register',
+       data: {email: testUser,
+              password: 'examplepass2'},
+       success: () => {
+         console.log("register w/ existing user FAILED");
+         resolve();
+       },
+       error: (error) => {
+         if(error.responseText == "DUPLICATE EMAIL"){
+           console.log("register w/ existing user PASSED");
+         }
+         else{
+           console.log("register w/ existing user FAILED");
+         }
+         resolve();
+       }
+     });
+   });
+
+   return promise;
+ }
