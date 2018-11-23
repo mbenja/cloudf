@@ -28,6 +28,7 @@
     "express-zip": "^2.0.1",
     "file-dialog": "0.0.7",
     "formidable": "^1.2.1",
+    "mime": "^2.3.1",
     "mongodb": "^3.1.8",
     "mysql": "^2.16.0",
     "path": "^0.12.7"
