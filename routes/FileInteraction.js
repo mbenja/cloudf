@@ -412,9 +412,9 @@ router.get('/shareFile', function(req, res) {
   console.log('entered shareFile');
   // check that it is a valid user that is being shared with
 
-  isSharingUser(req.query.share_with).then(
-    (share_user) => {
-      shareFileTo(share_user, req.query.file_id).then(
+  getUserInfo(req.query.share_with).then(
+    (user_results) => {
+      shareFileTo(user_results.user_id, req.query.file_id).then(
         () => {
           res.send("success");
         },
@@ -435,14 +435,14 @@ router.get('/shareFile', function(req, res) {
   );
 });
 
-async function isSharingUser(email){
+async function getUserInfo(email){
   let promise = new Promise(function(resolve, reject) {
     connection.query("SELECT * FROM users WHERE email=?", [email], (err, results, fields) => {
       if(err){
         reject({type: 'mysql', contents: err});
       }
       else if(results.length == 1){
-        resolve(results[0].user_id);
+        resolve(results[0]);
       }
       else{
         reject({type: 'share', contents: 'USER NOT FOUND'});
@@ -453,7 +453,38 @@ async function isSharingUser(email){
   return promise;
 }
 
+
 async function shareFileTo(share_user, file_id){
+
+  async function createIfNoSharedDir(db, share_user){
+    // check if they have a shared folder
+    let promise = new Promise((resolve, reject) => {
+      db.collection(share_user + ".files").findOne({$and: [{filename: "Shared"}, {'metadata.path': "/root"}, {'metadata.content_type': "directory"}]}).then(
+        (shared_dir) => {
+          if(!shared_dir){
+            createDirectory("/root", "Shared", share_user).then((response) => {
+              if(response == 'success'){
+                resolve();
+              }
+              else{
+                reject(response);
+              }
+            });
+          }
+          else{
+            resolve();
+          }
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+
+    return promise;
+
+  }
+
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(mongo_url, function(err, database) {
       if(database == null){
@@ -464,41 +495,50 @@ async function shareFileTo(share_user, file_id){
 
         const db = database.db('cloudf');
 
-        let file_id_obj = new mongodb.ObjectID(file_id);
+        createIfNoSharedDir(db, share_user).then(() => {
 
-        db.collection(client_user + ".files").findOne({_id: file_id_obj}).then(
-          (doc) => {
-            console.log(doc);
+          let file_id_obj = new mongodb.ObjectID(file_id);
 
-            var to_bucket = new mongodb.GridFSBucket(db, {
-              bucketName: share_user
-            });
+          db.collection(client_user + ".files").findOne({_id: file_id_obj}).then(
+            (doc) => {
+              console.log(doc);
 
-            var from_bucket = new mongodb.GridFSBucket(db, {
-              bucketName: client_user
-            });
+              var to_bucket = new mongodb.GridFSBucket(db, {
+                bucketName: share_user
+              });
 
-            var upload_stream = to_bucket.openUploadStream(doc.filename);
-            upload_stream.options.metadata = {
-              date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
-              path: '/root/Shared',
-              content_type: doc.metadata.content_type
-            };
+              var from_bucket = new mongodb.GridFSBucket(db, {
+                bucketName: client_user
+              });
 
-            console.log('created buckets');
+              var upload_stream = to_bucket.openUploadStream(doc.filename);
+              upload_stream.options.metadata = {
+                date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
+                path: '/root/Shared',
+                content_type: doc.metadata.content_type
+              };
 
-            from_bucket.openDownloadStream(file_id_obj).
-            pipe(upload_stream).
-            on('error', function(error) {
-              console.log(error);
-              assert.ifError(error);
-            }).
-            on('finish', function() {
-              console.log('success');
-              resolve();
-            });
-          }
-        );
+              console.log('created buckets');
+
+              from_bucket.openDownloadStream(file_id_obj).
+              pipe(upload_stream).
+              on('error', function(error) {
+                console.log(error);
+                assert.ifError(error);
+              }).
+              on('finish', function() {
+                console.log('success');
+                resolve();
+              });
+            },
+            (error) => {
+              reject(error);
+            }
+          );
+        },
+        (error) => {
+          reject(error)
+        });
       }
     });
   });
@@ -623,9 +663,14 @@ async function uploadFile(input_upload_file, moveto_path) {
 
 /**
  * Uploads directory from Node server to mongoDB
- * @param {Object} directory_name - the directory to be uploaded to mongoDB
+ * @param {String} enclosing_path - path to put the new directory in
+ * @param {String} directory_name - the directory to be uploaded to mongoDB
+ * @param {String} [user=client_user] - user to create folder in (defaults to the value in client_user)
  */
-async function createDirectory(enclosing_path, directory_name) {
+async function createDirectory(enclosing_path, directory_name, user) {
+
+  user = user || client_user;
+
   let promise = new Promise(function(resolve, reject) {
     mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
@@ -637,7 +682,7 @@ async function createDirectory(enclosing_path, directory_name) {
         const db = database.db('cloudf');
         // define bucket
         var bucket = new mongodb.GridFSBucket(db, {
-          bucketName: client_user
+          bucketName: user
         });
         // create upload stream
         upload_stream = bucket.openUploadStream(directory_name);
