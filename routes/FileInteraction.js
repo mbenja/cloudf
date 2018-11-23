@@ -406,6 +406,108 @@ router.get('/moveFiles', function(req, res) {
 
 
 
+
+router.get('/shareFile', function(req, res) {
+  //req.query.file_id
+  console.log('entered shareFile');
+  // check that it is a valid user that is being shared with
+
+  isSharingUser(req.query.share_with).then(
+    (share_user) => {
+      shareFileTo(share_user, req.query.file_id).then(
+        () => {
+          res.send("success");
+        },
+        (error) => {
+          res.status(500).send(error);
+        }
+      );
+
+    },
+    (error) => {
+      if(error.type == 'share'){
+        res.status(404).send(error.contents);
+      }
+      else{
+        res.status(500).send(error.contents.code);
+      }
+    }
+  );
+});
+
+async function isSharingUser(email){
+  let promise = new Promise(function(resolve, reject) {
+    connection.query("SELECT * FROM users WHERE email=?", [email], (err, results, fields) => {
+      if(err){
+        reject({type: 'mysql', contents: err});
+      }
+      else if(results.length == 1){
+        resolve(results[0].user_id);
+      }
+      else{
+        reject({type: 'share', contents: 'USER NOT FOUND'});
+      }
+    })
+  });
+
+  return promise;
+}
+
+async function shareFileTo(share_user, file_id){
+  let promise = new Promise(function(resolve, reject) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
+      if(database == null){
+        reject('BROKEN PIPE');
+      }
+      else{
+        console.log("Successfully connected to mongoDB");
+
+        const db = database.db('cloudf');
+
+        let file_id_obj = new mongodb.ObjectID(file_id);
+
+        db.collection(client_user + ".files").findOne({_id: file_id_obj}).then(
+          (doc) => {
+            console.log(doc);
+
+            var to_bucket = new mongodb.GridFSBucket(db, {
+              bucketName: share_user
+            });
+
+            var from_bucket = new mongodb.GridFSBucket(db, {
+              bucketName: client_user
+            });
+
+            var upload_stream = to_bucket.openUploadStream(doc.filename);
+            upload_stream.options.metadata = {
+              date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
+              path: '/root/Shared',
+              content_type: doc.metadata.content_type
+            };
+
+            console.log('created buckets');
+
+            from_bucket.openDownloadStream(file_id_obj).
+            pipe(upload_stream).
+            on('error', function(error) {
+              console.log(error);
+              assert.ifError(error);
+            }).
+            on('finish', function() {
+              console.log('success');
+              resolve();
+            });
+          }
+        );
+      }
+    });
+  });
+
+  return promise;
+}
+
+
+
 /**
  * Retrieves an array of all documents within root directory of user collection
  * @param {String} user_id - the user id to retrieve root directory for
