@@ -427,21 +427,26 @@ function download() {
 
 function editFileName(){
   let filename = document.getElementById('data-filename');
-  let filenameInput = document.createElement('input')
+  let filenameInput = document.getElementById('data-filename-input');
+  let sidebar = document.getElementById('file_sidebar');
 
-  filenameInput.type = "text";
-  filenameInput.id = "data-filename-input";
+  filename.style.display='none';
+  filenameInput.style.display = 'block';
+
   filenameInput.addEventListener("keyup", function(event) {
     event.preventDefault();
     if(event.keyCode === 13) {
       console.log("enter has been pressed!");
+      filename.innerHTML = filenameInput.value;
+      filenameInput.style.display = "none";
+      filename.style.display = "block";
+      //Backend Rename Call
+
+      
     }
   });
 
-  filename.visibility='hidden';
-  filename.appendChild(filenameInput);
-
-
+  sidebar.appendChild(filenameInput);
 }
 
 
