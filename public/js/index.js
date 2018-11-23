@@ -41,7 +41,7 @@ $('#loading_modal').modal('show');
 // initial call to backend to get file data, then hide modal if it succeeds
 refreshData().then(() => {
   setTimeout(function() {
-    $('#loading_modal').modal('hide'); 
+    $('#loading_modal').modal('hide');
   }, 500);
 });
 
@@ -426,6 +426,21 @@ function download() {
 }
 
 function editFileName(){
+  let filename = document.getElementById('data-filename');
+  let filenameInput = document.createElement('input')
+
+  filenameInput.type = "text";
+  filenameInput.id = "data-filename-input";
+  filenameInput.addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if(event.keyCode === 13) {
+      console.log("enter has been pressed!");
+    }
+  });
+
+  filename.visibility='hidden';
+  filename.appendChild(filenameInput);
+
 
 }
 
