@@ -701,47 +701,58 @@ function doLogout(){
   });
 }
 
+let email_share_input = document.getElementById('emailShareInput');
+
+/**
+ * shares the currently selected item with the user entered in the email box
+ */
 function shareItem(){
 
-  const obj = {
-    file_id: current_file_data[selected_index]["_id"],
-    share_with: document.getElementById('emailShareInput').value
-  }
+  if(current_file_data[selected_index].metadata.content_type == "directory"){
+    const obj = {
+      directory_id: current_file_data[selected_index]["_id"],
+      directory_name: current_file_data[selected_index].filename,
+      directory_path: current_file_data[selected_index].metadata.path,
+      share_with: email_share_input.value
+    };
 
-  $.ajax({
-    url: '/FileInteraction/shareFile',
-    data: obj,
-    success: () => {
-      hideSidebar();
-      $('#modal_share').modal('hide');
-      $.snackbar({content: "Shared file successfully!"});
-    },
-    error: (response) => {
-      console.log(response);
-      $.snackbar({content: "<strong>Error:</strong> " + response.responseText});
+    $.ajax({
+      url: '/FileInteraction/shareDirectory',
+      data: obj,
+      success: () => {
+        hideSidebar();
+        $('#modal_share').modal('hide');
+        email_share_input.value = "";
+        $.snackbar({content: "Shared file successfully!"});
+      },
+      error: (response) => {
+        console.log(response);
+        $.snackbar({content: "<strong>Error:</strong> " + response.responseText});
+      }
+    });
+  }
+  else{
+    // singular file
+    const obj = {
+      file_id: current_file_data[selected_index]["_id"],
+      file_name: current_file_data[selected_index].filename,
+      content_type: current_file_data[selected_index].content_type,
+      share_with: email_share_input.value
     }
-  });
-  // if (current_file_data[selected_index]["metadata"]["content_type"] == "directory") {
-  //   // is directory
-  //   const obj = {
-  //     directory_id: current_file_data[selected_index]["_id"],
-  //     directory_name: current_file_data[selected_index]["filename"],
-  //     directory_path: current_file_data[selected_index]["metadata"]["path"] + '/' +
-  //     current_file_data[selected_index]["filename"]
-  //   };
-  //   // making call to back-end
-  //   window.open('/FileInteraction/downloadDirectory?directory_id=' + obj.directory_id +
-  //   '&directory_name=' + obj.directory_name + '&directory_path=' + obj.directory_path);
-  // } else {
-  //   // is singular file
-  //   const obj = {
-  //     file_id: current_file_data[selected_index]["_id"],
-  //     file_name: current_file_data[selected_index]["filename"]
-  //   };
-  //   // making call to back-end
-  //   window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name);
-  //   // window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name + '&session=' + Cookies.get('cloudf_session'));
-  // }
-  // // hide sidebar
-  // hideSidebar();
+
+    $.ajax({
+      url: '/FileInteraction/shareFile',
+      data: obj,
+      success: () => {
+        hideSidebar();
+        $('#modal_share').modal('hide');
+        email_share_input.value = "";
+        $.snackbar({content: "Shared file successfully!"});
+      },
+      error: (response) => {
+        console.log(response);
+        $.snackbar({content: "<strong>Error:</strong> " + response.responseText});
+      }
+    });
+  }
 }
