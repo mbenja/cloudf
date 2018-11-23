@@ -405,15 +405,19 @@ router.get('/moveFiles', function(req, res) {
 });
 
 
-
-
+/**
+ * shares a file with another user
+ * @param {String} file_id - id of the file within mongo
+ * @param {String} share_with - email of the user to share with
+ */
 router.get('/shareFile', function(req, res) {
   //req.query.file_id
   console.log('entered shareFile');
-  // check that it is a valid user that is being shared with
 
-  getUserInfo(req.query.share_with).then(
+  // check that it is a valid user that is being shared with
+  getUserInfoByEmail(req.query.share_with).then(
     (user_results) => {
+      // share the file
       shareFileTo(user_results.user_id, req.query.file_id).then(
         () => {
           res.send("success");
@@ -435,7 +439,12 @@ router.get('/shareFile', function(req, res) {
   );
 });
 
-async function getUserInfo(email){
+/**
+ * queries mysql database for the given user based on email
+ * @param {String} email - email of the user to search for
+ * @returns {Object} containing user_id, email, hashed password
+ */
+async function getUserInfoByEmail(email){
   let promise = new Promise(function(resolve, reject) {
     connection.query("SELECT * FROM users WHERE email=?", [email], (err, results, fields) => {
       if(err){
@@ -453,15 +462,50 @@ async function getUserInfo(email){
   return promise;
 }
 
+/**
+ * queries mysql database for the given user based on user id
+ * @param {String} user_id - user id of the user to search for
+ * @returns {Object} containing user_id, email, hashed password
+ */
+async function getUserInfoByUserId(user_id){
+ let promise = new Promise(function(resolve, reject) {
+   connection.query("SELECT * FROM users WHERE user_id=?", [user_id], (err, results, fields) => {
+     if(err){
+       reject({type: 'mysql', contents: err});
+     }
+     else if(results.length == 1){
+       resolve(results[0]);
+     }
+     else{
+       reject({type: 'share', contents: 'USER NOT FOUND'});
+     }
+   })
+ });
 
+ return promise;
+}
+
+/**
+ * shares a given file with a given user
+ * @param {String} share_user - user id to share with
+ * @param {String} file_id - id of the file within mongo to share
+ * @returns {Promise}
+ */
 async function shareFileTo(share_user, file_id){
 
-  async function createIfNoSharedDir(db, share_user){
+  /**
+   * checks if the user to share with has a "Shared" directory, and creates it if not present
+   * @param {Object} db - mongo database that files are stored in
+   * @returns {Promise}
+   */
+  async function createIfNoSharedDir(db){
     // check if they have a shared folder
     let promise = new Promise((resolve, reject) => {
+      // find the shared directory
       db.collection(share_user + ".files").findOne({$and: [{filename: "Shared"}, {'metadata.path': "/root"}, {'metadata.content_type': "directory"}]}).then(
         (shared_dir) => {
           if(!shared_dir){
+            // if one was not found, create it
             createDirectory("/root", "Shared", share_user).then((response) => {
               if(response == 'success'){
                 resolve();
@@ -482,7 +526,6 @@ async function shareFileTo(share_user, file_id){
     });
 
     return promise;
-
   }
 
   let promise = new Promise(function(resolve, reject) {
@@ -495,14 +538,18 @@ async function shareFileTo(share_user, file_id){
 
         const db = database.db('cloudf');
 
+        // creat the shared directory if needed
         createIfNoSharedDir(db, share_user).then(() => {
 
+          // create object for file id to use in queries
           let file_id_obj = new mongodb.ObjectID(file_id);
 
+          // get the information of the file to be shared
           db.collection(client_user + ".files").findOne({_id: file_id_obj}).then(
             (doc) => {
               console.log(doc);
 
+              // create gridfs buckets for sharer and sharee collections
               var to_bucket = new mongodb.GridFSBucket(db, {
                 bucketName: share_user
               });
@@ -511,24 +558,32 @@ async function shareFileTo(share_user, file_id){
                 bucketName: client_user
               });
 
-              var upload_stream = to_bucket.openUploadStream(doc.filename);
-              upload_stream.options.metadata = {
-                date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
-                path: '/root/Shared',
-                content_type: doc.metadata.content_type
-              };
+              getUserInfoByUserId(client_user).then((user_results) => {
+                // create upload stream with associated metadata
+                var upload_stream = to_bucket.openUploadStream(doc.filename);
+                upload_stream.options.metadata = {
+                  date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
+                  path: '/root/Shared',
+                  content_type: doc.metadata.content_type,
+                  shared_by: user_results.email
+                };
 
-              console.log('created buckets');
+                console.log('created buckets');
 
-              from_bucket.openDownloadStream(file_id_obj).
-              pipe(upload_stream).
-              on('error', function(error) {
-                console.log(error);
-                assert.ifError(error);
-              }).
-              on('finish', function() {
-                console.log('success');
-                resolve();
+                // create download stream of the file object and pipe it into the upload stream
+                from_bucket.openDownloadStream(file_id_obj).
+                pipe(upload_stream).
+                on('error', function(error) {
+                  console.log(error);
+                  assert.ifError(error);
+                }).
+                on('finish', function() {
+                  console.log('success');
+                  resolve();
+                });
+              },
+              (error) => {
+                reject(error);
               });
             },
             (error) => {

@@ -86,31 +86,41 @@ body {
 
 #deleteFile {
   background-image: url("/images/flaticon/delete.png");
-  right: 0px;
 
-  top: 10px;
-  left: 40%;
+  /* top: 40px;
+  left: 68px; */
 
 }
 
 #downloadFile {
   background-image: url("/images/flaticon/cloud-computing.png");
 
-  top: 10px;
-  left: 10%;
+  /* top: 40px;
+  left: 10px; */
+}
+
+#shareFile {
+  background-image: url("/images/flaticon/share-option.png");
+
+  /* top: 40px;
+  left: 126px; */
 }
 
 .circleButton {
   border-radius: 50%;
   width: 48px;
   height: 48px;
-  background: red;
-  border: 3px solid #000;
+  background: #9C858D;
+  border: 2px solid #000;
   background-repeat: round ;
   cursor: pointer;
 
   position: absolute;
   z-index: 2;
+}
+
+.circleButton.side{
+  position: relative;
 }
 
 .floatingButtons {
@@ -143,7 +153,8 @@ body {
   * Styling for upload form modal, create directory modal
 */
 #modal_upload_form_content, #modal_create_directory_content,
-#modal_delete_file_content, #modal_download_file_content {
+#modal_delete_file_content, #modal_download_file_content,
+#modal_share_file_content {
   background-color: #E6CCBE;
 }
 
@@ -155,7 +166,7 @@ body {
   z-index: 1;
   top: 10vh;
   transition: right 0.5s;
-  padding-top: 10vh;
+  padding-top: 36px;
   padding-left: 15px;
   padding-right: 15px;
   background-color: #E9E9E9;

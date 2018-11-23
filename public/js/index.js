@@ -320,6 +320,12 @@ function populateSidebar(index){
   document.getElementById("data-filename").innerHTML = current_file_data[index].filename;
   document.getElementById("data-filetype").innerHTML = current_file_data[index].metadata.content_type;
   document.getElementById("data-adddate").innerHTML = current_file_data[index].metadata.date_added;
+  if(current_file_data[index].metadata.shared_by){
+    document.getElementById("data-sharedby").innerHTML = "Shared By:<br>" + current_file_data[index].metadata.shared_by;
+  }
+  else{
+    document.getElementById("data-sharedby").innerHTML = "";
+  }
 }
 
 /**
@@ -693,4 +699,49 @@ function doLogout(){
             }
           }
   });
+}
+
+function shareItem(){
+
+  const obj = {
+    file_id: current_file_data[selected_index]["_id"],
+    share_with: document.getElementById('emailShareInput').value
+  }
+
+  $.ajax({
+    url: '/FileInteraction/shareFile',
+    data: obj,
+    success: () => {
+      hideSidebar();
+      $('#modal_share').modal('hide');
+      $.snackbar({content: "Shared file successfully!"});
+    },
+    error: (response) => {
+      console.log(response);
+      $.snackbar({content: "<strong>Error:</strong> " + response.responseText});
+    }
+  });
+  // if (current_file_data[selected_index]["metadata"]["content_type"] == "directory") {
+  //   // is directory
+  //   const obj = {
+  //     directory_id: current_file_data[selected_index]["_id"],
+  //     directory_name: current_file_data[selected_index]["filename"],
+  //     directory_path: current_file_data[selected_index]["metadata"]["path"] + '/' +
+  //     current_file_data[selected_index]["filename"]
+  //   };
+  //   // making call to back-end
+  //   window.open('/FileInteraction/downloadDirectory?directory_id=' + obj.directory_id +
+  //   '&directory_name=' + obj.directory_name + '&directory_path=' + obj.directory_path);
+  // } else {
+  //   // is singular file
+  //   const obj = {
+  //     file_id: current_file_data[selected_index]["_id"],
+  //     file_name: current_file_data[selected_index]["filename"]
+  //   };
+  //   // making call to back-end
+  //   window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name);
+  //   // window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name + '&session=' + Cookies.get('cloudf_session'));
+  // }
+  // // hide sidebar
+  // hideSidebar();
 }
