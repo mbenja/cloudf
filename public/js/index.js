@@ -39,7 +39,11 @@ let selected_index = 0;
 // display loading modal
 $('#loading_modal').modal('show');
 // initial call to backend to get file data, then hide modal if it succeeds
-refreshData().then(() => { $('#loading_modal').modal('hide'); });
+refreshData().then(() => {
+  setTimeout(function() {
+    $('#loading_modal').modal('hide'); 
+  }, 500);
+});
 
 
 
