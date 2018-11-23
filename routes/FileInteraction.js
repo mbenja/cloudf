@@ -356,9 +356,14 @@ router.get('/downloadFile', function(req, res) {
   console.log("GET /downloadFile");
   downloadFile(req.query).then((response) => {
     // download
-    res.download(response, req.query.file_name);
-    // purge download directory
-    purgeDownloadDirectory();
+    res.download(response, req.query.file_name, function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        // purge download directory
+        purgeDownloadDirectory();
+      }
+    });
   })
 });
 
@@ -386,9 +391,14 @@ router.get('/downloadDirectory', function(req, res) {
     // call for download
     downloadDirectory(obj).then((response) => {
       // download
-      res.zip(response, req.query.directory_name + '.zip');
-      // purge download directory
-      //purgeDownloadDirectory();
+      res.zip(response, req.query.directory_name + '.zip', function(err) {
+        if (err) {
+
+        } else {
+          // purge download directory
+          purgeDownloadDirectory();
+        }
+      });
     })
   });
 });
