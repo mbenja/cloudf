@@ -219,32 +219,22 @@ function populateBreadcrumbs(path){
      file_card = document.getElementById(id);
 
      if(id != ev.target.id) {
-       //file_card.style.visibility = "hidden";
-
-       //Possible Events
-        //File or Folder Drop on Directory
-        //File or Folder Drop on Parent Directory
-        //File or Folder Drop on Breadcrumb Banner
-      //Backend Function Call To Rename
-      console.log(file_card);
-      console.log(id);
-      console.log(ev.target.id);
-
       // parse ids
       var source_index = id;
       source_index = source_index.replace('file', '');
       var destination_index = ev.target.id;
-      destination_index = destination_index.replace('file', '');
-
-      console.log(source_index);
-      console.log(destination_index);
+      var destination_path;
+      if (destination_index.includes("pathSection")) {
+        // is breadcrumb banner
+        destination_path = document.getElementById(ev.target.id).getAttribute("path");
+      } else {
+        // is not breadcrumb banner
+        destination_index = destination_index.replace('file', '');
+        destination_path = current_file_data[destination_index]["metadata"]["path"] + '/' +
+                               current_file_data[destination_index]["filename"];
+      }
       // define ids and paths for backend
       var source_ids = [];
-      var destination_path = current_file_data[destination_index]["metadata"]["path"] + '/' +
-                             current_file_data[destination_index]["filename"];
-      console.log(current_file_data);
-      console.log(current_file_data[source_index]);
-      console.log(current_file_data[destination_index]);
       // build array of source_ids
       if (current_file_data[source_index]["metadata"]["content_type"] != 'directory') {
         // source_index is file
@@ -257,8 +247,6 @@ function populateBreadcrumbs(path){
           }
         }
       }
-      console.log(source_ids);
-      console.log(destination_path);
       // define object for back end
       const obj = {
         source_ids: source_ids,
