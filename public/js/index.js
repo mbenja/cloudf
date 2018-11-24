@@ -5,10 +5,17 @@
 let current_file_data = [];
 
 /**
+ * Current directory being uploaded by user
+ * @type {String}
+ */
+let current_upload_path_local = '';
+
+/**
  * stores path currently being viewed by the user
  * @type {String}
  */
-let current_path = '/root';
+let current_path;
+setCurrentPath('/root');
 
 
 
@@ -31,8 +38,14 @@ let selected_index = 0;
 
 
 
-// initial call to backend to get file data
-refreshData();
+// display loading modal
+$('#loading_modal').modal('show');
+// initial call to backend to get file data, then hide modal if it succeeds
+refreshData().then(() => {
+  setTimeout(function() {
+    $('#loading_modal').modal('hide');
+  }, 500);
+});
 
 
 
@@ -44,7 +57,7 @@ refreshData();
 function populateDirectoryListing(path){
 
   // update current path
-  current_path = path;
+  setCurrentPath(path);
 
   // remove all of the files currently displayed
   while(files_div.firstChild){
@@ -65,17 +78,35 @@ function populateDirectoryListing(path){
 
     // create enclosing div for file
     let file_card = document.createElement('div');
+
+    //Assign File ID
+    file_card.setAttribute("id", "file" + i);
+
     // set css class and onlick attributes based on file type
     if(cur_type == "parent"){
       file_card.setAttribute("class", "card parent");
       file_card.setAttribute("onclick", "populateDirectoryListing(\"" + current_path.split('/').splice(0, current_path.split('/').length-1).join('/') + "\");");
+
+      file_card.setAttribute("ondrop", "drop(event)");
+      file_card.setAttribute("ondragover", "allowDrop(event)");
     }
     else if(cur_type == "directory"){
       file_card.setAttribute("class", "card directory");
       file_card.setAttribute("onclick", "populateDirectoryListing(\"" + path + "/" + files_in_path[i].filename + "\");")
+
+      file_card.setAttribute("draggable", "true");
+      file_card.setAttribute("ondragstart", "drag(event)");
+      file_card.setAttribute("ondrop", "drop(event)");
+      file_card.setAttribute("ondragover", "allowDrop(event)");
+
+      file_card.setAttribute("ondblclick", "is_single=0;populateDirectoryListing(\"" + path + "/" + files_in_path[i].filename + "\");");
+      file_card.setAttribute("onclick", "is_single=1;setTimeout(function() { if (is_single) showSidebar(" + files_in_path[i].index + ");},300);");
     }
     else{
       file_card.setAttribute("class", "card file");
+
+      file_card.setAttribute("draggable", "true");
+      file_card.setAttribute("ondragstart", "drag(event)");
       // set onclick event to show sidebar
       file_card.setAttribute("onclick", "showSidebar(" + files_in_path[i].index + ");")
     }
@@ -83,6 +114,9 @@ function populateDirectoryListing(path){
     // create body for file type image and name
     let card_body = document.createElement('div');
     card_body.setAttribute("class", "card-body");
+
+    //Assign File ID
+    card_body.setAttribute("id", "file" + i);
 
     // create file type image
     let file_icon = document.createElement('img');
@@ -139,6 +173,8 @@ function populateBreadcrumbs(path){
           block_to_insert.classList.add('pathSection');
           block_to_insert.path = path;
           block_to_insert.setAttribute("onclick", "populateDirectoryListing(this.path)");
+          block_to_insert.setAttribute("ondrop", "drop(event)");
+          block_to_insert.setAttribute("ondragover", "allowDrop(event)");
           block_to_insert.innerHTML = partialPath ;
           block_to_insert.pathNum = current_path_sections;
 
@@ -188,10 +224,104 @@ function populateBreadcrumbs(path){
 }
 
 /**
+ * allows the file_card to be dragged
+ * @param {event} the drag event on file_card being moved
+ */
+ function drag(ev) {
+    ev.dataTransfer.setData("id", ev.target.id);
+}
+
+/**
+ * changes file_card path to new path and updates page
+ * @param {event} the drop event between the folder and file_card being moved
+ */
+ function drop(ev) {
+     ev.preventDefault();
+
+     let id = ev.dataTransfer.getData("id");
+     file_card = document.getElementById(id);
+
+     if(id != ev.target.id) {
+       //file_card.style.visibility = "hidden";
+
+       //Possible Events
+        //File or Folder Drop on Directory
+        //File or Folder Drop on Parent Directory
+        //File or Folder Drop on Breadcrumb Banner
+      //Backend Function Call To Rename
+      console.log(file_card);
+      console.log(id);
+      console.log(ev.target.id);
+
+      // parse ids
+      var source_index = id;
+      source_index = source_index.replace('file', '');
+      var destination_index = ev.target.id;
+      destination_index = destination_index.replace('file', '');
+
+      console.log(source_index);
+      console.log(destination_index);
+      // define ids and paths for backend
+      var source_ids = [];
+      var destination_path = current_file_data[destination_index]["metadata"]["path"] + '/' +
+                             current_file_data[destination_index]["filename"];
+      console.log(current_file_data);
+      console.log(current_file_data[source_index]);
+      console.log(current_file_data[destination_index]);
+      // build array of source_ids
+      if (current_file_data[source_index]["metadata"]["content_type"] != 'directory') {
+        // source_index is file
+        source_ids.push(current_file_data[source_index]["_id"]);
+      } else {
+        // source_index is directory
+        for (var i = 0; i < current_file_data.length; i++) {
+          if (current_file_data[i]["metadata"]["path"].includes(current_file_data[source_index]["metadata"]["path"])) {
+            source_ids.push(current_file_data[source_index]["_id"]);
+          }
+        }
+      }
+      console.log(source_ids);
+      console.log(destination_path);
+      // define object for back end
+      const obj = {
+        source_ids: source_ids,
+        destination_path: destination_path
+      };
+      // perform ajax call
+      $.ajax({
+        url: '/FileInteraction/moveFiles',
+        data: obj,
+        success: function (response) {
+          // show snackbar dependent upon response
+          if (response == 'BROKEN PIPE') {
+            $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+          } else {
+            // refresh front-end
+            refreshData();
+          }
+        },
+        error: function (data) {
+          console.log(data);
+        }
+      });
+    }
+ }
+
+ /**
+  * allows drop event to occur on folder
+  * @param {event} the div that is having drop event occur on it
+  */
+ function allowDrop(ev) {
+     ev.preventDefault();
+ }
+
+
+/**
  * displays the file information sidebar
  * @param {Number} index index of the file to show in current_file_data
  */
 function showSidebar(index) {
+  showEditFileName('hide');
   selected_index = index;
   populateSidebar(index);
   document.getElementById("file_sidebar").removeAttribute('disabled');
@@ -218,91 +348,170 @@ function populateSidebar(index){
   document.getElementById("data-filename").innerHTML = current_file_data[index].filename;
   document.getElementById("data-filetype").innerHTML = current_file_data[index].metadata.content_type;
   document.getElementById("data-adddate").innerHTML = current_file_data[index].metadata.date_added;
+  if(current_file_data[index].metadata.shared_by){
+    document.getElementById("data-sharedby").innerHTML = "Shared By:<br>" + current_file_data[index].metadata.shared_by;
+  }
+  else{
+    document.getElementById("data-sharedby").innerHTML = "";
+  }
 }
-
-
 
 /**
  * Sends necessary data to back-end for call to delete file
  */
-function deleteFile() {
+function deleteItem() {
   // update state variables in back-end
-  sendState();
-  // define object to be sent to back-end
-  const obj = {
-    file_id: current_file_data[selected_index]["_id"]
-  };
-  // perform ajax call
-  $.ajax({
-    url: '/FileInteraction/deleteFile',
-    data: obj,
-    success: function (response) {
-      // dismiss delete modal
-      $('#modal_delete_file').modal('hide');
-      // hide sidebar
-      hideSidebar();
-      // show snackbar dependent upon response
-      if (response == 'BROKEN PIPE') {
-        $.snackbar({content: "<strong>Error:</strong> Servers are down."});
-      } else {
-        $.snackbar({content: "<strong>Success!</strong> The file has been deleted."});
-        // refresh front-end
-        refreshData();
-      }
-    },
-    error: function (data) {
-      console.log(data);
-    }
-  });
+  //sendState();
+  // check content type
+  if (current_file_data[selected_index]["metadata"]["content_type"] == "directory") {
+    // is directory
+    // define object to be sent to back-end
+    const obj = {
+      directory_id: current_file_data[selected_index]["_id"],
+      directory_path: current_file_data[selected_index]["metadata"]["path"] + '/' +
+      current_file_data[selected_index]["filename"]
+    };
+    // perform ajax call
+    $.ajax({
+      url: '/FileInteraction/deleteDirectory',
+      data: obj,
+      success: function (response) {
+        // dismiss delete modal
+        $('#modal_delete').modal('hide');
+        // hide sidebar
+        hideSidebar();
+        // show snackbar dependent upon response
+        if (response == 'BROKEN PIPE') {
+          $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+        } else {
+          $.snackbar({content: "<strong>Success!</strong> The folder has been deleted."});
+          // refresh front-end
+          refreshData();
+        }
+      },
+      error: (data) => { checkInvalidSession(data); }
+    });
+  } else {
+    // is file
+    // define object to be sent to back-end
+    const obj = {
+      file_id: current_file_data[selected_index]["_id"]
+    };
+    // perform ajax call
+    $.ajax({
+      url: '/FileInteraction/deleteFile',
+      data: obj,
+      success: function (response) {
+        // dismiss delete modal
+        $('#modal_delete').modal('hide');
+        // hide sidebar
+        hideSidebar();
+        // show snackbar dependent upon response
+        if (response == 'BROKEN PIPE') {
+          $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+        } else {
+          $.snackbar({content: "<strong>Success!</strong> The file has been deleted."});
+          // refresh front-end
+          refreshData();
+        }
+      },
+      error: (data) => { checkInvalidSession(data); }
+    });
+  }
 }
 
 
 
 /**
- * Sends necessary data to back-end for call to download file
+ * Sends necessary data to back-end for call to download file/directory
  */
-function downloadFile() {
+function download() {
   // update state variables in back-end
-  sendState();
+  //sendState();
+  // check content_type
   // define object to be sent to back-end
-  const obj = {
-    file_id: current_file_data[selected_index]["_id"],
-    file_name: current_file_data[selected_index]["filename"]
-  };
-  // making call to back-end
-  window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name);
+  if (current_file_data[selected_index]["metadata"]["content_type"] == "directory") {
+    // is directory
+    const obj = {
+      directory_id: current_file_data[selected_index]["_id"],
+      directory_name: current_file_data[selected_index]["filename"],
+      directory_path: current_file_data[selected_index]["metadata"]["path"] + '/' +
+      current_file_data[selected_index]["filename"]
+    };
+    // making call to back-end
+    window.open('/FileInteraction/downloadDirectory?directory_id=' + obj.directory_id +
+    '&directory_name=' + obj.directory_name + '&directory_path=' + obj.directory_path);
+  } else {
+    // is singular file
+    const obj = {
+      file_id: current_file_data[selected_index]["_id"],
+      file_name: current_file_data[selected_index]["filename"]
+    };
+    // making call to back-end
+    window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name);
+    // window.open('/FileInteraction/downloadFile?file_id=' + obj.file_id + '&file_name=' + obj.file_name + '&session=' + Cookies.get('cloudf_session'));
+  }
   // hide sidebar
   hideSidebar();
 }
 
-function editFileName(){
+function showEditFileName(status) {
+  let filename = document.getElementById('data-filename');
+  let filenameInput = document.getElementById('data-filename-input');
+
+  if(status == 'show') {
+    filenameInput.style.display = "block";
+    filename.style.display = "none";
+  }
+  else {
+    filenameInput.style.display = "none";
+    filename.style.display = "block";
+  }
 
 }
 
+function editFileName(){
+  let filenameInput = document.getElementById('data-filename-input');
+  let filename = document.getElementById('data-filename');
 
+  showEditFileName('show');
+
+  filenameInput.addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if(event.keyCode === 13) {
+      console.log("enter has been pressed!");
+      filename.innerHTML = filenameInput.value;
+      showEditFileName('hide');
+
+      //Backend Rename Call
+
+    }
+  });
+}
 
 /**
  * Retrieves necessary data from user to perform back-end call to upload file
  */
-function sendState() {
-  // define data needed on backend
-  // TODO this is hard-coded until we implement user authentication
-  const obj = {
-    user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
-    current_path: current_path
-  };
-  // perform ajax call
-  $.ajax({
-    url: '/FileInteraction/clientState',
-    data: obj,
-    success: function (data) {
-      //console.log(data);
-    },
-    error: function (data) {
-      console.log(data);
-    }
-  });
-}
+// function sendState() {
+//   // define data needed on backend
+//   // TODO this is hard-coded until we implement user authentication
+//   const obj = {
+//     user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
+//     current_path: current_path,
+//     current_upload_path_local: current_upload_path_local
+//   };
+//   // perform ajax call
+//   $.ajax({
+//     url: '/FileInteraction/clientState',
+//     data: obj,
+//     success: function (data) {
+//       //console.log(data);
+//     },
+//     error: function (data) {
+//       console.log(data);
+//     }
+//   });
+// }
 
 
 
@@ -311,7 +520,7 @@ function sendState() {
  */
 function createDirectory() {
   // send state
-  sendState();
+  //sendState();
 
   // get data for back-end
   // account for empty folder name
@@ -320,6 +529,7 @@ function createDirectory() {
     directory_name = 'New Folder';
   }
   const obj = {
+    current_path: current_path,
     directory_name: directory_name
   };
   // perform ajax call
@@ -341,6 +551,7 @@ function createDirectory() {
       }
     },
     error: function(response) {
+      checkInvalidSession(response);
       // dismiss modal
       $('#modal_create_directory').modal('hide');
       // present snackbar
@@ -363,47 +574,78 @@ function refreshData() {
 
   let callback = $.Deferred();
 
-  const obj = {
-    user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx'
-  };
+  // const obj = {
+  //   user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx'
+  // };
   // perform ajax call
   $.ajax({
     url: '/FileInteraction/getRootDirectory',
-    data: obj,
     success: function (data) {
       // present error if broken pipe
       if (data == 'BROKEN PIPE') {
         $.snackbar({content: "<strong>Error:</strong> Servers are down."});
       } else {
         current_file_data = data.map((val, ind) => { val.index = ind; return val; });
-        populateDirectoryListing('/root');
+        populateDirectoryListing(current_path);
       }
+      console.log(data);
       callback.resolve();
     },
     error: function (data) {
-      console.log(data);
+      checkInvalidSession(data);
+      //console.log("error:" + data);
       callback.reject();
     }
   });
   // call to send client state
-  sendState();
+  //sendState();
 
   return callback.promise();
 
 }
 
 
+/**
+ * On change listener for upload directory form so that back-end can know name of
+ * folder that is being uploaded
+ */
+document.getElementById("input_upload_directory").addEventListener("change", function(event) {
+  let files = event.target.files;
+  var directory = files[0].webkitRelativePath;
+  directory = directory.split('/');
+  setCurrentUploadPathLocal(directory[0]);
+  //setCurrentPath(current_path + '/' + current_upload_path_local);
+  //sendState();
+}, false);
+
+
+/**
+ * checks the data returned from a request to see if there was an authentication error
+ * if there was an authenticaion error, redirect to the login page
+ * if there wasn't, update the cookies to refersh the current session for another hour
+ * @param {Object} data data returns from an ajax request
+ */
+function checkInvalidSession(data){
+  //alert(data.responseText);
+  if(data.responseText == 'INVALID SESSION' || data.responseText == 'NOT LOGGED IN'){
+    window.location.replace("/login");
+    return;
+  }
+  else{
+    Cookies.set('cloudf_session', Cookies.get('cloudf_session'), {expires: 1/24}); // one hour = 1/24 of a day
+  }
+}
+
 
 /**
  * Defining on submit for upload_form so that we can handle on complete, etc.
  */
-$('#upload_form').submit(function(e){
+$('#upload_form').submit(function(event) {
   // prevents rerouting of page
-  e.preventDefault();
+  event.preventDefault();
 
   // serialize the form
   var form_data = $('#upload_form').serialize();
-
   // submit the form
   $(this).ajaxSubmit({
     data: form_data,
@@ -418,8 +660,77 @@ $('#upload_form').submit(function(e){
         $.snackbar({content: "<strong>Error:</strong> Servers are down."});
       } else {
         $.snackbar({content: "<strong>Success!</strong> Upload complete."});
+        // purge upload directory
+        $.ajax({
+          url: '/FileInteraction/purgeUploadDirectory',
+          success: function (data) {
+            // present error if broken pipe
+            if (data == 'BROKEN PIPE') {
+              $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+            }
+          },
+          error: function (data) {
+            checkInvalidSession(data);
+          }
+        });
         // refresh front-end
         refreshData();
+      }
+    },
+    error: function(response) {
+      checkInvalidSession(response);
+      // dismiss modal
+      $('#modal_upload_form').modal('hide');
+      // present snackbar
+      $.snackbar({content: "<strong>Error:</strong> Upload was not completed."});
+     }
+  });
+  // reset input
+  document.getElementById("input_upload_file").value = "";
+  document.getElementById("input_upload_directory").value = "";
+  return false;
+});
+
+$('#upload_form_directory').submit(function(event) {
+  // prevents rerouting of page
+  event.preventDefault();
+
+  // serialize the form
+  var form_data = $('#upload_form').serialize();
+
+  // submit the form
+  $(this).ajaxSubmit({
+    data: form_data,
+    contentType: 'application/json',
+    success: function(response) {
+      // dismiss modal upon success
+      $('#modal_upload_form').modal('hide');
+      // show snackbar dependent upon response
+      if (response == 'FILE ALREADY EXISTS') {
+        $.snackbar({content: "<strong>Error:</strong> A file of that name already exists within this directory."});
+      } else if (response == 'DIRECTORY ALREADY EXISTS') {
+        $.snackbar({content: "<strong>Error:</strong> A folder of that name already exists within this directory."});
+      } else if (response == 'BROKEN PIPE') {
+        $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+      } else {
+        $.snackbar({content: "<strong>Success!</strong> Upload complete."});
+        // refresh front-end
+        //setCurrentPath(current_path + '/' + current_upload_path_local);
+        setCurrentUploadPathLocal("");
+        refreshData();
+        // purge upload directory
+        $.ajax({
+          url: '/FileInteraction/purgeUploadDirectory',
+          success: function (data) {
+            // present error if broken pipe
+            if (data == 'BROKEN PIPE') {
+              $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+            }
+          },
+          error: function (data) {
+            checkInvalidSession(data);
+          }
+        });
       }
     },
     error: function(response) {
@@ -431,5 +742,99 @@ $('#upload_form').submit(function(e){
   });
   // reset input
   document.getElementById("input_upload_file").value = "";
+  document.getElementById("input_upload_directory").value = "";
   return false;
 });
+
+
+/**
+ * updates the path the user is currently viewing
+ * @param {String} new_path the updated path
+ */
+function setCurrentPath(new_path){
+  // update path variable
+  current_path = new_path;
+  // update the upload file action path so that the current path gets passed along with the upload request
+  document.getElementById('upload_form').setAttribute('action', '/FileInteraction/uploadFile?current_path=' + current_path);
+  document.getElementById('upload_form_directory').setAttribute('action', '/FileInteraction/uploadDirectory?current_path=' + current_path + "&current_upload_path_local=" + current_upload_path_local);
+}
+
+function setCurrentUploadPathLocal(new_path){
+  current_upload_path_local = new_path;
+  document.getElementById('upload_form_directory').setAttribute('action', '/FileInteraction/uploadDirectory?current_path=' + current_path + "&current_upload_path_local=" + current_upload_path_local);
+}
+
+
+/**
+ * makes an ajax call to logout the user
+ * redirect to the login page if the logout was successful.
+ */
+function doLogout(){
+  $.ajax({url: '/authenticate/logout',
+          data: {session: Cookies.get('cloudf_session')},
+          success: (data) => {
+            if(data == 'SUCCESSFUL LOGOUT'){
+              window.location.replace("/login");
+            }
+            else{
+              $.snackbar({content: "<strong>Error:</strong> Logout failed, please try again."});
+            }
+          }
+  });
+}
+
+let email_share_input = document.getElementById('emailShareInput');
+
+/**
+ * shares the currently selected item with the user entered in the email box
+ */
+function shareItem(){
+
+  if(current_file_data[selected_index].metadata.content_type == "directory"){
+    const obj = {
+      directory_id: current_file_data[selected_index]["_id"],
+      directory_name: current_file_data[selected_index].filename,
+      directory_path: current_file_data[selected_index].metadata.path,
+      share_with: email_share_input.value
+    };
+
+    $.ajax({
+      url: '/FileInteraction/shareDirectory',
+      data: obj,
+      success: () => {
+        hideSidebar();
+        $('#modal_share').modal('hide');
+        email_share_input.value = "";
+        $.snackbar({content: "Shared file successfully!"});
+      },
+      error: (response) => {
+        console.log(response);
+        $.snackbar({content: "<strong>Error:</strong> " + response.responseText});
+      }
+    });
+  }
+  else{
+    // singular file
+    const obj = {
+      file_id: current_file_data[selected_index]["_id"],
+      file_name: current_file_data[selected_index].filename,
+      content_type: current_file_data[selected_index].content_type,
+      share_with: email_share_input.value
+    }
+
+    $.ajax({
+      url: '/FileInteraction/shareFile',
+      data: obj,
+      success: () => {
+        hideSidebar();
+        $('#modal_share').modal('hide');
+        email_share_input.value = "";
+        $.snackbar({content: "Shared file successfully!"});
+      },
+      error: (response) => {
+        console.log(response);
+        $.snackbar({content: "<strong>Error:</strong> " + response.responseText});
+      }
+    });
+  }
+}

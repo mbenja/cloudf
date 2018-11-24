@@ -16,6 +16,15 @@ body {
   width: 50%;
 }
 
+/**
+ * Styling for file cards
+ */
+.card {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  border-radius: 1vw;
+}
+
 #main_container {
   width: 100vw;
   padding-right: 15px;
@@ -77,31 +86,31 @@ body {
 
 #deleteFile {
   background-image: url("/images/flaticon/delete.png");
-  right: 0px;
-
-  top: 10px;
-  left: 40%;
-
 }
 
 #downloadFile {
   background-image: url("/images/flaticon/cloud-computing.png");
+}
 
-  top: 10px;
-  left: 10%;
+#shareFile {
+  background-image: url("/images/flaticon/share-option.png");
 }
 
 .circleButton {
   border-radius: 50%;
   width: 48px;
   height: 48px;
-  background: red;
-  border: 3px solid #000;
+  background: #9C858D;
+  border: 2px solid #000;
   background-repeat: round ;
   cursor: pointer;
 
   position: absolute;
   z-index: 2;
+}
+
+.circleButton.side{
+  position: relative;
 }
 
 .floatingButtons {
@@ -115,7 +124,8 @@ body {
 
 /* Styling For breadcrumb Banner */
 .breadcrumbs{
-
+  background-color: #c0eafc;
+  border-radius: 1vw;
 }
 
 #banner {
@@ -148,8 +158,14 @@ body {
   * Styling for upload form modal, create directory modal
 */
 #modal_upload_form_content, #modal_create_directory_content,
-#modal_delete_file_content, #modal_download_file_content {
+#modal_delete_file_content, #modal_download_file_content,
+#modal_share_file_content {
   background-color: #E6CCBE;
+}
+
+#data-filename-input {
+  width: -webkit-fill-available;
+  display: none;
 }
 
 .sidebar {
@@ -160,13 +176,13 @@ body {
   z-index: 1;
   top: 10vh;
   transition: right 0.5s;
-  padding-top: 10vh;
+  padding-top: 36px;
   padding-left: 15px;
   padding-right: 15px;
   background-color: #E9E9E9;
   border: 2px solid black;
   text-align: center;
-  /*padding: 1vw;*/
+  /* padding: 1vw; */
   border-radius: 1vw;
 }
 .sidebar[disabled]{

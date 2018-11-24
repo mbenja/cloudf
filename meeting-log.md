@@ -95,3 +95,96 @@ Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
 
   * Discussed user manual
   * Sent email to Professor Gibbons regarding Docker container deployment
+
+## Meeting \#8
+Date: Wednesday, October 31, 2018
+
+Time: 11:30 - 11:50 PM
+
+Location: In-class
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Planned next meeting
+  * Discussed current work being done by team members
+
+## Meeting \#9
+Date: Friday, November 2, 2018
+
+Time: 11:35 - 11:50 PM
+
+Location: In-class
+
+Attendees: Evan Brown, Blake Rieschick
+
+  * Discussed next meeting
+  * Talked about work being done - Evan doing user authentication, Blake doing breadcrumbs & click/drag move file functionality
+
+## Meeting \#10
+Date: Monday, November 5, 2018
+
+Time: 11:40 - 11:50 PM
+
+Location: In-class
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed current work being done by team members
+  * Discussed issues currently observed during directory downloads
+  * Discussed integration of user authentication
+  * Planned next meeting
+
+## Meeting \#11
+Date: Monday, November 7, 2018
+
+Time: 11:40 - 11:50 PM
+
+Location: In-class
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed current work being done by team members
+  * Discussed integration of moving files implementation with back-end
+  * Discussed implementing of testing suite
+  * Discussed issues currently observed during directory downloads
+
+## Meeting \#12
+Date: Monday, November 9, 2018
+
+Time: 11:40 - 11:50 PM
+
+Location: In-class
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed current work being done by team members
+  * Discussed issues currently being observed during directory uploads
+  * Discussed integration of moving files implementation with back-end
+  * Discussed current status of user authentication
+
+## Meeting \#13
+Date: Tuesday, November 13, 2018
+
+Time: 1:00 - 2:50 PM
+
+Location: Spahr
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed current work being done by team members
+  * Discussed integration of user authentication with front and back-end
+  * Discussed implementation of moving files in back-end
+
+## Meeting \#14
+Date: Monday, November 19, 2018
+
+Time: 11:00 - 11:50 PM
+
+Location: In-class
+
+Attendees: Benjamin Streit, Evan Brown, Blake Rieschick
+
+  * Discussed current work being done by team members
+  * Trouble-shooting of issues with mysql container
+  * Discussed future work to be done
+  * Discussed division of labor concerning test suite

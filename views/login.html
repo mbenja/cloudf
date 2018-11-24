@@ -19,7 +19,7 @@
     <div class="card shadow-lg " id="card_login">
       <img class="card-img-top" src="/images/cloudf.png" style="width:50%;margin:auto;" alt="Card image cap">
       <div class="card-body">
-        <form>
+        <form id="loginform" action="../" method="get" onsubmit="doLogin(email_input.value, password_input.value); return false;">
           <div class="form-group">
             <label for="input_login_email" class="bmd-label-floating">email address</label>
             <input type="email" class="form-control" id="input_login_email">
@@ -30,15 +30,52 @@
           </div>
           <div class="row justify-content-between" style="padding-left:15px;padding-right:15px;">
             <button type="submit" class="btn bg-light btn-raised">log in</button>
-            <button type="submit" class="btn bg-light btn-raised">no account? sign up</button>
+            <button type="button" onclick="$('#modal_register').modal('show');" class="btn bg-light btn-raised">no account? sign up</button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_register">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title">
+              Register New User
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <form action='../' method='get' onsubmit="registerUser(); return false;">
+
+              <div class="form-group">
+                <label for="reg_email_input" onsubmit="return true;" class='sr-only'>Email address</label>
+                <input type="email" class="form-control" id="reg_email_input" name="reg_email" placeholder="Enter email">
+              </div>
+              <div class="form-group">
+                <label for="reg_pass_input1" class='sr-only'>Password</label>
+                <input type="password" class="form-control" id="reg_pass_input1" name="reg_pass1" placeholder="Enter password">
+              </div>
+              <div class="form-group">
+                <label for="reg_pass_input2" class='sr-only'>Password Again</label>
+                <input type="password" class="form-control" id="reg_pass_input2" placeholder="Re-enter password">
+              </div>
+              <button type="submit" class="btn btn-raised btn-success">Submit</button>
+
+            </form>
+
+          </div>
+        </div>
       </div>
     </div>
 
 
     <!-- jQuery first, then Popper.js, SnackbarJS, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
     <!-- SnackbarJS plugin -->
     <script src="https://cdn.rawgit.com/FezVrasta/snackbarjs/1.1.0/dist/snackbar.min.js"></script>
