@@ -298,6 +298,7 @@ function populateBreadcrumbs(path){
  * @param {Number} index index of the file to show in current_file_data
  */
 function showSidebar(index) {
+  showEditFileName('hide');
   selected_index = index;
   populateSidebar(index);
   document.getElementById("file_sidebar").removeAttribute('disabled');
@@ -425,31 +426,39 @@ function download() {
   hideSidebar();
 }
 
-function editFileName(){
+function showEditFileName(status) {
   let filename = document.getElementById('data-filename');
   let filenameInput = document.getElementById('data-filename-input');
-  let sidebar = document.getElementById('file_sidebar');
 
-  filename.style.display='none';
-  filenameInput.style.display = 'block';
+  if(status == 'show') {
+    filenameInput.style.display = "block";
+    filename.style.display = "none";
+  }
+  else {
+    filenameInput.style.display = "none";
+    filename.style.display = "block";
+  }
+
+}
+
+function editFileName(){
+  let filenameInput = document.getElementById('data-filename-input');
+  let filename = document.getElementById('data-filename');
+
+  showEditFileName('show');
 
   filenameInput.addEventListener("keyup", function(event) {
     event.preventDefault();
     if(event.keyCode === 13) {
       console.log("enter has been pressed!");
       filename.innerHTML = filenameInput.value;
-      filenameInput.style.display = "none";
-      filename.style.display = "block";
+      showEditFileName('hide');
+
       //Backend Rename Call
 
-      
     }
   });
-
-  sidebar.appendChild(filenameInput);
 }
-
-
 
 /**
  * Retrieves necessary data from user to perform back-end call to upload file
