@@ -456,12 +456,49 @@ function editFileName(){
   filenameInput.addEventListener("keyup", function(event) {
     event.preventDefault();
     if(event.keyCode === 13) {
-      console.log("enter has been pressed!");
       filename.innerHTML = filenameInput.value;
       showEditFileName('hide');
-
-      //Backend Rename Call
-
+      // gather all documents that will need their path edited
+      var ids = [];
+      var paths = [];
+      var compare_path = current_file_data[selected_index]["metadata"]["path"] + '/' + current_file_data[selected_index]["filename"];
+      ids.push(current_file_data[selected_index]["_id"]);
+      paths.push(current_file_data[selected_index]["metadata"]["path"].replace(current_file_data[selected_index]["metadata"]["filename"], filenameInput.value));
+      for (var i = 0; i < current_file_data.length; i++) {
+        if (current_file_data[i]["metadata"]["path"].includes(compare_path)) {
+          ids.push(current_file_data[i]["_id"]);
+          paths.push(current_file_data[i]["metadata"]["path"].replace(current_file_data[selected_index]["filename"], filenameInput.value));
+        }
+      }
+      // define object to be sent to back-end
+      const obj = {
+        documents: current_file_data,
+        ids: ids,
+        paths: paths,
+        new_name: filenameInput.value
+      };
+      // perform ajax call
+      $.ajax({
+        url: '/FileInteraction/changeName',
+        data: obj,
+        success: function(response) {
+          // show snackbar dependent upon response
+          if (response == 'NAME ALREADY EXISTS') {
+            $.snackbar({content: "<strong>Error:</strong> An item of that name already exists within this directory."});
+          } else if (response == 'BROKEN PIPE') {
+            $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+          } else {
+            $.snackbar({content: "<strong>Success!</strong> Name change complete."});
+            // refresh front-end
+            refreshData();
+          }
+        },
+        error: function(response) {
+          checkInvalidSession(response);
+          // present snackbar
+          $.snackbar({content: "<strong>Error:</strong> Name change was not completed."});
+         }
+      });
     }
   });
 }

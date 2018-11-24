@@ -414,6 +414,28 @@ router.get('/moveFiles', function(req, res) {
     })
 });
 
+/**
+  * Calls for name change to occur
+  */
+router.get('/changeName', function(req, res) {
+  console.log("GET /nameChange");
+  // ensure no duplicate names
+  isInDirectory(req.query.current_path, req.query.new_name).then((response) => {
+    if (response === true) {
+      // already exists
+      res.send('NAME ALREADY EXISTS');
+    } else if (response == 'BROKEN PIPE') {
+      res.send(response);
+    } else {
+      // proceed
+      // now call async function that changes name in mongoDB
+      changeName(req.query.documents, req.query.ids, req.query.paths, req.query.new_name).then((response) => {
+        res.send(response);
+      })
+    }
+  })
+});
+
 
 /**
   * Calls for upload directory to be purged
@@ -1140,6 +1162,74 @@ async function downloadDirectory(subdirectory) {
    let result = await promise;
    return result;
  }
+
+ /**
+  * Changes name of given file with given name
+  * @param {Array} ids - ids of documents to be modified
+  * @param {Array} paths - paths of documents to be modified
+  * @param {String} new_name - the new name of the document being modified
+  */
+async function changeName(documents, ids, paths, new_name) {
+  let promise = new Promise(function(resolve, reject) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
+      // handle bad connection to mongoDB
+      if (database == null) {
+        resolve('BROKEN PIPE');
+      } else {
+        console.log("Successfully connected to mongoDB");
+
+        const db = database.db('cloudf');
+
+        // define bucket
+        var bucket = new mongodb.GridFSBucket(db, {
+          bucketName: client_user
+        });
+
+        // check if file or directory
+        if (ids.length == 0) {
+          // file
+        } else {
+          // directory
+          var count = 0;
+          // iterate through ids and modify each one with the path and filename
+          for (var i = 0; i < ids.length; i++) {
+            // find matching document
+            var matching_document;
+            for (var j = 0; j < documents.length; j++) {
+              if (documents[j]["_id"] == ids[i]) {
+                // found match
+                matching_document = j;
+                // remove id key
+                delete documents[matching_document]["_id"];
+              }
+            }
+            if (i == 0) {
+              // update fields in object
+              documents[matching_document]["filename"] = new_name;
+              documents[matching_document]["metadata"]["path"] = paths[i]
+            } else {
+              // update fields in object
+              documents[matching_document]["metadata"]["path"] = paths[i];
+            }
+            // update document in mongo
+            db.collection(client_user + '.files').updateOne({ _id: new mongodb.ObjectID(ids[i]) }, { $set: documents[matching_document] }, function(err, res) {
+              if (err) {
+                console.log(err);
+              }
+              count++;
+              if (count == ids.length) {
+                database.close();
+                resolve(res);
+              }
+            });
+          }
+        }
+      }
+    });
+  });
+  let result = await promise;
+  return result;
+}
 
 
 
