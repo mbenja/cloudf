@@ -325,6 +325,12 @@ function populateSidebar(index){
   document.getElementById("data-filename").innerHTML = current_file_data[index].filename;
   document.getElementById("data-filetype").innerHTML = current_file_data[index].metadata.content_type;
   document.getElementById("data-adddate").innerHTML = current_file_data[index].metadata.date_added;
+  if(current_file_data[index].metadata.shared_by){
+    document.getElementById("data-sharedby").innerHTML = "Shared By:<br>" + current_file_data[index].metadata.shared_by;
+  }
+  else{
+    document.getElementById("data-sharedby").innerHTML = "";
+  }
 }
 
 /**
@@ -752,4 +758,60 @@ function doLogout(){
             }
           }
   });
+}
+
+let email_share_input = document.getElementById('emailShareInput');
+
+/**
+ * shares the currently selected item with the user entered in the email box
+ */
+function shareItem(){
+
+  if(current_file_data[selected_index].metadata.content_type == "directory"){
+    const obj = {
+      directory_id: current_file_data[selected_index]["_id"],
+      directory_name: current_file_data[selected_index].filename,
+      directory_path: current_file_data[selected_index].metadata.path,
+      share_with: email_share_input.value
+    };
+
+    $.ajax({
+      url: '/FileInteraction/shareDirectory',
+      data: obj,
+      success: () => {
+        hideSidebar();
+        $('#modal_share').modal('hide');
+        email_share_input.value = "";
+        $.snackbar({content: "Shared file successfully!"});
+      },
+      error: (response) => {
+        console.log(response);
+        $.snackbar({content: "<strong>Error:</strong> " + response.responseText});
+      }
+    });
+  }
+  else{
+    // singular file
+    const obj = {
+      file_id: current_file_data[selected_index]["_id"],
+      file_name: current_file_data[selected_index].filename,
+      content_type: current_file_data[selected_index].content_type,
+      share_with: email_share_input.value
+    }
+
+    $.ajax({
+      url: '/FileInteraction/shareFile',
+      data: obj,
+      success: () => {
+        hideSidebar();
+        $('#modal_share').modal('hide');
+        email_share_input.value = "";
+        $.snackbar({content: "Shared file successfully!"});
+      },
+      error: (response) => {
+        console.log(response);
+        $.snackbar({content: "<strong>Error:</strong> " + response.responseText});
+      }
+    });
+  }
 }

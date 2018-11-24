@@ -161,17 +161,51 @@
       </div>
     </div>
 
+
+    <!--
+    Share file modal
+    -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_share">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modal_share_file_content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              Share Item
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="emailShareInput">Email Address to Share with</label>
+              <input type="email" class="form-control" id="emailShareInput" placeholder="Enter Email">
+              <small class="form-text text-muted">This email must be registered to an account with cloudf</small>
+            </div>
+            <div class="form-group">
+              <button type="button" class="btn btn-raised btn-success" onclick="shareItem();">Share</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- div for file data display sidebar -->
     <div id="file_sidebar" class="sidebar" disabled>
       <!-- <div class="circleButton" id="deleteFile" onclick="$('#modal_delete_file').modal('show');"> </div> -->
-      <div class="circleButton" id="deleteFile" onclick="$('#modal_delete').modal('show');"> </div>
-      <div class="circleButton" id="downloadFile" onclick="download()"> </div>
       <a href="javascript:void(0)" class="close" onclick="hideSidebar()">&times;</a>
+      <div style="display:flex; justify-content:space-around;">
+        <div class="circleButton side" id="deleteFile" onclick="$('#modal_delete').modal('show');"> </div>
+        <div class="circleButton side" id="downloadFile" onclick="download()"> </div>
+        <div class="circleButton side" id="shareFile" onclick="$('#modal_share').modal('show');"> </div>
+      </div>
+      <hr>
       <input type='text' id='data-filename-input'>
       <h3 id="data-filename" ondblclick="editFileName()"></h3>
       <hr>
       <p id="data-filetype"></p>
       <p id="data-adddate"></p>
+      <p id="data-sharedby"></p>
     </div>
 
     <!-- jQuery first, then Popper.js, SnackbarJS, then Bootstrap JS -->
