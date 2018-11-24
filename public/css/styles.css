@@ -86,24 +86,14 @@ body {
 
 #deleteFile {
   background-image: url("/images/flaticon/delete.png");
-
-  /* top: 40px;
-  left: 68px; */
-
 }
 
 #downloadFile {
   background-image: url("/images/flaticon/cloud-computing.png");
-
-  /* top: 40px;
-  left: 10px; */
 }
 
 #shareFile {
   background-image: url("/images/flaticon/share-option.png");
-
-  /* top: 40px;
-  left: 126px; */
 }
 
 .circleButton {
@@ -156,6 +146,11 @@ body {
 #modal_delete_file_content, #modal_download_file_content,
 #modal_share_file_content {
   background-color: #E6CCBE;
+}
+
+#data-filename-input {
+  width: -webkit-fill-available;
+  display: none;
 }
 
 .sidebar {

@@ -39,7 +39,11 @@ let selected_index = 0;
 // display loading modal
 $('#loading_modal').modal('show');
 // initial call to backend to get file data, then hide modal if it succeeds
-refreshData().then(() => { $('#loading_modal').modal('hide'); });
+refreshData().then(() => {
+  setTimeout(function() {
+    $('#loading_modal').modal('hide');
+  }, 500);
+});
 
 
 
@@ -294,6 +298,7 @@ function populateBreadcrumbs(path){
  * @param {Number} index index of the file to show in current_file_data
  */
 function showSidebar(index) {
+  showEditFileName('hide');
   selected_index = index;
   populateSidebar(index);
   document.getElementById("file_sidebar").removeAttribute('disabled');
@@ -427,11 +432,39 @@ function download() {
   hideSidebar();
 }
 
-function editFileName(){
+function showEditFileName(status) {
+  let filename = document.getElementById('data-filename');
+  let filenameInput = document.getElementById('data-filename-input');
+
+  if(status == 'show') {
+    filenameInput.style.display = "block";
+    filename.style.display = "none";
+  }
+  else {
+    filenameInput.style.display = "none";
+    filename.style.display = "block";
+  }
 
 }
 
+function editFileName(){
+  let filenameInput = document.getElementById('data-filename-input');
+  let filename = document.getElementById('data-filename');
 
+  showEditFileName('show');
+
+  filenameInput.addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if(event.keyCode === 13) {
+      console.log("enter has been pressed!");
+      filename.innerHTML = filenameInput.value;
+      showEditFileName('hide');
+
+      //Backend Rename Call
+
+    }
+  });
+}
 
 /**
  * Retrieves necessary data from user to perform back-end call to upload file
@@ -604,6 +637,19 @@ $('#upload_form').submit(function(event) {
         $.snackbar({content: "<strong>Error:</strong> Servers are down."});
       } else {
         $.snackbar({content: "<strong>Success!</strong> Upload complete."});
+        // purge upload directory
+        $.ajax({
+          url: '/FileInteraction/purgeUploadDirectory',
+          success: function (data) {
+            // present error if broken pipe
+            if (data == 'BROKEN PIPE') {
+              $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+            }
+          },
+          error: function (data) {
+            checkInvalidSession(data);
+          }
+        });
         // refresh front-end
         refreshData();
       }
@@ -649,6 +695,19 @@ $('#upload_form_directory').submit(function(event) {
         //setCurrentPath(current_path + '/' + current_upload_path_local);
         setCurrentUploadPathLocal("");
         refreshData();
+        // purge upload directory
+        $.ajax({
+          url: '/FileInteraction/purgeUploadDirectory',
+          success: function (data) {
+            // present error if broken pipe
+            if (data == 'BROKEN PIPE') {
+              $.snackbar({content: "<strong>Error:</strong> Servers are down."});
+            }
+          },
+          error: function (data) {
+            checkInvalidSession(data);
+          }
+        });
       }
     },
     error: function(response) {
