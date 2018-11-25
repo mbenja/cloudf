@@ -258,7 +258,6 @@ function populateBreadcrumbs(path){
       paths.push(current_file_data[source_index]["metadata"]["path"].replace(source_path, destination_path));
       // define object for back end
       const obj = {
-        documents: current_file_data,
         source_ids: source_ids,
         paths: paths
       };
@@ -470,7 +469,6 @@ function editFileName(){
       }
       // define object to be sent to back-end
       const obj = {
-        documents: current_file_data,
         ids: ids,
         paths: paths,
         new_name: filenameInput.value

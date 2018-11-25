@@ -464,10 +464,13 @@ router.get('/downloadDirectory', function(req, res) {
   */
 router.get('/moveFiles', function(req, res) {
   console.log("GET /moveFiles");
-  // call for files to be moved
-  moveFiles(req.query.documents, req.query.source_ids, req.query.paths).then((response) => {
-      res.send(response);
-    })
+  // get root directory
+  getRootDirectory().then((documents) => {
+    // call for files to be moved
+    moveFiles(documents, req.query.source_ids, req.query.paths).then((response) => {
+        res.send(response);
+      })
+  });
 });
 
 /**
@@ -484,10 +487,13 @@ router.get('/changeName', function(req, res) {
       res.send(response);
     } else {
       // proceed
-      // now call async function that changes name in mongoDB
-      changeName(req.query.documents, req.query.ids, req.query.paths, req.query.new_name).then((response) => {
-        res.send(response);
-      })
+      // get root directory
+      getRootDirectory().then((documents) => {
+        // now call async function that changes name in mongoDB
+        changeName(documents, req.query.ids, req.query.paths, req.query.new_name).then((response) => {
+          res.send(response);
+        })
+      });
     }
   })
 });
