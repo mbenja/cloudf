@@ -20,6 +20,7 @@ function testBackend() {
   testDeleteFile();
   testUploadFile();
   testUploadDirectory();
+  testEditName();
 }
 
 /**
@@ -40,7 +41,6 @@ function testGetRootDirectory() {
 function testGetSubDirectory() {
   // define data object for back-end
   const obj = {
-    user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
     subdirectory: 'FOR_TEST_SUITE'
   };
   // perform ajax call
@@ -65,6 +65,7 @@ function testGetSubDirectory() {
 */
 function testCreateDirectory() {
   const obj = {
+    current_path: current_path,
     directory_name: 'test_create_directory'
   };
   // perform ajax call
@@ -92,8 +93,9 @@ function testDeleteDirectory() {
   index = current_file_data.findIndex(x => x.filename == "test_delete_directory");
   const obj = {
     directory_id: current_file_data[index]["_id"],
-    directory_path: current_file_data[index]["metadata"]["path"] + '/' +
-    current_file_data[index]["filename"]
+    directory_path: current_file_data[index]["metadata"]["path"]
+    // directory_path: current_file_data[index]["metadata"]["path"] + '/' +
+    // current_file_data[index]["filename"]
   };
   // perform ajax call
   $.ajax({
@@ -179,6 +181,53 @@ $('#upload_form_test').submit(function(event) {
 */
 function testUploadDirectory() {
   $('#modal_upload_form_test').modal('show');
+}
+
+/**
+  * Testing editFileName
+  */
+function testEditName() {
+  var new_name = "TEST EDIT NAME";
+  var selected_index = 0;
+  // gather all documents that will need their path edited
+  var ids = [];
+  var paths = [];
+  var compare_path = current_file_data[selected_index]["metadata"]["path"] + '/' + current_file_data[selected_index]["filename"];
+  ids.push(current_file_data[selected_index]["_id"]);
+  paths.push(current_file_data[selected_index]["metadata"]["path"].replace(current_file_data[selected_index]["metadata"]["filename"], new_name));
+  for (var i = 0; i < current_file_data.length; i++) {
+    if (current_file_data[i]["metadata"]["path"].includes(compare_path)) {
+      ids.push(current_file_data[i]["_id"]);
+      paths.push(current_file_data[i]["metadata"]["path"].replace(current_file_data[selected_index]["filename"], new_name));
+    }
+  }
+  // define object to be sent to back-end
+  const obj = {
+    documents: current_file_data,
+    ids: ids,
+    paths: paths,
+    new_name: new_name
+  };
+  // perform ajax call
+  $.ajax({
+    url: '/FileInteraction/changeName',
+    data: obj,
+    success: function(response) {
+      if (response == 'NAME ALREADY EXISTS') {
+        console.log("editFileName: " + "FAILED");
+      } else if (response == 'BROKEN PIPE') {
+        console.log("editFileName: " + "FAILED");
+      } else {
+        console.log("editFileName: " + "PASSED");
+        // refresh front-end
+        refreshData();
+      }
+    },
+    error: function(response) {
+      checkInvalidSession(response);
+      console.log("editFileName: " + "FAILED");
+     }
+  });
 }
 
 /**
