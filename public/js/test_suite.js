@@ -235,6 +235,9 @@ $('#upload_form_directory_test').submit(function(event) {
   return false;
 });
 
+/**
+ * test authentication backend functions
+ */
 async function testAuth(){
 
   //save current session cookie
@@ -246,12 +249,27 @@ async function testAuth(){
   // initially remove session cookie
   Cookies.remove('cloudf_session');
   await testNotLoggedIn();
+
+  // set cookie to bad value for test
   Cookies.set('cloudf_session', 'exampleBadCookie')
   await testInvalidCookie();
 
-
+  // test registration functions
   await testNewRegistration(testUser);
   await testExistingRegistration(testUser);
+
+  // test login functions
+  await testInvalidUsername();
+  await testInvalidPassword(testUser);
+  await testLogin(testUser);
+  await testIsLoggedIn();
+
+  // test logout functions
+  await testLogout();
+  await testLogoutNotLoggedIn();
+
+  // reset cookies to initial user's session
+  Cookies.set('cloudf_session', cur_session);
 }
 
 /**
