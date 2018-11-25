@@ -123,11 +123,6 @@ body {
 }
 
 /* Styling For breadcrumb Banner */
-.breadcrumbs{
-  background-color: #c0eafc;
-  border-radius: 1vw;
-}
-
 #banner {
   width: 80%;
   height: 30px;

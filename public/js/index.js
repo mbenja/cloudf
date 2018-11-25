@@ -18,12 +18,14 @@ let current_path;
 setCurrentPath('/root');
 
 
-
+let array_of_crumbs = [document.getElementById('path')];
 let current_breadcrumb_path;
-let current_breadcrumb_parents = 0;
+let current_breadcrumb_parents = -1;
 let current_path_sections = 0;
 let elementsRemoved = 0;
-
+let bannerWidth = document.getElementById('banner').clientWidth;
+let numOfTabs = Math.floor(bannerWidth/104);
+console.log("initial main container width: " + document.getElementById('banner').clientWidth)
 /**
  * references the file display div for easy addition/removal of files
  * @type {Object}
@@ -137,7 +139,12 @@ function populateDirectoryListing(path){
   populateBreadcrumbs(path);
 }
 
-
+function calculateBreadcrumbSize(offset) {
+  let bannerWidth = document.getElementById('banner').clientWidth + offset;
+  let numOfTabs = Math.floor(bannerWidth/104);
+  console.log("Main container width: " + bannerWidth)
+  console.log("Num of tabs allowed: " + numOfTabs);
+}
 
 /**
  * updates the breadcrumbs at the top of the page to display the path currentlybeing viewed.
@@ -145,7 +152,7 @@ function populateDirectoryListing(path){
  */
 function populateBreadcrumbs(path){
   let partialPath = "";
-    let parentCount = 0;
+  let parentCount = 0;
      //Parse File Path
      for(let x = 1; x <= path.length; x++)
      {
@@ -153,75 +160,67 @@ function populateBreadcrumbs(path){
          parentCount++;
        }
      }
-     if(parentCount > current_breadcrumb_parents) {
-     current_breadcrumb_parents = parentCount;
-      //Parse File Path
+
+      //Get Tab Name
        for(let x = path.length-1; x != 0; x--)
        {
-         partialPath = path[x] + partialPath;
+         let lastLetter = path[x];
+         partialPath = lastLetter + partialPath;
          if(path[x] == '/')
          {
-          parentCount++;
-          current_path_sections++;
-
-          //add HTML block to document
-          var block_to_insert ;
-          var container_block ;
-
-          block_to_insert = document.createElement( 'span' );
-          block_to_insert.id = 'pathSection'+current_path_sections;
-          block_to_insert.classList.add('pathSection');
-          block_to_insert.path = path;
-          block_to_insert.setAttribute("onclick", "populateDirectoryListing(this.path)");
-          block_to_insert.setAttribute("ondrop", "drop(event)");
-          block_to_insert.setAttribute("ondragover", "allowDrop(event)");
-          block_to_insert.innerHTML = partialPath ;
-          block_to_insert.pathNum = current_path_sections;
-
-
-          container_block = document.getElementById( 'banner' );
-          container_block.appendChild( block_to_insert );
-
-          //check if overflow in elements occurs
-          let currentPxFilled = (current_path_sections-elementsRemoved+1) * 100;
-          let currentPrecentFilled = currentPxFilled/document.getElementById('main_container').clientWidth;
-          console.log("Current Precent: " + currentPrecentFilled);
-          if(currentPrecentFilled > .8) {
-            console.log("overflow has occured");
-            while(currentPrecentFilled > .8) {
-              elementsRemoved++;
-              console.log('pathSection'+elementsRemoved);
-              removedTab = document.getElementById('pathSection'+elementsRemoved);
-              removedTab.parentElement.removeChild(removedTab);
-              currentPxFilled = (current_path_sections-elementsRemoved+1) * 100;
-              currentPrecentFilled = currentPxFilled/document.getElementById('main_container').clientWidth;
-              console.log("Current Precent: " + currentPrecentFilled);
-            }
-          }
-          else if(currentPrecentFilled <= .8 && elementsRemoved > 0) {
-
-
-          }
-
-          partialPath = "";
           break;
         }
       }
-    }
-    else if (parentCount < current_breadcrumb_parents)
-    {
-     let jumpParentNum = current_breadcrumb_parents - parentCount;
-     for(let x=0; x<jumpParentNum; x++)
-     {
-       let block_to_remove = document.getElementById('pathSection'+current_path_sections);
-       block_to_remove.parentNode.removeChild(block_to_remove);
-       current_path_sections--;
-       current_breadcrumb_parents = parentCount;
 
-     }
+          let removedTab = [];
 
-    }
-}
+          if(parentCount >= current_breadcrumb_parents) {
+            //add HTML block to document
+            var block_to_insert ;
+            var container_block ;
+            current_breadcrumb_parents++;
+
+            block_to_insert = document.createElement( 'span' );
+            block_to_insert.id = 'pathSection'+current_path_sections;
+            block_to_insert.classList.add('pathSection');
+            block_to_insert.path = path;
+            block_to_insert.setAttribute("onclick", "populateDirectoryListing(this.path)");
+            block_to_insert.setAttribute("ondrop", "drop(event)");
+            block_to_insert.setAttribute("ondragover", "allowDrop(event)");
+            block_to_insert.innerHTML = partialPath ;
+            block_to_insert.pathNum = current_path_sections;
+              array_of_crumbs.push(block_to_insert);
+
+            container_block = document.getElementById( 'banner' );
+            container_block.appendChild( block_to_insert );
+              current_path_sections++;
+
+            if(array_of_crumbs.length-1 > numOfTabs) {
+              elementsRemoved++;
+              removedTab = array_of_crumbs[elementsRemoved];
+                removedTab.style.display = "none";
+              }
+          }
+
+          else if(parentCount < current_breadcrumb_parents) {
+            let decreaseBy = current_breadcrumb_parents - parentCount;
+
+            for(let lcv = 0; lcv < decreaseBy; lcv++) {
+              current_breadcrumb_parents--;
+              console.log("backtracking a tab");
+              removedTab = array_of_crumbs.pop();
+              console.log(removedTab.id);
+              removedTab.parentElement.removeChild(removedTab);
+
+              if(elementsRemoved > 0) {
+              let visibleTab = array_of_crumbs[elementsRemoved];
+                visibleTab.style.display = "block";
+                elementsRemoved--;
+              }
+            }
+            decreaseBy = 0;
+          }
+      }
 
 /**
  * allows the file_card to be dragged
@@ -324,8 +323,11 @@ function showSidebar(index) {
   showEditFileName('hide');
   selected_index = index;
   populateSidebar(index);
+
   document.getElementById("file_sidebar").removeAttribute('disabled');
   document.getElementById("main_container").setAttribute('small', true);
+
+  calculateBreadcrumbSize(-1 * document.getElementById('file_sidebar').clientWidth);
 }
 
 
@@ -336,6 +338,8 @@ function showSidebar(index) {
 function hideSidebar() {
   document.getElementById("file_sidebar").setAttribute('disabled', true);
   document.getElementById("main_container").removeAttribute('small');
+
+  calculateBreadcrumbSize(document.getElementById('file_sidebar').clientWidth);
 }
 
 
