@@ -59,7 +59,7 @@ const icons_map = {
   "application/vnd.ms-excel": "xls.png",
   "application/vnd.ms-excel.sheet.binary.macroenabled.12": "xls.png", // actually .xlsb
   "application/vnd.ms-excel.sheet.macroenabled.12": "xls.png", // actually .xlsm
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xslx.png",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx.png",
   "application/xml": "xml.png",
   "text/yaml": "yml.png",
   "application/zip": "zip.png"

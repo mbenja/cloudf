@@ -56,8 +56,6 @@ function doLogin(email, pass){
            password: pass}
   }).then(
     (session_id) => {
-      // update the cookies with the returned session
-      Cookies.set('cloudf_session', session_id, {expires: 1/24});
       // redirect to main page
       window.location.replace("..");
     },
