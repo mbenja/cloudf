@@ -21,6 +21,7 @@ function testBackend() {
   testUploadFile();
   testUploadDirectory();
   testEditName();
+  testMoveFile();
 }
 
 /**
@@ -227,6 +228,61 @@ function testEditName() {
       checkInvalidSession(response);
       console.log("editFileName: " + "FAILED");
      }
+  });
+}
+
+/**
+  * Testing move files
+  */
+function testMoveFile() {
+  var source_index = 1;
+  var destination_index = 0;
+  var source_path;
+  var destination_path;
+  // will be zero if breadcrumb
+  if (destination_index == -1) {
+    destination_path = document.getElementById(ev.target.id).getAttribute("path");
+  } else {
+    destination_path = current_file_data[destination_index]["metadata"]["path"] +
+    '/' + current_file_data[destination_index]["filename"];
+  }
+  source_path = current_file_data[source_index]["metadata"]["path"];
+  // find all items to be moved
+  // build paths array
+  var source_ids = [];
+  var paths = [];
+  for (var i = 0; i < current_file_data.length; i++) {
+    if (current_file_data[i]["metadata"]["path"].includes(source_path + '/' + current_file_data[source_index]["filename"])) {
+      source_ids.push(current_file_data[i]["_id"]);
+      paths.push(current_file_data[i]["metadata"]["path"].replace(source_path, destination_path));
+    }
+  }
+  // include item itself
+  source_ids.push(current_file_data[source_index]["_id"]);
+  paths.push(current_file_data[source_index]["metadata"]["path"].replace(source_path, destination_path));
+  // define object for back end
+  const obj = {
+    documents: current_file_data,
+    source_ids: source_ids,
+    paths: paths
+  };
+  // perform ajax call
+  $.ajax({
+    url: '/FileInteraction/moveFiles',
+    data: obj,
+    success: function (response) {
+      // show snackbar dependent upon response
+      if (response == 'BROKEN PIPE') {
+        console.log("moveFile: " + "FAILED");
+      } else {
+        // refresh front-end
+        refreshData();
+        console.log("moveFile: " + "PASSED");
+      }
+    },
+    error: function (data) {
+      console.log("moveFile: " + "FAILED");
+    }
   });
 }
 
