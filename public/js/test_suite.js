@@ -3,7 +3,7 @@
   * Test scores are updating accordingly
 */
 function runTestSuite() {
-  testBackend();
+  testAuth();
 }
 
 /**
@@ -319,6 +319,7 @@ async function testInvalidCookie(){
         else{
           console.log("checkLogin with invalid cookie FAILED");
         }
+        resolve();
       }
     });
 
@@ -338,8 +339,13 @@ async function testNewRegistration(testUser){
       url: '/authenticate/register',
       data: {email: testUser,
              password: 'examplepass'},
-      success: () => {
-        console.log("register PASSED");
+      success: (result) => {
+        if(result == "SUCCESSFUL REGISTRATION"){
+          console.log("register PASSED");
+        }
+        else{
+          console.log("register FAILED");
+        }
         resolve();
       },
       error: () => {
@@ -381,3 +387,192 @@ async function testNewRegistration(testUser){
 
    return promise;
  }
+
+/**
+ * tests that the login function returns "INVALID USER" when a bad username is used
+ */
+async function testInvalidUsername(){
+  let promise = new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/authenticate/initiateLogin',
+      data: {email: 'anIncorrectEmail@example.com',
+             password: 'doesntmatter'},
+      success: () => {
+        console.log("login with invalid username FAILED");
+        resolve();
+      },
+      error: (error) => {
+        if(error.responseText == "INVALID USER"){
+          console.log("login with invalid username PASSED");
+        }
+        else{
+          console.log("login with invalid username FAILED");
+        }
+        resolve();
+      }
+    });
+  });
+
+  return promise;
+}
+
+/**
+ * tests that the login function returns "INCORRECT PASSWORD" when the wrong password for a user is entered
+ */
+async function testInvalidPassword(testUser){
+  let promise = new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/authenticate/initiateLogin',
+      data: {email: testUser,
+             password: 'anIncorrectPassword'},
+      success: () => {
+        console.log("login with incorrect password FAILED");
+        resolve();
+      },
+      error: (error) => {
+        if(error.responseText == "INCORRECT PASSWORD"){
+          console.log("login with incorrect password PASSED");
+        }
+        else{
+          console.log("login with incorrect password FAILED");
+        }
+        resolve();
+      }
+    });
+  });
+
+  return promise;
+}
+
+/**
+ * test that the login function returns a session id that is stored in the cookies when successful
+ */
+async function testLogin(testUser){
+  let promise = new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/authenticate/initiateLogin',
+      data: {email: testUser,
+             password: 'examplepass'},
+      success: (result) => {
+        console.log(result);
+        if(result == Cookies.get('cloudf_session')){
+          console.log("login PASSED");
+        }
+        else{
+          console.log("login FAILED");
+        }
+        resolve();
+      },
+      error: () => {
+        console.log("login FAILED");
+        resolve();
+      }
+    });
+  });
+
+  return promise;
+}
+
+/**
+ * test that the backend recognizes that a user is logged in after a successful initiateLogin call
+ */
+async function testIsLoggedIn(){
+  let promise = new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/authenticate/checkLogin',
+      success: (result) => {
+        if(result == "LOGGED IN"){
+          console.log("checkLogin after login PASSED");
+        }
+        else{
+          console.log("checkLogin after login FAILED");
+        }
+        resolve();
+      },
+      error: () => {
+        console.log("checkLogin after login FAILED");
+        resolve();
+      }
+    });
+  });
+
+  return promise;
+}
+
+/**
+ * test that the logout function returns "SUCCESSFUL LOGOUT" when user is logged in
+ */
+async function testLogout(){
+  let promise = new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/authenticate/logout',
+      success: (result) => {
+        if(result == "SUCCESSFUL LOGOUT"){
+          console.log("logout PASSED");
+        }
+        else{
+          console.log("logout FAILED");
+        }
+        resolve();
+      },
+      error: () => {
+        console.log("logout FAILED");
+        resolve();
+      }
+    })
+  });
+
+  return promise;
+}
+
+/**
+ * test that backend recognizes that a user is no longer logged in after a successful logout call
+ */
+async function testIsLoggedInAfterLogout(){
+  let promise = new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/authenticate/checkLogin',
+      success: () => {
+        console.log("checkLogin after logout FAILED");
+        resolve();
+      },
+      error: (error) => {
+        if(error.responseText == "NOT LOGGED IN"){
+          console.log("checkLogin after logout PASSED");
+        }
+        else{
+          console.log("checkLogin after logout FAILED");
+        }
+        resolve();
+      }
+    });
+  });
+
+  return promise;
+}
+
+/**
+ * test that the logout function returns "NOT LOGGED IN" when a user is not logged in
+ */
+async function testLogoutNotLoggedIn(){
+  let promise = new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/authenticate/logout',
+      success: () => {
+        console.log("logout when not logged in FAILED");
+        resolve();
+      },
+      error: (error) => {
+        if(error.responseText == "NOT LOGGED IN"){
+          console.log("logout when not logged in PASSED");
+        }
+        else{
+          console.log("logout when not logged in FAILED");
+        }
+        resolve();
+      }
+    });
+  });
+
+  return promise;
+}
