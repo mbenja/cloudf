@@ -18,16 +18,19 @@
   },
   "homepage": "https://github.com/mbenja/cloudf#readme",
   "dependencies": {
+    "bcrypt": "^3.0.2",
+    "cookie-parser": "^1.4.3",
     "dateformat": "^3.0.3",
     "documentation": "^8.1.2",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
-    "express-fileupload": "^1.0.0-alpha.1",
+    "express-fileupload": "^1.0.0",
     "express-zip": "^2.0.1",
     "file-dialog": "0.0.7",
     "formidable": "^1.2.1",
     "mime": "^2.3.1",
     "mongodb": "^3.1.8",
+    "mysql": "^2.16.0",
     "path": "^0.12.7"
   }
 }

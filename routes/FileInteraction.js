@@ -64,51 +64,102 @@ var path = require('path');
  */
 var mime = require('mime');
 
+/**
+ * exports of connection definition file
+ * @type {Object}
+ */
+// var client_state = {
+//   user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
+//   current_path: '',
+//   current_upload_path_local: ''
+// };
+let conn_info = require('./connection.js');
+
+/**
+ * contains the mysql connection information
+ * @type {Object}
+ */
+let connection = conn_info.connection;
+
+/**
+ * contains the mongo connection url
+ * @type {String}
+ */
+let mongo_url = conn_info.mongo_url;
+
+let cookieParser = require('cookie-parser');
+
+/**
+ * contains exports of session manager file
+ * @type {Object}
+ */
+let sessions = require("./SessionManager.js");
+
+/**
+ * create instance of SessionManager class
+ * @type {SessionManager}
+ */
+let session_mgr = new sessions.SessionManager(connection);
+
 router.use(fileUpload());
+router.use(cookieParser());
 
 // setting up static folder
 router.use(express.static(path.join(__dirname, 'public')));
 
 /**
- * Defining object containing state variables from front-end
- * @type {Object}
+ * middleware function - before any call to file interaction backend, we
+ * should validate the session.
  */
-var client_state = {
-  user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
-  current_path: '',
-  current_upload_path_local: ''
-};
+router.use(function valSession(req, res, next){
+  console.log("in valSession");
 
-/**
- * port to connect to mongoDB on
- * @type {Number}
- */
-const port = '27017';
+  let session_id = req.cookies['cloudf_session'];
+  if(!session_id){
+    res.status(401).send('NOT LOGGED IN');
+    return;
+  }
 
-/**
- * url to connect to mongodb on
- * @type {String}
- */
-const url = 'mongodb://mongo:' + port + '/cloudf';
+  // call validatesession to check session in sql data
+  session_mgr.validateSession(session_id).then(
+    (user_id) => {
+      // update the user in the client for next() callback functions
+      client_user = user_id;
 
-/**
- * userID to connect to mongoDB with
- * TODO this is temporarily hard-coded until we implement user authentication
- */
-var user_id = 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx';
+      // refresh the session
+      session_mgr.refreshSession(session_id).then(
+        (new_date) => {
+          // if everything succeeded, go to the next response function for this request
+          res.cookie('cloudf_session', session_id, {expires: new_date});
+          next();
+        },
+        (error) => {
+          if(error.type == 'auth'){
+            res.status(401).send(error.contents);
+          }
+          else{
+            res.status(500).send(error.contents.code);
+          }
+        }
+      );
+    },
+    (error) => {
+      if(error.type == 'auth'){
+        res.status(401).send(error.contents);
+      }
+      else{
+        res.status(500).send(error.contents.code);
+      }
+    }
+  );
 
-
-
-/**
- * Route for updating client state
- * @param {Object} client_state - the client state to be set as current
- */
-router.get('/clientState', function(req, res) {
-  console.log("GET /clientState");
-  client_state = req.query;
-  res.send('success');
 });
 
+
+/**
+ * tracks the client's user id for requests after the session is validated
+ */
+let client_user = '';
 
 
 /**
@@ -118,7 +169,7 @@ router.get('/clientState', function(req, res) {
  */
 router.get('/getRootDirectory', function(req, res) {
   console.log("GET /getRootDirectory");
-  getRootDirectory(req.query.user_id).then((response) => {
+  getRootDirectory().then((response) => {
     res.send(response);
   });
 });
@@ -133,7 +184,7 @@ router.get('/getRootDirectory', function(req, res) {
  */
 router.get('/getSubdirectory', function(req, res) {
   console.log("GET /getSubdirectory");
-  getSubdirectory(req.query.user_id, req.query.subdirectory).then((response) => {
+  getSubdirectory(req.query.subdirectory).then((response) => {
     res.send(response);
   });
 });
@@ -145,6 +196,7 @@ router.get('/getSubdirectory', function(req, res) {
  */
 router.post('/uploadFile', function(req, res) {
   console.log("POST /uploadFile");
+  console.log(req.query);
   if (!req.files) {
     return res.status(400).send('No files were uploaded.');
   }
@@ -161,7 +213,7 @@ router.post('/uploadFile', function(req, res) {
       return res.status(500).send(err);
     } else {
       // ensure no duplicate uploads
-      isInDirectory(client_state.current_path, input_upload_file.name).then((response) => {
+      isInDirectory(req.query.current_path, input_upload_file.name).then((response) => {
         if (response === true) {
           // already exists
           res.send('FILE ALREADY EXISTS');
@@ -170,7 +222,7 @@ router.post('/uploadFile', function(req, res) {
         } else {
           // proceed
           // now call async function that uploads to mongoDB
-          uploadFile(input_upload_file).then((response) => {
+          uploadFile(input_upload_file, req.query.current_path).then((response) => {
             res.send(response);
           })
         }
@@ -191,10 +243,13 @@ router.post('/uploadDirectory', function(req, res) {
   // create folder on backend
   // ensure no duplicate uploads
   // adjust client state variables
-  const client_state_original = client_state.current_path;
-  client_state.current_path = client_state.current_path.split('/');
-  client_state.current_path = '/' + client_state.current_path[1];
-  isInDirectory(client_state.current_path, client_state.current_upload_path_local).then((response) => {
+  const current_path = req.query.current_path;
+  const cupl = req.query.current_upload_path_local
+  //const client_state_original = client_state.current_path;
+  //let current_path = '/' + req.query.current_path.split('/')[1];
+  // client_state.current_path = client_state.current_path.split('/');
+  // client_state.current_path = '/' + client_state.current_path[1];
+  isInDirectory(current_path, cupl).then((response) => {
     if (response === true) {
       // already exists
       res.send('DIRECTORY ALREADY EXISTS');
@@ -202,9 +257,9 @@ router.post('/uploadDirectory', function(req, res) {
       res.send(response);
     } else {
       // proceed
-      createDirectory(client_state.current_upload_path_local).then((response) => {
+      createDirectory(current_path, cupl).then((response) => {
         // adjust client state variables
-        client_state.current_path = client_state_original;
+        //client_state.current_path = client_state_original;
         // now place all files within upload directory onto NodeJS server
         // get folder
         let input_upload_directory = req.files.input_upload_directory;
@@ -222,7 +277,7 @@ router.post('/uploadDirectory', function(req, res) {
               return res.status(500).send(err);
             } else {
               // now call async function that uploads to mongoDB
-              uploadFile(input_upload_file).then((response) => {
+              uploadFile(input_upload_file, current_path + '/' + cupl).then((response) => {
                 count++;
                 // only send response if last file
                 if (count == input_upload_directory.length) {
@@ -245,7 +300,7 @@ router.post('/uploadDirectory', function(req, res) {
 router.get('/createDirectory', function(req, res) {
   console.log("GET /createDirectory");
   // ensure no duplicate uploads
-  isInDirectory(client_state.current_path, req.query.directory_name).then((response) => {
+  isInDirectory(req.query.current_path, req.query.directory_name).then((response) => {
     if (response === true) {
       // already exists
       res.send('DIRECTORY ALREADY EXISTS');
@@ -254,7 +309,7 @@ router.get('/createDirectory', function(req, res) {
     } else {
       // proceed
       // now call async function that uploads to mongoDB
-      createDirectory(req.query.directory_name).then((response) => {
+      createDirectory(req.query.current_path, req.query.directory_name).then((response) => {
         res.send(response);
       })
     }
@@ -279,7 +334,7 @@ router.get('/deleteFile', function(req, res) {
 router.get('/deleteDirectory', function(req, res) {
   console.log("GET /deleteDirectory");
   // get directory
-  getSubdirectory(client_state.user_id, req.query.directory_path).then((response) => {
+  getSubdirectory(req.query.directory_path).then((response) => {
     const obj = {
       contents: response,
     };
@@ -302,9 +357,14 @@ router.get('/downloadFile', function(req, res) {
   console.log("GET /downloadFile");
   downloadFile(req.query).then((response) => {
     // download
-    res.download(response, req.query.file_name);
-    // purge download directory
-    purgeDownloadDirectory();
+    res.download(response, req.query.file_name, function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        // purge download directory
+        purgeDownloadDirectory();
+      }
+    });
   })
 });
 
@@ -316,7 +376,7 @@ router.get('/downloadFile', function(req, res) {
 router.get('/downloadDirectory', function(req, res) {
   console.log("GET /downloadDirectory");
   // get directory
-  getSubdirectory(client_state.user_id, req.query.directory_path).then((response) => {
+  getSubdirectory(req.query.directory_path).then((response) => {
     var subdirectory = [];
     // filter out placeholder inner directory documents
     for (var i = 0; i < response.length; i++) {
@@ -332,12 +392,393 @@ router.get('/downloadDirectory', function(req, res) {
     // call for download
     downloadDirectory(obj).then((response) => {
       // download
-      res.zip(response, req.query.directory_name + '.zip');
-      // purge download directory
-      //purgeDownloadDirectory();
+      res.zip(response, req.query.directory_name + '.zip', function(err) {
+        if (err) {
+
+        } else {
+          // purge download directory
+          purgeDownloadDirectory();
+        }
+      });
     })
   });
 });
+
+/**
+  * Calls for files to be moved
+  */
+router.get('/moveFiles', function(req, res) {
+  console.log("GET /moveFiles");
+  // call for files to be moved
+  moveFiles(req.query.documents, req.query.source_ids, req.query.paths).then((response) => {
+      res.send(response);
+    })
+});
+
+/**
+  * Calls for name change to occur
+  */
+router.get('/changeName', function(req, res) {
+  console.log("GET /nameChange");
+  // ensure no duplicate names
+  isInDirectory(req.query.current_path, req.query.new_name).then((response) => {
+    if (response === true) {
+      // already exists
+      res.send('NAME ALREADY EXISTS');
+    } else if (response == 'BROKEN PIPE') {
+      res.send(response);
+    } else {
+      // proceed
+      // now call async function that changes name in mongoDB
+      changeName(req.query.documents, req.query.ids, req.query.paths, req.query.new_name).then((response) => {
+        res.send(response);
+      })
+    }
+  })
+});
+
+
+/**
+  * Calls for upload directory to be purged
+  */
+router.get('/purgeUploadDirectory', function(req, res) {
+  console.log("GET /purgeUploadDirectory");
+  purgeUploadDirectory();
+  res.send('done');
+});
+
+/**
+ * shares a file with another user
+ * @param {String} file_id - id of the file within mongo
+ * @param {String} share_with - email of the user to share with
+ */
+router.get('/shareFile', function(req, res) {
+  //req.query.file_id
+  console.log('entered shareFile');
+
+  // check that it is a valid user that is being shared with
+  getUserInfoByEmail(req.query.share_with).then(
+    (user_results) => {
+
+      const obj = {
+        file_id: req.query.file_id,
+        file_name: req.query.file_name,
+        content_type: req.query.content_type
+      };
+
+      // share the file
+      shareFileTo(user_results.user_id, obj).then(
+        () => {
+          res.send("success");
+        },
+        (error) => {
+          res.status(500).send(error);
+        }
+      );
+
+    },
+    (error) => {
+      if(error.type == 'share'){
+        res.status(404).send(error.contents);
+      }
+      else{
+        res.status(500).send(error.contents.code);
+      }
+    }
+  );
+});
+
+/**
+ * shares a directory with another user
+ * @param {String} directory_path - file path to the directory (but not including it)
+ * @param {String} directory_name - name of the directory to share
+ * @param {String} directory_id - file id of the directory within mongo
+ * @param {String} share_with - email of the user to share with
+ */
+router.get('/shareDirectory', function(req, res) {
+
+  // check that it is a valid user that is being shared with
+  getUserInfoByEmail(req.query.share_with).then(
+    (user_results) => {
+      getSubdirectory(req.query.directory_path + '/' + req.query.directory_name).then((response) => {
+
+        // getSubdirectory returns everything WITHIN the directory, but we also want
+        // to send the actual directory too, so add that to the response object
+        response.push({
+          _id: req.query.directory_id,
+          filename: req.query.directory_name,
+          metadata: {path: req.query.directory_path,
+                     content_type: 'directory'}
+        });
+
+        const obj = {
+          contents: response,
+          directory_path: req.query.directory_path
+        };
+
+        // share the directory
+        shareDirectoryTo(user_results.user_id, obj).then(
+          () => {
+            res.send("success");
+          },
+          (error) => {
+            res.status(500).send(error);
+          }
+        );
+
+      });
+    },
+    (error) => {
+      if(error.type == 'share'){
+        res.status(404).send(error.contents);
+      }
+      else{
+        res.status(500).send(error.contents.code);
+      }
+    }
+  );
+
+});
+
+/**
+ * queries mysql database for the given user based on email
+ * @param {String} email - email of the user to search for
+ * @returns {Object} containing user_id, email, hashed password
+ */
+async function getUserInfoByEmail(email){
+  let promise = new Promise(function(resolve, reject) {
+    connection.query("SELECT * FROM users WHERE email=?", [email], (err, results, fields) => {
+      if(err){
+        reject({type: 'mysql', contents: err});
+      }
+      else if(results.length == 1){
+        resolve(results[0]);
+      }
+      else{
+        reject({type: 'share', contents: 'USER NOT FOUND'});
+      }
+    })
+  });
+
+  return promise;
+}
+
+/**
+ * queries mysql database for the given user based on user id
+ * @param {String} user_id - user id of the user to search for
+ * @returns {Object} containing user_id, email, hashed password
+ */
+async function getUserInfoByUserId(user_id){
+ let promise = new Promise(function(resolve, reject) {
+   connection.query("SELECT * FROM users WHERE user_id=?", [user_id], (err, results, fields) => {
+     if(err){
+       reject({type: 'mysql', contents: err});
+     }
+     else if(results.length == 1){
+       resolve(results[0]);
+     }
+     else{
+       reject({type: 'share', contents: 'USER NOT FOUND'});
+     }
+   })
+ });
+
+ return promise;
+}
+
+
+/**
+ * checks if the user to share with has a "Shared" directory, and creates it if not present
+ * @param {Object} db - mongo database that files are stored in
+ * @returns {Promise}
+ */
+async function createIfNoSharedDir(db, user_id){
+  // check if they have a shared folder
+  let promise = new Promise((resolve, reject) => {
+    // find the shared directory
+    db.collection(user_id + ".files").findOne({$and: [{filename: "Shared"}, {'metadata.path': "/root"}, {'metadata.content_type': "directory"}]}).then(
+      (shared_dir) => {
+        if(!shared_dir){
+          // if one was not found, create it
+          createDirectory("/root", "Shared", user_id).then((response) => {
+            if(response == 'success'){
+              resolve();
+            }
+            else{
+              reject(response);
+            }
+          });
+        }
+        else{
+          resolve();
+        }
+      },
+      (error) => {
+        reject(error);
+      }
+    );
+  });
+
+  return promise;
+}
+
+
+/**
+ * shares a given file with a given user
+ * @param {String} share_user - user id to share with
+ * @param {Object} file_info - contains properties file_id, file_name, and content_type of file being shared
+ * @returns {Promise}
+ */
+async function shareFileTo(share_user, file_info){
+
+  let promise = new Promise(function(resolve, reject) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
+      if(database == null){
+        reject('BROKEN PIPE');
+      }
+      else{
+        console.log("Successfully connected to mongoDB");
+
+        const db = database.db('cloudf');
+
+        // creat the shared directory if needed
+        createIfNoSharedDir(db, share_user).then(() => {
+
+          // create object for file id to use in queries
+          let file_id_obj = new mongodb.ObjectID(file_info.file_id);
+
+          // create gridfs buckets for sharer and sharee collections
+          var to_bucket = new mongodb.GridFSBucket(db, {
+            bucketName: share_user
+          });
+
+          var from_bucket = new mongodb.GridFSBucket(db, {
+            bucketName: client_user
+          });
+
+          getUserInfoByUserId(client_user).then((user_results) => {
+            // create upload stream with associated metadata
+            var upload_stream = to_bucket.openUploadStream(file_info.file_name);
+            upload_stream.options.metadata = {
+              date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
+              path: '/root/Shared',
+              content_type: file_info.content_type,
+              shared_by: user_results.email
+            };
+
+            console.log('created buckets');
+
+            // create download stream of the file object and pipe it into the upload stream
+            from_bucket.openDownloadStream(file_id_obj).
+            pipe(upload_stream).
+            on('error', function(error) {
+              console.log(error);
+              assert.ifError(error);
+            }).
+            on('finish', function() {
+              console.log('success');
+              database.close();
+              resolve();
+            });
+          },
+          (error) => {
+            database.close();
+            reject(error);
+          });
+        },
+        (error) => {
+          database.close();
+          reject(error)
+        });
+      }
+    });
+  });
+
+  return promise;
+}
+
+
+
+/**
+ * shares a given file with a given user
+ * @param {String} share_user - user id to share with
+ * @param {Object} subdirectory - contains properties contents (array of files to be downloaded) and directory_path
+ * @returns {Promise}
+ */
+async function shareDirectoryTo(share_user, subdirectory){
+
+  let promise = new Promise(function(resolve, reject) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
+      if(database == null){
+        reject('BROKEN PIPE');
+      }
+      else{
+        console.log("Successfully connected to mongoDB");
+
+        const db = database.db('cloudf');
+
+        // creat the shared directory if needed
+        createIfNoSharedDir(db, share_user).then(() => {
+
+          // create gridfs buckets for sharer and sharee collections
+          var to_bucket = new mongodb.GridFSBucket(db, {
+            bucketName: share_user
+          });
+
+          var from_bucket = new mongodb.GridFSBucket(db, {
+            bucketName: client_user
+          });
+
+          // get client user's email for telling who shared things
+          getUserInfoByUserId(client_user).then((user_results) => {
+
+            var count = 0;
+            for(var i = 0; i < subdirectory.contents.length; i++){
+
+              // create object for file id to use in queries
+              let file_id_obj = new mongodb.ObjectID(subdirectory.contents[i]["_id"]);
+
+              const file_name = subdirectory.contents[i].filename;
+              const new_path = subdirectory.contents[i].metadata.path.replace(subdirectory.directory_path, '/root/Shared');
+
+              // create upload stream for this file
+              let upload_stream = to_bucket.openUploadStream(file_name);
+              upload_stream.options.metadata = {
+                date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
+                path: new_path,
+                content_type: subdirectory.contents[i].metadata.content_type,
+                shared_by: user_results.email
+              };
+
+              from_bucket.openDownloadStream(file_id_obj).
+              pipe(upload_stream).
+              on('error', function(error) {
+                assert.ifError(error);
+              }).
+              on('finish', function() {
+                count++
+                // only resolve if last file
+                if (count == subdirectory.contents.length) {
+                  database.close();
+                  resolve('done');
+                }
+              });
+            }
+          },
+          (error) => {
+            reject(error);
+          });
+
+        },
+        (error) => {
+          reject(error)
+        });
+      }
+    });
+  });
+
+  return promise;
+}
 
 
 
@@ -346,9 +787,10 @@ router.get('/downloadDirectory', function(req, res) {
  * @param {String} user_id - the user id to retrieve root directory for
  * @returns {Array} documents - an array of document objects
  */
-async function getRootDirectory(user_id) {
+async function getRootDirectory() {
+  console.log(client_user);
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -356,7 +798,7 @@ async function getRootDirectory(user_id) {
         console.log("Successfully connected to mongoDB");
 
         const db = database.db('cloudf');
-        db.collection(user_id + '.files').find().toArray(function(err, documents) {
+        db.collection(client_user + '.files').find().toArray(function(err, documents) {
           database.close();
           resolve(documents);
         });
@@ -375,9 +817,9 @@ async function getRootDirectory(user_id) {
  * @param {String} subdirectory - the subdirectory to retrieve
  * @returns {Array} documents - an array of document objects
  */
-async function getSubdirectory(user_id, subdirectory) {
+async function getSubdirectory(subdirectory) {
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -385,7 +827,7 @@ async function getSubdirectory(user_id, subdirectory) {
         console.log("Successfully connected to mongoDB");
 
         const db = database.db('cloudf');
-        db.collection(user_id + '.files').find().toArray(function(err, documents) {
+        db.collection(client_user + '.files').find().toArray(function(err, documents) {
           database.close();
           resolve(documents);
         });
@@ -409,9 +851,9 @@ async function getSubdirectory(user_id, subdirectory) {
  * Uploads file from Node server to mongoDB
  * @param {Object} input_upload_file - the file object to be uploaded to mongoDB
  */
-async function uploadFile(input_upload_file) {
+async function uploadFile(input_upload_file, moveto_path) {
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -421,13 +863,13 @@ async function uploadFile(input_upload_file) {
         const db = database.db('cloudf');
         // define bucket
         var bucket = new mongodb.GridFSBucket(db, {
-          bucketName: client_state.user_id
+          bucketName: client_user
         });
         // create upload stream
         upload_stream = bucket.openUploadStream(input_upload_file.name);
         upload_stream.options.metadata = {
           date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
-          path: client_state.current_path,
+          path: moveto_path,
           content_type: input_upload_file.mimetype
         };
         // create read stream and pipe
@@ -455,11 +897,16 @@ async function uploadFile(input_upload_file) {
 
 /**
  * Uploads directory from Node server to mongoDB
- * @param {Object} directory_name - the directory to be uploaded to mongoDB
+ * @param {String} enclosing_path - path to put the new directory in
+ * @param {String} directory_name - the directory to be uploaded to mongoDB
+ * @param {String} [user=client_user] - user to create folder in (defaults to the value in client_user)
  */
-async function createDirectory(directory_name) {
+async function createDirectory(enclosing_path, directory_name, user) {
+
+  user = user || client_user;
+
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -469,13 +916,13 @@ async function createDirectory(directory_name) {
         const db = database.db('cloudf');
         // define bucket
         var bucket = new mongodb.GridFSBucket(db, {
-          bucketName: client_state.user_id
+          bucketName: user
         });
         // create upload stream
         upload_stream = bucket.openUploadStream(directory_name);
         upload_stream.options.metadata = {
           date_added: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
-          path: client_state.current_path,
+          path: enclosing_path,
           content_type: 'directory'
         };
         // create new readable stream
@@ -512,7 +959,7 @@ async function createDirectory(directory_name) {
  */
 async function deleteFile(file_id) {
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -520,7 +967,7 @@ async function deleteFile(file_id) {
         console.log("Successfully connected to mongoDB");
 
         const db = database.db('cloudf');
-        db.collection(client_state.user_id + '.files').deleteOne({_id: new mongodb.ObjectID(file_id)}, function(err, response) {
+        db.collection(client_user + '.files').deleteOne({_id: new mongodb.ObjectID(file_id)}, function(err, response) {
           database.close();
           resolve(response);
         });
@@ -537,7 +984,7 @@ async function deleteFile(file_id) {
  */
 async function deleteDirectory(subdirectory) {
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -548,7 +995,7 @@ async function deleteDirectory(subdirectory) {
 
         var count = 0;
         for (var i = 0; i < subdirectory.contents.length; i++) {
-          db.collection(client_state.user_id + '.files').deleteOne({_id: new mongodb.ObjectID(subdirectory.contents[i]["_id"])}, function(err, response) {
+          db.collection(client_user + '.files').deleteOne({_id: new mongodb.ObjectID(subdirectory.contents[i]["_id"])}, function(err, response) {
             count++;
             // only resolve if last file
             if (count == subdirectory.contents.length) {
@@ -560,6 +1007,8 @@ async function deleteDirectory(subdirectory) {
       }
     });
   });
+
+  return promise;
 }
 
 
@@ -571,7 +1020,7 @@ async function deleteDirectory(subdirectory) {
  */
 async function downloadFile(file_object) {
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -584,7 +1033,7 @@ async function downloadFile(file_object) {
 
         // define bucket
         var bucket = new mongodb.GridFSBucket(db, {
-          bucketName: client_state.user_id
+          bucketName: client_user
         });
 
         bucket.openDownloadStream(new mongodb.ObjectID(file_object["file_id"])).
@@ -612,7 +1061,7 @@ async function downloadDirectory(subdirectory) {
   // array to be sent back
   var node_directory = [];
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -623,7 +1072,7 @@ async function downloadDirectory(subdirectory) {
 
         // define bucket
         var bucket = new mongodb.GridFSBucket(db, {
-          bucketName: client_state.user_id
+          bucketName: client_user
         });
 
         // iterate through subdirectory, placing each file on NodeJS server
@@ -661,6 +1110,132 @@ async function downloadDirectory(subdirectory) {
   return node_directory;
 }
 
+/**
+ * Moves files according to specification
+ * @param {Array} source_ids - the ids of the files to be moved
+ * @param {String} destination_path - the path to set for each file
+ */
+ async function moveFiles(documents, source_ids, paths) {
+   let promise = new Promise(function(resolve, reject) {
+     mongodb.MongoClient.connect(mongo_url, function(err, database) {
+       // handle bad connection to mongoDB
+       if (database == null) {
+         resolve('BROKEN PIPE');
+       } else {
+         console.log("Successfully connected to mongoDB");
+
+         const db = database.db('cloudf');
+
+         // define bucket
+         var bucket = new mongodb.GridFSBucket(db, {
+           bucketName: client_user
+         });
+
+         // iterate through source_ids and modify each one with the destination path
+         var count = 0;
+         for (var i = 0; i < source_ids.length; i++) {
+           // find matching document
+           var matching_document;
+           for (var j = 0; j < documents.length; j++) {
+             if (documents[j]["_id"] == source_ids[i]) {
+               // found match
+               matching_document = j;
+               // remove id key
+               delete documents[matching_document]["_id"];
+             }
+           }
+           // update document object
+           documents[matching_document]["metadata"]["path"] = paths[i];
+           // update document in mongo
+           db.collection(client_user + '.files').updateOne({ _id: new mongodb.ObjectID(source_ids[i]) }, { $set: documents[matching_document] }, function(err, res) {
+             if (err) {
+               console.log(err);
+             } else {
+               console.log(res);
+             }
+             count++;
+             // only close and resolve if final document
+             if (count == source_ids.length) {
+               database.close();
+               resolve(res);
+             }
+           });
+         }
+       }
+     });
+   });
+   let result = await promise;
+   return result;
+ }
+
+ /**
+  * Changes name of given file with given name
+  * @param {Array} ids - ids of documents to be modified
+  * @param {Array} paths - paths of documents to be modified
+  * @param {String} new_name - the new name of the document being modified
+  */
+async function changeName(documents, ids, paths, new_name) {
+  let promise = new Promise(function(resolve, reject) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
+      // handle bad connection to mongoDB
+      if (database == null) {
+        resolve('BROKEN PIPE');
+      } else {
+        console.log("Successfully connected to mongoDB");
+
+        const db = database.db('cloudf');
+
+        // define bucket
+        var bucket = new mongodb.GridFSBucket(db, {
+          bucketName: client_user
+        });
+
+        // check if file or directory
+        if (ids.length == 0) {
+          // file
+        } else {
+          // directory
+          var count = 0;
+          // iterate through ids and modify each one with the path and filename
+          for (var i = 0; i < ids.length; i++) {
+            // find matching document
+            var matching_document;
+            for (var j = 0; j < documents.length; j++) {
+              if (documents[j]["_id"] == ids[i]) {
+                // found match
+                matching_document = j;
+                // remove id key
+                delete documents[matching_document]["_id"];
+              }
+            }
+            if (i == 0) {
+              // update fields in object
+              documents[matching_document]["filename"] = new_name;
+              documents[matching_document]["metadata"]["path"] = paths[i]
+            } else {
+              // update fields in object
+              documents[matching_document]["metadata"]["path"] = paths[i];
+            }
+            // update document in mongo
+            db.collection(client_user + '.files').updateOne({ _id: new mongodb.ObjectID(ids[i]) }, { $set: documents[matching_document] }, function(err, res) {
+              if (err) {
+                console.log(err);
+              }
+              count++;
+              if (count == ids.length) {
+                database.close();
+                resolve(res);
+              }
+            });
+          }
+        }
+      }
+    });
+  });
+  let result = await promise;
+  return result;
+}
+
 
 
 /**
@@ -671,7 +1246,7 @@ async function downloadDirectory(subdirectory) {
  */
 async function isInDirectory(path, file_name) {
   let promise = new Promise(function(resolve, reject) {
-    mongodb.MongoClient.connect(url, function(err, database) {
+    mongodb.MongoClient.connect(mongo_url, function(err, database) {
       // handle bad connection to mongoDB
       if (database == null) {
         resolve('BROKEN PIPE');
@@ -679,7 +1254,7 @@ async function isInDirectory(path, file_name) {
         console.log("Successfully connected to mongoDB");
 
         const db = database.db('cloudf');
-        db.collection(client_state.user_id + '.files').find({'metadata.path': path, 'filename': file_name}).toArray(function(err, documents) {
+        db.collection(client_user + '.files').find({'metadata.path': path, 'filename': file_name}).toArray(function(err, documents) {
           database.close();
           resolve(documents);
         });

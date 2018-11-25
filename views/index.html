@@ -15,19 +15,38 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="modal fade" tabindex="-1" role="dialog" data-backdrop='static' data-keyboard='false' id="loading_modal">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              Loading files, please wait...
+            </h4>
+          </div>
+          <div class="modal-body">
+            <div class="progress" style="height: 20px;">
+              <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center">
       <img src="/images/cloudf.png" style="height:10vh;">
       <!-- put current username and logout button here -->
+      <div>
+        <button type="button" class="btn btn-raised btn-secondary" onclick="doLogout();">Log Out</button>
+      </div>
     </div>
     <div id="main_container">
       <!-- breadcrumbs Banner -->
       <div class="breadcrumbs" id="banner">
           <div class="pathSection" id="path" onclick="populateDirectoryListing('/root')" ondrop="drop(event)" ondragover="allowDrop(event)">
-            <p style="text-align: center">Root</p>
+            <p style="text-align: center" id="pathSection0" path="/root">Root</p>
           </div>
       </div>
       <div id="files">
-        <p>Loading files, please wait...</p>
       </div>
       <!-- Floating Buttons -->
       <div class="floatingButtons">
@@ -62,7 +81,7 @@
               encType="multipart/form-data">
               <div class="form-group">
                 <div class="custom-file">
-                  <input type="file" class="form-control-file" id="input_upload_file" name="input_upload_file" onchange="sendState();" multiple>
+                  <input type="file" class="form-control-file" id="input_upload_file" name="input_upload_file" multiple><!-- onchange="sendState();"> -->
                 </div>
               </div>
               <div class="form-group">
@@ -191,20 +210,56 @@
       </div>
     </div>
 
+
+    <!--
+    Share file modal
+    -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_share">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modal_share_file_content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              Share Item
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="emailShareInput">Email Address to Share with</label>
+              <input type="email" class="form-control" id="emailShareInput" placeholder="Enter Email">
+              <small class="form-text text-muted">This email must be registered to an account with cloudf</small>
+            </div>
+            <div class="form-group">
+              <button type="button" class="btn btn-raised btn-success" onclick="shareItem();">Share</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- div for file data display sidebar -->
     <div id="file_sidebar" class="sidebar" disabled>
       <!-- <div class="circleButton" id="deleteFile" onclick="$('#modal_delete_file').modal('show');"> </div> -->
-      <div class="circleButton" id="deleteFile" onclick="$('#modal_delete').modal('show');"> </div>
-      <div class="circleButton" id="downloadFile" onclick="download()"> </div>
       <a href="javascript:void(0)" class="close" onclick="hideSidebar()">&times;</a>
-      <h3 id="data-filename"></h3>
+      <div style="display:flex; justify-content:space-around;">
+        <div class="circleButton side" id="deleteFile" onclick="$('#modal_delete').modal('show');"> </div>
+        <div class="circleButton side" id="downloadFile" onclick="download()"> </div>
+        <div class="circleButton side" id="shareFile" onclick="$('#modal_share').modal('show');"> </div>
+      </div>
+      <hr>
+      <input type='text' id='data-filename-input'>
+      <h3 id="data-filename" ondblclick="editFileName()"></h3>
       <hr>
       <p id="data-filetype"></p>
       <p id="data-adddate"></p>
+      <p id="data-sharedby"></p>
     </div>
 
     <!-- jQuery first, then Popper.js, SnackbarJS, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
     <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
     <!-- SnackbarJS plugin -->
