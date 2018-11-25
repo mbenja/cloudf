@@ -2,9 +2,9 @@
   * Calls all necessary tests for testing each portion of application
   * Test scores are updating accordingly
 */
-function runTestSuite() {
+async function runTestSuite() {
+  await testAuth();
   testBackend();
-  testAuth();
 }
 
 /**
@@ -353,6 +353,8 @@ async function testAuth(){
 
   // reset cookies to initial user's session
   Cookies.set('cloudf_session', cur_session);
+
+  return;
 }
 
 /**
@@ -537,7 +539,6 @@ async function testLogin(testUser){
       data: {email: testUser,
              password: 'examplepass'},
       success: (result) => {
-        console.log(result);
         if(result == Cookies.get('cloudf_session')){
           console.log("login PASSED");
         }
