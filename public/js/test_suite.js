@@ -236,12 +236,46 @@ $('#upload_form_directory_test').submit(function(event) {
 });
 
 async function testAuth(){
-  // initially logout the user
-  Cookies.remove('cloudf_session')
+
   let testUser = 'example' + Math.floor(Math.random()*1000000) + '@example.com';
+
+  // initially remove session cookie
+  Cookies.remove('cloudf_session');
+  await testNotLoggedIn();
+  Cookies.set('cloudf_session', )
+
+
 
   await testNewRegistration(testUser);
   await testExistingRegistration(testUser);
+}
+
+/**
+ * test that not having a session cookie returns "NOT LOGGED IN"
+ */
+async function testNotLoggedIn(){
+
+  let promise = new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/authenticate/checkLogin',
+      success: () => {
+        console.log("checkLogin without session FAILED");
+        resolve();
+      },
+      error: (error) => {
+        if(error.responseText == "NOT LOGGED IN"){
+          console.log("checkLogin without session PASSED");
+        }
+        else{
+          console.log("checkLogin without session FAILED");
+        }
+        resolve();
+      }
+    })
+
+  });
+
+  return promise;
 }
 
 /**
@@ -258,7 +292,7 @@ async function testNewRegistration(testUser){
         console.log("register PASSED");
         resolve();
       },
-      error: (error) => {
+      error: () => {
         console.log("register FAILED");
         resolve();
       }
