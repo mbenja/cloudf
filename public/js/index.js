@@ -643,9 +643,6 @@ function checkInvalidSession(data){
     window.location.replace("/login");
     return;
   }
-  else{
-    Cookies.set('cloudf_session', Cookies.get('cloudf_session'), {expires: 1/24}); // one hour = 1/24 of a day
-  }
 }
 
 
@@ -783,7 +780,6 @@ function setCurrentUploadPathLocal(new_path){
  */
 function doLogout(){
   $.ajax({url: '/authenticate/logout',
-          data: {session: Cookies.get('cloudf_session')},
           success: (data) => {
             if(data == 'SUCCESSFUL LOGOUT'){
               window.location.replace("/login");

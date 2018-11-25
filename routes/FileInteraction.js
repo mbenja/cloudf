@@ -128,8 +128,9 @@ router.use(function valSession(req, res, next){
 
       // refresh the session
       session_mgr.refreshSession(session_id).then(
-        () => {
+        (new_date) => {
           // if everything succeeded, go to the next response function for this request
+          res.cookie('cloudf_session', session_id, {expires: new_date});
           next();
         },
         (error) => {

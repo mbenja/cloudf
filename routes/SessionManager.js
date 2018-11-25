@@ -91,7 +91,7 @@ class SessionManager {
   /**
    * updates the given session id so it won't expire for another hour
    * @param {String} session_id session id to update
-   * @returns {Promise}
+   * @returns {Promise} with the new expiration date of the session
    */
   refreshSession(session_id){
 
@@ -106,7 +106,7 @@ class SessionManager {
           reject({type: 'mysql', contents: err});
         }
         else{
-          resolve();
+          resolve(exp_date);
         }
       });
     });
