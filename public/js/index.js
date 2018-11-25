@@ -79,6 +79,7 @@ function populateDirectoryListing(path){
 
     //Assign File ID
     file_card.setAttribute("id", "file" + i);
+    file_card.setAttribute('_id', files_in_path[i]["_id"]);
 
     // set css class and onlick attributes based on file type
     if(cur_type == "parent"){
@@ -214,43 +215,52 @@ function populateBreadcrumbs(path){
  */
  function drop(ev) {
      ev.preventDefault();
-
      let id = ev.dataTransfer.getData("id");
-     file_card = document.getElementById(id);
-
+     source_file_card = document.getElementById(id);
+     destination_file_card = document.getElementById(ev.target.id);
      if(id != ev.target.id) {
-      // parse ids
-      var source_index = id;
-      source_index = source_index.replace('file', '');
-      var destination_index = ev.target.id;
+      // get ids
+      const source_id = source_file_card.getAttribute('_id');
+      const destination_id = destination_file_card.getAttribute("_id");
+      var source_index = -1;
+      var destination_index = -1;
+      var source_path;
       var destination_path;
-      if (destination_index.includes("pathSection")) {
-        // is breadcrumb banner
-        destination_path = document.getElementById(ev.target.id).getAttribute("path");
-      } else {
-        // is not breadcrumb banner
-        destination_index = destination_index.replace('file', '');
-        destination_path = current_file_data[destination_index]["metadata"]["path"] + '/' +
-                               current_file_data[destination_index]["filename"];
-      }
-      // define ids and paths for backend
-      var source_ids = [];
-      // build array of source_ids
-      if (current_file_data[source_index]["metadata"]["content_type"] != 'directory') {
-        // source_index is file
-        source_ids.push(current_file_data[source_index]["_id"]);
-      } else {
-        // source_index is directory
-        for (var i = 0; i < current_file_data.length; i++) {
-          if (current_file_data[i]["metadata"]["path"].includes(current_file_data[source_index]["metadata"]["path"])) {
-            source_ids.push(current_file_data[source_index]["_id"]);
-          }
+      // look up in files array
+      for (var i = 0; i < current_file_data.length; i++) {
+        if (current_file_data[i]["_id"] == source_id) {
+          source_index = i;
+        }
+        if (current_file_data[i]["_id"] == destination_id) {
+          destination_index = i;
         }
       }
+      // will be zero if breadcrumb
+      if (destination_index == -1) {
+        destination_path = document.getElementById(ev.target.id).getAttribute("path");
+      } else {
+        destination_path = current_file_data[destination_index]["metadata"]["path"] +
+        '/' + current_file_data[destination_index]["filename"];
+      }
+      source_path = current_file_data[source_index]["metadata"]["path"];
+      // find all items to be moved
+      // build paths array
+      var source_ids = [];
+      var paths = [];
+      for (var i = 0; i < current_file_data.length; i++) {
+        if (current_file_data[i]["metadata"]["path"].includes(source_path + '/' + current_file_data[source_index]["filename"])) {
+          source_ids.push(current_file_data[i]["_id"]);
+          paths.push(current_file_data[i]["metadata"]["path"].replace(source_path, destination_path));
+        }
+      }
+      // include item itself
+      source_ids.push(current_file_data[source_index]["_id"]);
+      paths.push(current_file_data[source_index]["metadata"]["path"].replace(source_path, destination_path));
       // define object for back end
       const obj = {
+        documents: current_file_data,
         source_ids: source_ids,
-        destination_path: destination_path
+        paths: paths
       };
       // perform ajax call
       $.ajax({

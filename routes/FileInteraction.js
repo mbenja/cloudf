@@ -409,7 +409,7 @@ router.get('/downloadDirectory', function(req, res) {
 router.get('/moveFiles', function(req, res) {
   console.log("GET /moveFiles");
   // call for files to be moved
-  moveFiles(req.query.source_ids, req.query.destination_path).then((response) => {
+  moveFiles(req.query.documents, req.query.source_ids, req.query.paths).then((response) => {
       res.send(response);
     })
 });
@@ -1114,7 +1114,7 @@ async function downloadDirectory(subdirectory) {
  * @param {Array} source_ids - the ids of the files to be moved
  * @param {String} destination_path - the path to set for each file
  */
- async function moveFiles(source_ids, destination_path) {
+ async function moveFiles(documents, source_ids, paths) {
    let promise = new Promise(function(resolve, reject) {
      mongodb.MongoClient.connect(mongo_url, function(err, database) {
        // handle bad connection to mongoDB
@@ -1130,19 +1130,23 @@ async function downloadDirectory(subdirectory) {
            bucketName: client_user
          });
 
-         // create object to be set as document update
-         const update_obj = {
-           $set: {
-             metadata: {
-               path: destination_path
-             }
-           }
-         };
-
          // iterate through source_ids and modify each one with the destination path
          var count = 0;
          for (var i = 0; i < source_ids.length; i++) {
-           db.collection(client_user + '.files').updateOne({ _id: new mongodb.ObjectID(source_ids[i]) }, update_obj, function(err, res) {
+           // find matching document
+           var matching_document;
+           for (var j = 0; j < documents.length; j++) {
+             if (documents[j]["_id"] == source_ids[i]) {
+               // found match
+               matching_document = j;
+               // remove id key
+               delete documents[matching_document]["_id"];
+             }
+           }
+           // update document object
+           documents[matching_document]["metadata"]["path"] = paths[i];
+           // update document in mongo
+           db.collection(client_user + '.files').updateOne({ _id: new mongodb.ObjectID(source_ids[i]) }, { $set: documents[matching_document] }, function(err, res) {
              if (err) {
                console.log(err);
              } else {
