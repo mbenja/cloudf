@@ -14,7 +14,7 @@
     <title>cloudf</title>
   </head>
 
-  <body>
+  <body onresize="calculateBreadcrumbSize(0)">
     <div class="modal fade" tabindex="-1" role="dialog" data-backdrop='static' data-keyboard='false' id="loading_modal">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -42,9 +42,6 @@
     <div id="main_container">
       <!-- breadcrumbs Banner -->
       <div class="breadcrumbs" id="banner">
-          <div class="pathSection" id="path" onclick="populateDirectoryListing('/root')" ondrop="drop(event)" ondragover="allowDrop(event)">
-            <p style="text-align: center" id="pathSection0" path="/root">Root</p>
-          </div>
       </div>
       <div id="files">
       </div>
