@@ -55,6 +55,10 @@ router.use(cookieParser());
 router.get('/initiateLogin', function(req, res) {
   user_auth.authenticate(req.query.email, req.query.password).then(
     (session_id) => {
+      let exp_date = new Date();
+      exp_date.setHours(exp_date.getHours()+1);
+
+      res.cookie('cloudf_session', session_id, {expires: exp_date});
       res.send(session_id);
     },
     (error) => {
@@ -86,8 +90,9 @@ router.get('/checkLogin', function(req, res) {
 
       // refresh the session
       user_auth.sessions.refreshSession(session_id).then(
-        () => {
+        (new_date) => {
           // if everything succeeded, go to the next response function for this request
+          res.cookie('cloudf_session', session_id, {expires: new_date});
           res.send('LOGGED IN');
         },
         (error) => {
@@ -116,17 +121,15 @@ router.get('/checkLogin', function(req, res) {
  */
 router.get('/logout', function(req, res) {
 
-  // get the session id of the user from their cookies
-  try{
-    let session_id = req.headers.cookie.split('=')[1];
-  }
-  catch(err){
+  let session_id = req.cookies['cloudf_session'];
+  if(!session_id){
     res.status(401).send('NOT LOGGED IN');
     return;
   }
 
-  user_auth.sessions.logout(req.query.session).then(
+  user_auth.sessions.logout(session_id).then(
     () => {
+      res.clearCookie('cloudf_session');
       res.send('SUCCESSFUL LOGOUT');
     },
     (error) => {
