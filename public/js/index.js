@@ -25,6 +25,7 @@ let current_path_sections = 0;
 let elementsRemoved = 0;
 let bannerWidth = document.getElementById('banner').clientWidth;
 let numOfTabs = Math.floor(bannerWidth/104);
+let prevNumOfTabs = 0;
 console.log("initial main container width: " + document.getElementById('banner').clientWidth)
 /**
  * references the file display div for easy addition/removal of files
@@ -140,10 +141,39 @@ function populateDirectoryListing(path){
 }
 
 function calculateBreadcrumbSize(offset) {
-  let bannerWidth = document.getElementById('banner').clientWidth + offset;
-  let numOfTabs = Math.floor(bannerWidth/104);
-  console.log("Main container width: " + bannerWidth)
+  prevNumOfTabs = numOfTabs;
+  bannerWidth = document.getElementById('banner').clientWidth + offset;
+  numOfTabs = Math.floor(bannerWidth/104);
+  console.log("Prev Tabs: " + prevNumOfTabs);
   console.log("Num of tabs allowed: " + numOfTabs);
+  checkOverflow();
+}
+
+function checkOverflow() {
+  //let decBy = numOfTabs - prevNumOfTabs;
+  //if(decBy < 0 && array_of_crumbs.length-1 > numOfTabs) {
+  if(current_path_sections > numOfTabs) {
+    let decBy = current_path_sections  - numOfTabs;
+    console.log("removing" + decBy);
+    for(let lcv = 0; lcv<decBy;lcv++) {
+      elementsRemoved++;
+      removedTab = array_of_crumbs[elementsRemoved];
+        removedTab.style.display = "none";
+        current_path_sections--;
+      }
+    }
+  else if(current_path_sections < numOfTabs && elementsRemoved > 0) {
+    console.log("adding.. ")
+    for(let lcv = 0; lcv<numOfTabs-prevNumOfTabs;lcv++) {
+      if(elementsRemoved != 0) {
+        console.log(elementsRemoved);
+        let tab = array_of_crumbs[elementsRemoved];
+        tab.style.display = "block";
+        elementsRemoved--;
+        current_path_sections++;
+      }
+    }
+  }
 }
 
 /**
@@ -174,7 +204,7 @@ function populateBreadcrumbs(path){
 
           let removedTab = [];
 
-          if(parentCount >= current_breadcrumb_parents) {
+          if(parentCount > current_breadcrumb_parents) {
             //add HTML block to document
             var block_to_insert ;
             var container_block ;
@@ -195,11 +225,7 @@ function populateBreadcrumbs(path){
             container_block.appendChild( block_to_insert );
               current_path_sections++;
 
-            if(array_of_crumbs.length-1 > numOfTabs) {
-              elementsRemoved++;
-              removedTab = array_of_crumbs[elementsRemoved];
-                removedTab.style.display = "none";
-              }
+              calculateBreadcrumbSize(0);
           }
 
           else if(parentCount < current_breadcrumb_parents) {
@@ -211,11 +237,13 @@ function populateBreadcrumbs(path){
               removedTab = array_of_crumbs.pop();
               console.log(removedTab.id);
               removedTab.parentElement.removeChild(removedTab);
+              current_path_sections--
 
               if(elementsRemoved > 0) {
               let visibleTab = array_of_crumbs[elementsRemoved];
                 visibleTab.style.display = "block";
                 elementsRemoved--;
+                current_path_sections++;
               }
             }
             decreaseBy = 0;
@@ -324,10 +352,14 @@ function showSidebar(index) {
   selected_index = index;
   populateSidebar(index);
 
+  if(document.getElementById("main_container").getAttribute('small') != 'true') {
+    console.log("PLLZ WORK");
+    calculateBreadcrumbSize(-1 * document.getElementById('file_sidebar').clientWidth);
+  }
+
   document.getElementById("file_sidebar").removeAttribute('disabled');
   document.getElementById("main_container").setAttribute('small', true);
 
-  calculateBreadcrumbSize(-1 * document.getElementById('file_sidebar').clientWidth);
 }
 
 
