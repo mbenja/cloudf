@@ -237,13 +237,17 @@ $('#upload_form_directory_test').submit(function(event) {
 
 async function testAuth(){
 
+  //save current session cookie
+  let cur_session = Cookies.get('cloudf_session');
+
+  // create test username to user for these tests
   let testUser = 'example' + Math.floor(Math.random()*1000000) + '@example.com';
 
   // initially remove session cookie
   Cookies.remove('cloudf_session');
   await testNotLoggedIn();
-  Cookies.set('cloudf_session', )
-
+  Cookies.set('cloudf_session', 'exampleBadCookie')
+  await testInvalidCookie();
 
 
   await testNewRegistration(testUser);
@@ -276,6 +280,34 @@ async function testNotLoggedIn(){
   });
 
   return promise;
+}
+
+/**
+ * test that having an invalid cookie returns "INVALID SESSION"
+ */
+async function testInvalidCookie(){
+
+  let promise = new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/authenticate/checkLogin',
+      success: () => {
+        console.log("checkLogin with invalid cookie FAILED");
+        resolve();
+      },
+      error: (error) => {
+        if(error.responseText == "INVALID SESSION"){
+          console.log("checkLogin with invalid cookie PASSED");
+        }
+        else{
+          console.log("checkLogin with invalid cookie FAILED");
+        }
+      }
+    });
+
+  });
+
+  return promise;
+
 }
 
 /**
