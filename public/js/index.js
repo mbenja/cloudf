@@ -623,9 +623,33 @@ function refreshData() {
  */
 document.getElementById("input_upload_directory").addEventListener("change", function(event) {
   let files = event.target.files;
+  console.log(files);
   var directory = files[0].webkitRelativePath;
   directory = directory.split('/');
-  setCurrentUploadPathLocal(directory[0]);
+  // find any subdirectories and build associated paths
+  var subdirectories = [];
+  var paths = [];
+  subdirectories.push(directory);
+  paths.push(current_path);
+  for (var i = 0; i < files.length; i++) {
+    paths.push(files[i].webkitRelativePath.replace('/' + files[i].name, ''));
+    var relative_path = files[i].webkitRelativePath;
+    relative_path = relative_path.split('/');
+    console.log(relative_path);
+    if (relative_path.length > 2) {
+      // has subdirectory
+      for (var j = 1; j < relative_path.length; j += 2) {
+        // only include unique ones
+        if (!subdirectories.includes(relative_path[j])) {
+          subdirectories.push(relative_path[j]);
+        }
+      }
+    }
+  }
+  console.log(subdirectories);
+  console.log(paths);
+  // setCurrentUploadPathLocal(directory[0]);
+  setCurrentUploadPathLocal(subdirectories, paths);
   //setCurrentPath(current_path + '/' + current_upload_path_local);
   //sendState();
 }, false);
@@ -768,9 +792,9 @@ function setCurrentPath(new_path){
   document.getElementById('upload_form_directory').setAttribute('action', '/FileInteraction/uploadDirectory?current_path=' + current_path + "&current_upload_path_local=" + current_upload_path_local);
 }
 
-function setCurrentUploadPathLocal(new_path){
+function setCurrentUploadPathLocal(new_path, paths){
   current_upload_path_local = new_path;
-  document.getElementById('upload_form_directory').setAttribute('action', '/FileInteraction/uploadDirectory?current_path=' + current_path + "&current_upload_path_local=" + current_upload_path_local);
+  document.getElementById('upload_form_directory').setAttribute('action', '/FileInteraction/uploadDirectory?current_path=' + current_path + "&directories=" + current_upload_path_local + '&paths=' + paths);
 }
 
 
