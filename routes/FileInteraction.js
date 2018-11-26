@@ -1177,6 +1177,9 @@ async function downloadDirectory(subdirectory) {
  * @param {String} destination_path - the path to set for each file
  */
  async function moveFiles(documents, source_ids, paths) {
+   console.log(documents);
+   console.log(source_ids);
+   console.log(paths);
    let promise = new Promise(function(resolve, reject) {
      mongodb.MongoClient.connect(mongo_url, function(err, database) {
        // handle bad connection to mongoDB
