@@ -317,12 +317,12 @@ document.getElementById("input_upload_directory_test").addEventListener("change"
   console.log(subdirectories);
   console.log(paths);
   // setCurrentUploadPathLocal(directory[0]);
-  setCurrentUploadPathLocal(subdirectories, paths);
+  setCurrentUploadPathLocalTest(subdirectories, paths);
   //setCurrentPath(current_path + '/' + current_upload_path_local);
   //sendState();
 }, false);
 
-function setCurrentUploadPathLocal(new_path, paths){
+function setCurrentUploadPathLocalTest(new_path, paths){
   current_upload_path_local = new_path;
   document.getElementById('upload_form_directory_test').setAttribute('action', '/FileInteraction/uploadDirectory?current_path=' + current_path + "&directories=" + current_upload_path_local + '&paths=' + paths);
 }
