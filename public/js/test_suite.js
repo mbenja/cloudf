@@ -174,7 +174,7 @@ $('#upload_form_test').submit(function(event) {
      }
   });
   document.getElementById("input_upload_file").value = "";
-  document.getElementById("input_upload_directory").value = "";
+  document.getElementById("input_upload_directory_test").value = "";
   return false;
 });
 
@@ -205,7 +205,6 @@ function testEditName() {
   }
   // define object to be sent to back-end
   const obj = {
-    documents: current_file_data,
     ids: ids,
     paths: paths,
     new_name: new_name
@@ -263,7 +262,6 @@ function testMoveFile() {
   paths.push(current_file_data[source_index]["metadata"]["path"].replace(source_path, destination_path));
   // define object for back end
   const obj = {
-    documents: current_file_data,
     source_ids: source_ids,
     paths: paths
   };
@@ -285,6 +283,48 @@ function testMoveFile() {
       console.log("moveFile: " + "FAILED");
     }
   });
+}
+
+/**
+ * On change listener for upload directory form so that back-end can know name of
+ * folder that is being uploaded
+ */
+document.getElementById("input_upload_directory_test").addEventListener("change", function(event) {
+  let files = event.target.files;
+  console.log(files);
+  var directory = files[0].webkitRelativePath;
+  directory = directory.split('/');
+  // find any subdirectories and build associated paths
+  var subdirectories = [];
+  var paths = [];
+  subdirectories.push(directory);
+  paths.push(current_path);
+  for (var i = 0; i < files.length; i++) {
+    paths.push(files[i].webkitRelativePath.replace('/' + files[i].name, ''));
+    var relative_path = files[i].webkitRelativePath;
+    relative_path = relative_path.split('/');
+    console.log(relative_path);
+    if (relative_path.length > 2) {
+      // has subdirectory
+      for (var j = 1; j < relative_path.length; j += 2) {
+        // only include unique ones
+        if (!subdirectories.includes(relative_path[j])) {
+          subdirectories.push(relative_path[j]);
+        }
+      }
+    }
+  }
+  console.log(subdirectories);
+  console.log(paths);
+  // setCurrentUploadPathLocal(directory[0]);
+  setCurrentUploadPathLocal(subdirectories, paths);
+  //setCurrentPath(current_path + '/' + current_upload_path_local);
+  //sendState();
+}, false);
+
+function setCurrentUploadPathLocal(new_path, paths){
+  current_upload_path_local = new_path;
+  document.getElementById('upload_form_directory_test').setAttribute('action', '/FileInteraction/uploadDirectory?current_path=' + current_path + "&directories=" + current_upload_path_local + '&paths=' + paths);
 }
 
 /**
@@ -314,7 +354,7 @@ $('#upload_form_directory_test').submit(function(event) {
      }
   });
   document.getElementById("input_upload_file").value = "";
-  document.getElementById("input_upload_directory").value = "";
+  document.getElementById("input_upload_directory_test").value = "";
   return false;
 });
 
