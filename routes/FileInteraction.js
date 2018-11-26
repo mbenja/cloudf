@@ -601,6 +601,36 @@ router.get('/shareDirectory', function(req, res) {
 
 });
 
+router.get('/getCurrentEmail', function(req, res){
+
+  session_mgr.validateSession(req.cookies['cloudf_session']).then(
+    (user_id) => {
+      getUserInfoByUserId(user_id).then(
+        (user_results) => {
+          res.send(user_results.email);
+        },
+        (error) => {
+          if(error.type == 'share'){
+            res.status(404).send(error.contents);
+          }
+          else{
+            res.status(500).send(error.contents.code);
+          }
+        }
+      );
+    },
+    (error) => {
+      if(error.type == 'auth'){
+        res.status(401).send(error.contents);
+      }
+      else{
+        res.status(500).send(error.contents.code);
+      }
+    }
+  );
+
+});
+
 /**
  * queries mysql database for the given user based on email
  * @param {String} email - email of the user to search for

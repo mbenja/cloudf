@@ -1,10 +1,82 @@
+let cur_session;
+
 /**
   * Calls all necessary tests for testing each portion of application
   * Test scores are updating accordingly
 */
 async function runTestSuite() {
+
+  // store the current session cookie
+  cur_session = Cookies.get('cloudf_session');
+
+  //await setupTests();
   await testAuth();
   testBackend();
+}
+
+async function setupTests(){
+  let promise = new Promise((resolve, reject) => {
+
+    $.ajax({
+      url: '/FileInteraction/getCurrentEmail',
+      success: (email) => {
+
+        $.ajax({
+          url: '/authenticate/initiateLogin',
+          data: {email: 'testSetupUser@example.com',
+                 password: 'examplepass'},
+          success: () => {
+
+            $.ajax({
+              url: '/FileInteraction/getRootDirectory',
+              success: (results) => {
+
+                let index = results.findIndex(x => x.filename == "FOR_TEST_SUITE");
+                if(index == -1){
+                  reject('error in test setup');
+                  return;
+                }
+
+                $.ajax({
+                  url: '/FileInteraction/shareDirectory',
+                  data: {directory_id: results[index]["_id"],
+                         directory_name: results[index].filename,
+                         directory_path: results[index].metadata.path,
+                         share_with: email},
+                  success: () => {
+                    // reset session cookies to initial session
+                    Cookies.set('cloudf_session', cur_session);
+
+                    refreshData().then(() => {
+                      resolve('test setup successful');
+                    });
+                  },
+                  error: (error) => {
+                    console.log(error);
+                    reject('error in test setup');
+                  }
+                });
+              },
+              error: (error) => {
+                console.log(error);
+                reject('error in test setup');
+              }
+            });
+          },
+          error: (error) => {
+            console.log(error);
+            reject('error in test setup');
+          }
+        });
+      },
+      error: (error) => {
+        console.log(error);
+        reject('error in test setup');
+      }
+    });
+  });
+
+  return promise;
 }
 
 /**
@@ -363,9 +435,6 @@ $('#upload_form_directory_test').submit(function(event) {
  * @returns {Promise}
  */
 async function testAuth(){
-
-  //save current session cookie
-  let cur_session = Cookies.get('cloudf_session');
 
   // create test username to user for these tests
   let testUser = 'example' + Math.floor(Math.random()*1000000) + '@example.com';
@@ -771,6 +840,9 @@ function testShareFileBadUser() {
 async function testShareFile(testUser){
 
    let index = current_file_data.findIndex(x => x.filename == "test_share_file.rtf");
+   if(index == -1){
+     return new Promise((resolve, reject) => { reject('test file not found'); });
+   }
 
    let promise = new Promise((resolve, reject) => {
      $.ajax({
@@ -827,6 +899,9 @@ async function testShareFile(testUser){
  */
 async function testShareDirectory(testUser){
   let index = current_file_data.findIndex(x => x.filename == "test_share_directory");
+  if(index == -1){
+    return new Promise((resolve, reject) => { reject('test file not found'); });
+  }
 
   let promise = new Promise((resolve, reject) => {
     $.ajax({

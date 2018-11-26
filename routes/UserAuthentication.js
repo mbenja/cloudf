@@ -129,7 +129,6 @@ class UserAuthentication {
 
                   // handle bad connection to mongoDB
                   if (database == null) {
-                    database.close();
                     reject({type: 'mongo', contents: 'BROKEN PIPE'});
                   } else {
                     console.log("Successfully connected to mongoDB");
