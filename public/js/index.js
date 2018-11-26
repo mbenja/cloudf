@@ -71,9 +71,9 @@ function populateDirectoryListing(path){
   let files_in_path = current_file_data.filter(val => val.metadata.path == path);
 
   // if we're not looking at the root directory add additional file for parent dir
-  if(path != "/root"){
-    files_in_path.unshift({metadata: {content_type: 'parent'}, filename: '..'})
-  }
+  // if(path != "/root"){
+  //   files_in_path.unshift({metadata: {content_type: 'parent'}, filename: '..'})
+  // }
 
   // go though each of the files in this directory
   for(let i = 0; i < files_in_path.length; i++){
