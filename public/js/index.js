@@ -681,8 +681,8 @@ document.getElementById("input_upload_directory").addEventListener("change", fun
   // find any subdirectories and build associated paths
   var subdirectories = [];
   var paths = [];
-  subdirectories.push(directory);
-  paths.push(current_path);
+  subdirectories.push(directory[0]);
+  paths.push(directory[0]);
   for (var i = 0; i < files.length; i++) {
     paths.push(files[i].webkitRelativePath.replace('/' + files[i].name, ''));
     var relative_path = files[i].webkitRelativePath;
