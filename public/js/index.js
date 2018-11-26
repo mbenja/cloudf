@@ -907,7 +907,7 @@ function shareItem(){
     const obj = {
       file_id: current_file_data[selected_index]["_id"],
       file_name: current_file_data[selected_index].filename,
-      content_type: current_file_data[selected_index].content_type,
+      content_type: current_file_data[selected_index].metadata.content_type,
       share_with: email_share_input.value
     }
 

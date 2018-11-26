@@ -118,8 +118,8 @@ function testDeleteDirectory() {
 }
 
 /**
-  * Testing deleteFile
-*/
+ * Testing deleteFile
+ */
 function testDeleteFile() {
   index = current_file_data.findIndex(x => x.filename == "test_delete_file.rtf");
   const obj = {
@@ -320,6 +320,7 @@ $('#upload_form_directory_test').submit(function(event) {
 
 /**
  * test authentication backend functions
+ * @returns {Promise}
  */
 async function testAuth(){
 
@@ -349,16 +350,28 @@ async function testAuth(){
 
   // test logout functions
   await testLogout();
+  await testIsLoggedInAfterLogout();
   await testLogoutNotLoggedIn();
 
   // reset cookies to initial user's session
   Cookies.set('cloudf_session', cur_session);
 
+  // test sharing files - need to reset cookies after latter two tests since they login to test user account
+  await testShareFileBadUser();
+
+  await testShareFile(testUser);
+  Cookies.set('cloudf_session', cur_session);
+
+  await testShareDirectory(testUser);
+  Cookies.set('cloudf_session', cur_session);
+
   return;
 }
 
+
 /**
  * test that not having a session cookie returns "NOT LOGGED IN"
+ * @returns {Promise}
  */
 async function testNotLoggedIn(){
 
@@ -387,6 +400,7 @@ async function testNotLoggedIn(){
 
 /**
  * test that having an invalid cookie returns "INVALID SESSION"
+ * @returns {Promise}
  */
 async function testInvalidCookie(){
 
@@ -416,6 +430,8 @@ async function testInvalidCookie(){
 
 /**
  * test the registration of a new user is successful
+ * @param {String} testUser - an example user to test this function with
+ * @returns {Promise}
  */
 async function testNewRegistration(testUser){
 
@@ -446,6 +462,8 @@ async function testNewRegistration(testUser){
 
 /**
  * test that registration fails when a user already exists
+ * @param {String} testUser - an example user to test this function with
+ * @returns {Promise}
  */
  async function testExistingRegistration(testUser){
 
@@ -475,6 +493,7 @@ async function testNewRegistration(testUser){
 
 /**
  * tests that the login function returns "INVALID USER" when a bad username is used
+ * @returns {Promise}
  */
 async function testInvalidUsername(){
   let promise = new Promise((resolve, reject) => {
@@ -503,6 +522,8 @@ async function testInvalidUsername(){
 
 /**
  * tests that the login function returns "INCORRECT PASSWORD" when the wrong password for a user is entered
+ * @param {String} testUser - an example user to test this function with
+ * @returns {Promise}
  */
 async function testInvalidPassword(testUser){
   let promise = new Promise((resolve, reject) => {
@@ -531,6 +552,8 @@ async function testInvalidPassword(testUser){
 
 /**
  * test that the login function returns a session id that is stored in the cookies when successful
+ * @param {String} testUser - an example user to test this function with
+ * @returns {Promise}
  */
 async function testLogin(testUser){
   let promise = new Promise((resolve, reject) => {
@@ -559,6 +582,7 @@ async function testLogin(testUser){
 
 /**
  * test that the backend recognizes that a user is logged in after a successful initiateLogin call
+ * @returns {Promise}
  */
 async function testIsLoggedIn(){
   let promise = new Promise((resolve, reject) => {
@@ -585,6 +609,7 @@ async function testIsLoggedIn(){
 
 /**
  * test that the logout function returns "SUCCESSFUL LOGOUT" when user is logged in
+ * @returns {Promise}
  */
 async function testLogout(){
   let promise = new Promise((resolve, reject) => {
@@ -611,6 +636,7 @@ async function testLogout(){
 
 /**
  * test that backend recognizes that a user is no longer logged in after a successful logout call
+ * @returns {Promise}
  */
 async function testIsLoggedInAfterLogout(){
   let promise = new Promise((resolve, reject) => {
@@ -637,6 +663,7 @@ async function testIsLoggedInAfterLogout(){
 
 /**
  * test that the logout function returns "NOT LOGGED IN" when a user is not logged in
+ * @returns {Promise}
  */
 async function testLogoutNotLoggedIn(){
   let promise = new Promise((resolve, reject) => {
@@ -656,6 +683,153 @@ async function testLogoutNotLoggedIn(){
         resolve();
       }
     });
+  });
+
+  return promise;
+}
+
+/**
+ * test that sharing files with a nonexistant user returns "USER NOT FOUND"
+ * @returns {Promise}
+ */
+function testShareFileBadUser() {
+
+  index = current_file_data.findIndex(x => x.filename == "test_share_file.rtf");
+
+  let promise = new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/FileInteraction/shareFile',
+      data: {file_id: current_file_data[index]["_id"],
+            file_name: current_file_data[index].filename,
+            content_type: current_file_data[index].content_type,
+            share_with: 'invalidUser@example.com'},
+      success: () => {
+        console.log("shareFile with invalid user FAILED");
+        resolve();
+      },
+      error: (error) => {
+        if(error.responseText == "USER NOT FOUND"){
+          console.log("shareFile with invalid user PASSED");
+        }
+        else{
+          console.log("shareFile with invalid user FAILED");
+        }
+        resolve();
+      }
+    })
+  });
+
+  return promise;
+
+}
+
+/**
+ * test that sharing files works properly
+ * @param {String} testUser - an example user to test this function with
+ * @returns {Promise}
+ */
+async function testShareFile(testUser){
+
+   let index = current_file_data.findIndex(x => x.filename == "test_share_file.rtf");
+
+   let promise = new Promise((resolve, reject) => {
+     $.ajax({
+       url: '/FileInteraction/shareFile',
+       data: {file_id: current_file_data[index]["_id"],
+              file_name: current_file_data[index].filename,
+              content_type: current_file_data[index].metadata.content_type,
+              share_with: testUser},
+       success: () => {
+         $.ajax({
+           url: '/authenticate/initiateLogin',
+           data: {email: testUser,
+                  password: 'examplepass'},
+           success: () => {
+             $.ajax({
+               url: '/FileInteraction/getSubdirectory',
+               data: {subdirectory: '/root/Shared'},
+               success: (result) => {
+                 let index = result.findIndex(x => x.filename == "test_share_file.rtf");
+                 if(index != -1){
+                   console.log("shareFile PASSED");
+                 }
+                 else{
+                   console.log("shareFile FAILED");
+                 }
+                 resolve();
+               },
+               error: () => {
+                 console.log("shareFile FAILED");
+                 resolve();
+               }
+             });
+           },
+           error: () => {
+             console.log("shareFile FAILED");
+             resolve();
+           }
+         });
+       },
+       error: () => {
+         console.log("shareFile FAILED");
+         resolve();
+       }
+     })
+   });
+
+   return promise;
+}
+
+/**
+ * test sharing a directory works properly
+ * @param {String} testUser - an example user to test this function with
+ * @returns {Promise}
+ */
+async function testShareDirectory(testUser){
+  let index = current_file_data.findIndex(x => x.filename == "test_share_directory");
+
+  let promise = new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/FileInteraction/shareDirectory',
+      data: {directory_id: current_file_data[index]["_id"],
+             directory_name: current_file_data[index].filename,
+             directory_path: current_file_data[index].metadata.path,
+             share_with: testUser},
+      success: () => {
+        $.ajax({
+          url: '/authenticate/initiateLogin',
+          data: {email: testUser,
+                 password: 'examplepass'},
+          success: () => {
+            $.ajax({
+              url: '/FileInteraction/getSubdirectory',
+              data: {subdirectory: '/root/Shared'},
+              success: (result) => {
+                let index = result.findIndex(x => x.filename == "test_share_directory");
+                if(index != -1){
+                  console.log("shareDirectory PASSED");
+                }
+                else{
+                  console.log("shareDirectory FAILED");
+                }
+                resolve();
+              },
+              error: () => {
+                console.log("shareDirectory FAILED");
+                resolve();
+              }
+            });
+          },
+          error: () => {
+            console.log("shareDirectory FAILED");
+            resolve();
+          }
+        });
+      },
+      error: () => {
+        console.log("shareDirectory FAILED");
+      }
+    })
   });
 
   return promise;
