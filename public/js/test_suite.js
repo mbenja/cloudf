@@ -51,13 +51,13 @@ function testGetSubDirectory() {
     data: obj,
     success: function (response) {
       if (response == 'BROKEN PIPE') {
-        console.log("getRootDirectory: " + "FAILED");
+        console.log("getSubDirectory: " + "FAILED");
       } else {
-        console.log("getRootDirectory: " + "PASSED");
+        console.log("getSubDirectory: " + "PASSED");
       }
     },
     error: function (data) {
-      console.log("getRootDirectory: " + "FAILED");
+      console.log("getSubDirectory: " + "FAILED");
     }
   });
 }
