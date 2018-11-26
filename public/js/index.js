@@ -139,6 +139,9 @@ function populateDirectoryListing(path){
   }
   //Update breadcrumb Banner
   populateBreadcrumbs(path);
+
+  //Hide Side Panel
+  hideSidebar();
 }
 
 function calculateBreadcrumbSize(offset) {
