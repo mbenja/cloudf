@@ -9,7 +9,7 @@ async function runTestSuite() {
   // store the current session cookie
   cur_session = Cookies.get('cloudf_session');
 
-  //await setupTests();
+  await setupTests();
   await testAuth();
   testBackend();
 }
@@ -47,9 +47,7 @@ async function setupTests(){
                     // reset session cookies to initial session
                     Cookies.set('cloudf_session', cur_session);
 
-                    refreshData().then(() => {
-                      resolve('test setup successful');
-                    });
+                    refreshData().then(() => { resolve(); });
                   },
                   error: (error) => {
                     console.log(error);
@@ -167,7 +165,7 @@ function testDeleteDirectory() {
   index = current_file_data.findIndex(x => x.filename == "test_delete_directory");
   const obj = {
     directory_id: current_file_data[index]["_id"],
-    directory_path: current_file_data[index]["metadata"]["path"]
+    directory_path: current_file_data[index]["metadata"]["path"] + "/test_delete_directory"
     // directory_path: current_file_data[index]["metadata"]["path"] + '/' +
     // current_file_data[index]["filename"]
   };
