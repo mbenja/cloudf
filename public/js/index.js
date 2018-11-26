@@ -26,7 +26,7 @@ let elementsRemoved = 0;
 let bannerWidth = document.getElementById('banner').clientWidth;
 let numOfTabs = Math.floor(bannerWidth/104);
 let prevNumOfTabs = 0;
-console.log("initial main container width: " + document.getElementById('banner').clientWidth)
+
 /**
  * references the file display div for easy addition/removal of files
  * @type {Object}
@@ -145,8 +145,6 @@ function calculateBreadcrumbSize(offset) {
   prevNumOfTabs = numOfTabs;
   bannerWidth = document.getElementById('banner').clientWidth + offset;
   numOfTabs = Math.floor(bannerWidth/104);
-  console.log("Prev Tabs: " + prevNumOfTabs);
-  console.log("Num of tabs allowed: " + numOfTabs);
   checkOverflow();
 }
 
@@ -155,7 +153,6 @@ function checkOverflow() {
   //if(decBy < 0 && array_of_crumbs.length-1 > numOfTabs) {
   if(current_path_sections > numOfTabs) {
     let decBy = current_path_sections  - numOfTabs;
-    console.log("removing" + decBy);
     for(let lcv = 0; lcv<decBy;lcv++) {
       elementsRemoved++;
       removedTab = array_of_crumbs[elementsRemoved];
@@ -164,10 +161,8 @@ function checkOverflow() {
       }
     }
   else if(current_path_sections < numOfTabs && elementsRemoved > 0) {
-    console.log("adding.. ")
     for(let lcv = 0; lcv<numOfTabs-prevNumOfTabs;lcv++) {
       if(elementsRemoved != 0) {
-        console.log(elementsRemoved);
         let tab = array_of_crumbs[elementsRemoved];
         tab.style.display = "block";
         elementsRemoved--;
@@ -234,9 +229,7 @@ function populateBreadcrumbs(path){
 
             for(let lcv = 0; lcv < decreaseBy; lcv++) {
               current_breadcrumb_parents--;
-              console.log("backtracking a tab");
               removedTab = array_of_crumbs.pop();
-              console.log(removedTab.id);
               removedTab.parentElement.removeChild(removedTab);
               current_path_sections--
 
@@ -350,7 +343,6 @@ function showSidebar(index) {
   populateSidebar(index);
 
   if(document.getElementById("main_container").getAttribute('small') != 'true') {
-    console.log("PLLZ WORK");
     calculateBreadcrumbSize(-1 * document.getElementById('file_sidebar').clientWidth);
   }
 
