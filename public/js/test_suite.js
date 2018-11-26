@@ -1,3 +1,7 @@
+/**
+ * contains current user's session id for resetting after session is complete
+ * @type {String}
+ */
 let cur_session;
 
 /**

@@ -388,8 +388,6 @@ function populateSidebar(index){
  * Sends necessary data to back-end for call to delete file
  */
 function deleteItem() {
-  // update state variables in back-end
-  //sendState();
   // check content type
   if (current_file_data[selected_index]["metadata"]["content_type"] == "directory") {
     // is directory
@@ -454,8 +452,6 @@ function deleteItem() {
  * Sends necessary data to back-end for call to download file/directory
  */
 function download() {
-  // update state variables in back-end
-  //sendState();
   // check content_type
   // define object to be sent to back-end
   if (current_file_data[selected_index]["metadata"]["content_type"] == "directory") {
@@ -553,38 +549,11 @@ function editFileName(){
   });
 }
 
-/**
- * Retrieves necessary data from user to perform back-end call to upload file
- */
-// function sendState() {
-//   // define data needed on backend
-//   // TODO this is hard-coded until we implement user authentication
-//   const obj = {
-//     user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
-//     current_path: current_path,
-//     current_upload_path_local: current_upload_path_local
-//   };
-//   // perform ajax call
-//   $.ajax({
-//     url: '/FileInteraction/clientState',
-//     data: obj,
-//     success: function (data) {
-//       //console.log(data);
-//     },
-//     error: function (data) {
-//       console.log(data);
-//     }
-//   });
-// }
-
-
 
 /**
  * Performs back-end call to create a directory in MongoDB
  */
 function createDirectory() {
-  // send state
-  //sendState();
 
   // get data for back-end
   // account for empty folder name
@@ -634,13 +603,9 @@ function createDirectory() {
  */
 function refreshData() {
   // define data needed on backend
-  // TODO this is hard-coded until we implement user authentication
 
   let callback = $.Deferred();
 
-  // const obj = {
-  //   user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx'
-  // };
   // perform ajax call
   $.ajax({
     url: '/FileInteraction/getRootDirectory',
@@ -661,8 +626,6 @@ function refreshData() {
       callback.reject();
     }
   });
-  // call to send client state
-  //sendState();
 
   return callback.promise();
 
@@ -776,6 +739,9 @@ $('#upload_form').submit(function(event) {
   return false;
 });
 
+/**
+ * Defining on submit for upload_form_directory so that we can handle on complete, etc.
+ */
 $('#upload_form_directory').submit(function(event) {
   // prevents rerouting of page
   event.preventDefault();

@@ -68,11 +68,6 @@ var mime = require('mime');
  * exports of connection definition file
  * @type {Object}
  */
-// var client_state = {
-//   user_id: 'Mo190PgQtcI6FyRF3gNAge8whXhdtRMx',
-//   current_path: '',
-//   current_upload_path_local: ''
-// };
 let conn_info = require('./connection.js');
 
 /**
@@ -87,6 +82,10 @@ let connection = conn_info.connection;
  */
 let mongo_url = conn_info.mongo_url;
 
+/**
+ * contains exports of cookie parser node_module
+ * @type {Object}
+ */
 let cookieParser = require('cookie-parser');
 
 /**
@@ -101,6 +100,7 @@ let sessions = require("./SessionManager.js");
  */
 let session_mgr = new sessions.SessionManager(connection);
 
+// tell backend to use fileUpload and cookieParse modules for requests
 router.use(fileUpload());
 router.use(cookieParser());
 
@@ -232,8 +232,8 @@ router.post('/uploadFile', function(req, res) {
 });
 
 /**
-
-*/
+ * uploads a directory
+ */
 router.post('/uploadDirectory', function(req, res) {
   console.log("POST /uploadDirectory");
   if (!req.files) {
@@ -601,6 +601,9 @@ router.get('/shareDirectory', function(req, res) {
 
 });
 
+/**
+ * returns the current email of the logged-in user, if there is one
+ */
 router.get('/getCurrentEmail', function(req, res){
 
   session_mgr.validateSession(req.cookies['cloudf_session']).then(

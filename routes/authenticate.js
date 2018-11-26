@@ -40,10 +40,13 @@ var authentication = require('./UserAuthentication.js')
  */
 var user_auth = new authentication.UserAuthentication(connection, mongo_url);
 
-
+/**
+ * contains exports of cookie parser node_module
+ * @type {Object}
+ */
 var cookieParser = require('cookie-parser');
 
-
+// tell backend to parse cookies and store them in req.cookies for all requests
 router.use(cookieParser());
 
 /**
