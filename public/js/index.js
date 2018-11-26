@@ -287,7 +287,7 @@ function populateBreadcrumbs(path){
       }
       // will be zero if breadcrumb
       if (destination_index == -1) {
-        destination_path = document.getElementById(ev.target.id).getAttribute("path");
+        destination_path = document.getElementById(ev.target.id).path;
       } else {
         destination_path = current_file_data[destination_index]["metadata"]["path"] +
         '/' + current_file_data[destination_index]["filename"];
