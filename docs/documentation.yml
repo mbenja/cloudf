@@ -1,0 +1,158 @@
+toc:
+  - name: Project Information
+    file: ../README.md
+    children:
+      - name: app.js
+        description: |
+          Main file of the project.
+
+          Handles administrative functions such as setting up view engine, routing, and exposing ports.
+
+      - name: public/js/icons_map.js
+        description:
+      - name: public/js/index.js
+        description:
+      - name: public/js/login.js
+        description:
+      - name: public/js/test_suite.js
+        description:
+      - name: routes/authenticate.js
+        description:
+      - name: routes/connection.js
+        description:
+      - name: routes/FileInteraction.js
+        description:
+      - name: routes/index.js
+        description:
+      - name: routes/login.js
+        description:
+      - name: routes/SessionManager.js
+        description:
+      - name: routes/UserAuthentication.js
+        description:
+
+  - name: Works Cited
+    children:
+      - name: bcrypt
+        description:
+      - name: cookie-parser
+        description:
+      - name: dateformat
+        description:
+      - name: documentation
+        description:
+          Documentation.js is a simple documentation generation package that uses the JSDoc format.
+
+          We used documentation.js for generating documentation from our js files.
+
+          https://www.npmjs.com/package/documentation
+
+      - name: express
+        description: |
+          The express package provides a fast, simple web framework for node.js applications.
+
+          We used express for our server hosting.
+
+          https://www.npmjs.com/package/express
+
+      - name: ejs
+        description:
+          EJS is a simple templating language and view engine that can be used to generate HTML using javascript.
+
+          We used ejs for our html view engine.
+
+          https://www.npmjs.com/package/ejs
+
+      - name: express-fileupload
+        description:
+      - name: express-zip
+        description:
+      - name: mime
+        description:
+      - name: mongodb
+        description:
+      - name: mysql
+        description:
+      - name: path
+        description:
+          Path is a module for working with files and directories.
+
+          We used path for our routing functionality.
+
+          https://www.npmjs.com/package/path
+
+      - name: jQuery
+        description: |
+          jQuery is a javascript library that contains many useful functions for interacting with the DOM, making asyncronous calls, etc.
+
+          We used jQuery for both of these purposes.
+
+          https://jquery.com/
+
+      - name: Bootstrap
+        description: |
+          Bootstap is a frontend HTML/CSS/JS library that simplifies many aspects of visual/frontend design.
+
+          We used Bootstrap for its modals, navbars, and progress bar (and assorted other small functions).
+
+          https://getbootstrap.com/docs/4.1/getting-started/introduction/
+
+      - name: Popper.js
+        description: |
+          Popper is a javascript library used to more easily make tooltips and small dialogs.
+
+          https://popper.js.org/
+
+      - name: SnackbarJS
+        description: |
+          SnackbarJS is a library for displaying snackbar/toast popups at the bottom of the window.
+
+          We used SnackbarJS for reset game/submit score popups in the game modal.
+
+          https://fezvrasta.github.io/snackbarjs/
+
+      - name: Js-Cookie
+        description: |
+          Js-Cookie is a small, lightweight javascript API for handling browser cookies
+
+          We used this module in our test suite for more ease of use.
+
+          https://github.com/js-cookie/js-cookie
+
+      - name: jQuery Form Plugin
+        description: |
+          This plugin allows HTML forms to be submitted using ajax.
+
+          We used this plugin for better file upload integration.
+
+          http://malsup.com/jquery/form/
+
+      - name: Images
+        description: |
+          File Icons from:
+
+          https://github.com/redbooth/free-file-icons
+
+          Folder Icon from:
+
+          http://yousense.info/33/06889-folder-icon-32x32.html
+
+          Download Button Image by Smashicons from:
+
+          https://www.flaticon.com/free-icon/cloud-computing_149211#term=cloud%20computing&page=1&position=3
+
+          Upload Button Image by Freepik from:
+
+          https://www.flaticon.com/free-icon/upload-to-cloud_109713#term=upload%20to%20cloud&page=1&position=1
+
+          Delete Button Image by Kiranshastry from:
+
+          https://www.flaticon.com/free-icon/delete_709519#term=delete&page=1&position=18
+
+          Folder Button Image by Elegant Themes from:
+
+          https://www.flaticon.com/free-icon/new-add-folder_8715#term=new%20add%20folder&page=1&position=7
+
+          Share Button Image by Dave Gandy from:
+
+          https://www.flaticon.com/free-icon/share-option_25419#term=share%20option&page=1&position=1
