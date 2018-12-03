@@ -1817,6 +1817,18 @@
 
   <h1>cloudf</h1>
 <p>KU EECS 448, Software Engineering I. Project III.</p>
+<p>Cloudf is a cloud storage system built using Node. It uses MongoDB for actual file storage.</p>
+<p>User accounts and authentication are supported using MySQL.</p>
+<p>The project supports most functions that would be expected of an online storage system:</p>
+<ul>
+<li>File &#x26; Directory Upload</li>
+<li>File &#x26; Directory Download</li>
+<li>Directory creation</li>
+<li>Renaming items</li>
+<li>Moving items using click &#x26; drag</li>
+<li>Sharing items with other Cloudf users</li>
+</ul>
+<p>Cloudf is set up to use Docker for simpler deployment.</p>
 
  
    
@@ -3398,7 +3410,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/UserAuthentication.js#L11-L11'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/UserAuthentication.js#L11-L11'>
       <span>routes/UserAuthentication.js</span>
       </a>
     
@@ -3455,7 +3467,64 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/app.js#L7-L7'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L5-L5'>
+      <span>routes/FileInteraction.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>exports of express module</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>express</div>
+   
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='express'>
+      express
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/app.js#L7-L7'>
       <span>app.js</span>
       </a>
     
@@ -3512,7 +3581,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/index.js#L5-L5'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/index.js#L5-L5'>
       <span>routes/index.js</span>
       </a>
     
@@ -3569,7 +3638,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/login.js#L5-L5'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/login.js#L5-L5'>
       <span>routes/login.js</span>
       </a>
     
@@ -3626,65 +3695,8 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/authenticate.js#L5-L5'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/authenticate.js#L5-L5'>
       <span>routes/authenticate.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>exports of express module</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>express</div>
-   
-  
-    <p>
-      Type:
-      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='express'>
-      express
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L5-L5'>
-      <span>routes/FileInteraction.js</span>
       </a>
     
   </div>
@@ -3740,7 +3752,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L65-L65'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L65-L65'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -3797,7 +3809,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/UserAuthentication.js#L23-L23'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/UserAuthentication.js#L23-L23'>
       <span>routes/UserAuthentication.js</span>
       </a>
     
@@ -3854,7 +3866,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L23-L23'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L23-L23'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -3911,7 +3923,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/connection.js#L5-L5'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/connection.js#L5-L5'>
       <span>routes/connection.js</span>
       </a>
     
@@ -3968,7 +3980,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/app.js#L13-L13'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/app.js#L13-L13'>
       <span>app.js</span>
       </a>
     
@@ -4025,7 +4037,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L59-L59'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L59-L59'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -4082,7 +4094,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/app.js#L19-L19'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/app.js#L19-L19'>
       <span>app.js</span>
       </a>
     
@@ -4139,7 +4151,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/app.js#L29-L29'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/app.js#L29-L29'>
       <span>app.js</span>
       </a>
     
@@ -4196,7 +4208,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/app.js#L35-L35'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/app.js#L35-L35'>
       <span>app.js</span>
       </a>
     
@@ -4253,7 +4265,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/app.js#L41-L41'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/app.js#L41-L41'>
       <span>app.js</span>
       </a>
     
@@ -4310,7 +4322,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/app.js#L50-L50'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/app.js#L50-L50'>
       <span>app.js</span>
       </a>
     
@@ -4367,7 +4379,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/connection.js#L23-L23'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/connection.js#L23-L23'>
       <span>routes/connection.js</span>
       </a>
     
@@ -4424,7 +4436,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/icons_map.js#L5-L66'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/icons_map.js#L5-L66'>
       <span>public/js/icons_map.js</span>
       </a>
     
@@ -4481,7 +4493,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L5-L5'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L5-L5'>
       <span>public/js/index.js</span>
       </a>
     
@@ -4538,7 +4550,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L11-L11'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L11-L11'>
       <span>public/js/index.js</span>
       </a>
     
@@ -4595,7 +4607,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L17-L17'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L17-L17'>
       <span>public/js/index.js</span>
       </a>
     
@@ -4652,7 +4664,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L34-L34'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L34-L34'>
       <span>public/js/index.js</span>
       </a>
     
@@ -4709,7 +4721,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L40-L40'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L40-L40'>
       <span>public/js/index.js</span>
       </a>
     
@@ -4766,7 +4778,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L60-L145'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L60-L145'>
       <span>public/js/index.js</span>
       </a>
     
@@ -4833,7 +4845,7 @@ in the given path string. does NOT refresh file data from the database.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L182-L248'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L182-L248'>
       <span>public/js/index.js</span>
       </a>
     
@@ -4899,7 +4911,7 @@ in the given path string. does NOT refresh file data from the database.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L254-L256'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L254-L256'>
       <span>public/js/index.js</span>
       </a>
     
@@ -4973,7 +4985,7 @@ in the given path string. does NOT refresh file data from the database.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L262-L328'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L262-L328'>
       <span>public/js/index.js</span>
       </a>
     
@@ -5047,7 +5059,7 @@ in the given path string. does NOT refresh file data from the database.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L334-L336'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L334-L336'>
       <span>public/js/index.js</span>
       </a>
     
@@ -5121,7 +5133,7 @@ in the given path string. does NOT refresh file data from the database.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L343-L355'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L343-L355'>
       <span>public/js/index.js</span>
       </a>
     
@@ -5187,7 +5199,7 @@ in the given path string. does NOT refresh file data from the database.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L362-L367'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L362-L367'>
       <span>public/js/index.js</span>
       </a>
     
@@ -5239,7 +5251,7 @@ in the given path string. does NOT refresh file data from the database.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L375-L385'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L375-L385'>
       <span>public/js/index.js</span>
       </a>
     
@@ -5305,7 +5317,7 @@ in the given path string. does NOT refresh file data from the database.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L390-L447'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L390-L447'>
       <span>public/js/index.js</span>
       </a>
     
@@ -5357,7 +5369,7 @@ in the given path string. does NOT refresh file data from the database.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L454-L480'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L454-L480'>
       <span>public/js/index.js</span>
       </a>
     
@@ -5409,7 +5421,7 @@ in the given path string. does NOT refresh file data from the database.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L556-L596'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L556-L596'>
       <span>public/js/index.js</span>
       </a>
     
@@ -5461,7 +5473,7 @@ in the given path string. does NOT refresh file data from the database.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L998-L1046'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L998-L1046'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -5546,7 +5558,7 @@ in the given path string. does NOT refresh file data from the database.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L604-L632'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L604-L632'>
       <span>public/js/index.js</span>
       </a>
     
@@ -5606,7 +5618,7 @@ in the given path string. does NOT refresh file data from the database.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L639-L670'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L639-L670'>
       <span>public/js/index.js</span>
       </a>
     
@@ -5659,7 +5671,7 @@ folder that is being uploaded</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L366-L397'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L366-L397'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -5712,7 +5724,7 @@ folder that is being uploaded</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L679-L685'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L679-L685'>
       <span>public/js/index.js</span>
       </a>
     
@@ -5780,7 +5792,7 @@ if there wasn't, update the cookies to refersh the current session for another h
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L691-L740'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L691-L740'>
       <span>public/js/index.js</span>
       </a>
     
@@ -5832,7 +5844,7 @@ if there wasn't, update the cookies to refersh the current session for another h
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L745-L798'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L745-L798'>
       <span>public/js/index.js</span>
       </a>
     
@@ -5884,7 +5896,7 @@ if there wasn't, update the cookies to refersh the current session for another h
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L230-L253'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L230-L253'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -5936,7 +5948,7 @@ if there wasn't, update the cookies to refersh the current session for another h
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L407-L433'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L407-L433'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -5988,7 +6000,7 @@ if there wasn't, update the cookies to refersh the current session for another h
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L805-L811'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L805-L811'>
       <span>public/js/index.js</span>
       </a>
     
@@ -6054,7 +6066,7 @@ if there wasn't, update the cookies to refersh the current session for another h
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L823-L834'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L823-L834'>
       <span>public/js/index.js</span>
       </a>
     
@@ -6107,7 +6119,7 @@ redirect to the login page if the logout was successful.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/index.js#L841-L890'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/index.js#L841-L890'>
       <span>public/js/index.js</span>
       </a>
     
@@ -6159,7 +6171,7 @@ redirect to the login page if the logout was successful.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/login.js#L5-L5'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/login.js#L5-L5'>
       <span>public/js/login.js</span>
       </a>
     
@@ -6216,7 +6228,7 @@ redirect to the login page if the logout was successful.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/login.js#L11-L11'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/login.js#L11-L11'>
       <span>public/js/login.js</span>
       </a>
     
@@ -6273,7 +6285,7 @@ redirect to the login page if the logout was successful.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/login.js#L17-L17'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/login.js#L17-L17'>
       <span>public/js/login.js</span>
       </a>
     
@@ -6330,7 +6342,7 @@ redirect to the login page if the logout was successful.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/login.js#L23-L23'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/login.js#L23-L23'>
       <span>public/js/login.js</span>
       </a>
     
@@ -6387,7 +6399,7 @@ redirect to the login page if the logout was successful.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/login.js#L29-L29'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/login.js#L29-L29'>
       <span>public/js/login.js</span>
       </a>
     
@@ -6444,7 +6456,7 @@ redirect to the login page if the logout was successful.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/login.js#L51-L67'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/login.js#L51-L67'>
       <span>public/js/login.js</span>
       </a>
     
@@ -6519,7 +6531,7 @@ redirect to the login page if the logout was successful.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/login.js#L73-L100'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/login.js#L73-L100'>
       <span>public/js/login.js</span>
       </a>
     
@@ -6571,7 +6583,7 @@ redirect to the login page if the logout was successful.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L5-L5'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L5-L5'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -6628,7 +6640,7 @@ redirect to the login page if the logout was successful.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L11-L19'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L11-L19'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -6681,7 +6693,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L88-L100'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L88-L100'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -6734,7 +6746,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L105-L112'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L105-L112'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -6786,7 +6798,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L117-L137'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L117-L137'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -6838,7 +6850,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L142-L163'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L142-L163'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -6890,7 +6902,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L168-L192'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L168-L192'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -6942,7 +6954,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L197-L218'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L197-L218'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -6994,7 +7006,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L223-L225'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L223-L225'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7046,7 +7058,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L258-L260'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L258-L260'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7098,7 +7110,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L265-L306'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L265-L306'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7150,7 +7162,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L311-L360'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L311-L360'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7202,7 +7214,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L439-L480'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L439-L480'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7262,7 +7274,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L487-L510'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L487-L510'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7322,7 +7334,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L516-L540'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L516-L540'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7382,7 +7394,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L547-L572'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L547-L572'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7456,7 +7468,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L579-L603'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L579-L603'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7530,7 +7542,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L609-L632'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L609-L632'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7590,7 +7602,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L639-L662'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L639-L662'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7664,7 +7676,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L669-L692'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L669-L692'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7738,7 +7750,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L698-L719'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L698-L719'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7798,7 +7810,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L725-L746'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L725-L746'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7858,7 +7870,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L752-L773'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L752-L773'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7918,7 +7930,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L779-L800'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L779-L800'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -7978,7 +7990,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L806-L835'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L806-L835'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -8038,7 +8050,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L842-L895'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L842-L895'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -8112,7 +8124,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/public/js/test_suite.js#L902-L953'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/public/js/test_suite.js#L902-L953'>
       <span>public/js/test_suite.js</span>
       </a>
     
@@ -8186,7 +8198,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/authenticate.js#L11-L11'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/authenticate.js#L11-L11'>
       <span>routes/authenticate.js</span>
       </a>
     
@@ -8243,7 +8255,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L11-L11'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L11-L11'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -8300,7 +8312,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/index.js#L11-L11'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/index.js#L11-L11'>
       <span>routes/index.js</span>
       </a>
     
@@ -8357,7 +8369,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/login.js#L11-L11'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/login.js#L11-L11'>
       <span>routes/login.js</span>
       </a>
     
@@ -8414,7 +8426,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/authenticate.js#L17-L17'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/authenticate.js#L17-L17'>
       <span>routes/authenticate.js</span>
       </a>
     
@@ -8471,7 +8483,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L71-L71'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L71-L71'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -8528,7 +8540,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/authenticate.js#L23-L23'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/authenticate.js#L23-L23'>
       <span>routes/authenticate.js</span>
       </a>
     
@@ -8585,7 +8597,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/connection.js#L11-L17'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/connection.js#L11-L17'>
       <span>routes/connection.js</span>
       </a>
     
@@ -8642,7 +8654,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L77-L77'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L77-L77'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -8699,7 +8711,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/authenticate.js#L29-L29'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/authenticate.js#L29-L29'>
       <span>routes/authenticate.js</span>
       </a>
     
@@ -8756,7 +8768,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L83-L83'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L83-L83'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -8813,7 +8825,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/authenticate.js#L35-L35'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/authenticate.js#L35-L35'>
       <span>routes/authenticate.js</span>
       </a>
     
@@ -8870,7 +8882,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/authenticate.js#L41-L41'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/authenticate.js#L41-L41'>
       <span>routes/authenticate.js</span>
       </a>
     
@@ -8927,7 +8939,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/authenticate.js#L47-L47'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/authenticate.js#L47-L47'>
       <span>routes/authenticate.js</span>
       </a>
     
@@ -8984,7 +8996,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L89-L89'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L89-L89'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -9041,7 +9053,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/authenticate.js#L58-L76'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/authenticate.js#L58-L76'>
       <span>routes/authenticate.js</span>
       </a>
     
@@ -9124,7 +9136,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/authenticate.js#L81-L120'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/authenticate.js#L81-L120'>
       <span>routes/authenticate.js</span>
       </a>
     
@@ -9176,7 +9188,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/authenticate.js#L125-L148'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/authenticate.js#L125-L148'>
       <span>routes/authenticate.js</span>
       </a>
     
@@ -9228,7 +9240,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/authenticate.js#L155-L170'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/authenticate.js#L155-L170'>
       <span>routes/authenticate.js</span>
       </a>
     
@@ -9303,7 +9315,7 @@ Test scores are updating accordingly</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L170-L175'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L170-L175'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -9370,7 +9382,7 @@ Calls async function to get root directory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L185-L190'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L185-L190'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -9446,7 +9458,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L355-L372'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L355-L372'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -9498,7 +9510,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L379-L384'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L379-L384'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -9550,7 +9562,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L389-L404'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L389-L404'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -9602,7 +9614,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L411-L424'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L411-L424'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -9654,7 +9666,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L431-L460'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L431-L460'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -9706,7 +9718,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L465-L474'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L465-L474'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -9758,7 +9770,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L479-L499'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L479-L499'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -9810,7 +9822,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L505-L509'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L505-L509'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -9862,7 +9874,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L516-L550'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L516-L550'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -9937,7 +9949,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L559-L602'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L559-L602'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10030,7 +10042,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L607-L635'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L607-L635'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10082,7 +10094,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/connection.js#L29-L29'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/connection.js#L29-L29'>
       <span>routes/connection.js</span>
       </a>
     
@@ -10139,7 +10151,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L17-L17'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L17-L17'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10196,7 +10208,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L29-L29'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L29-L29'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10253,7 +10265,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L35-L35'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L35-L35'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10310,7 +10322,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L41-L41'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L41-L41'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10367,7 +10379,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L47-L47'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L47-L47'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10424,7 +10436,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L53-L53'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L53-L53'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10481,7 +10493,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L95-L95'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L95-L95'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10538,7 +10550,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/UserAuthentication.js#L5-L5'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/UserAuthentication.js#L5-L5'>
       <span>routes/UserAuthentication.js</span>
       </a>
     
@@ -10595,7 +10607,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L101-L101'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L101-L101'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10652,7 +10664,7 @@ Calls async function to get subdirectory, sends response</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L114-L156'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L114-L156'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10705,7 +10717,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L162-L162'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L162-L162'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10757,7 +10769,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L197-L232'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L197-L232'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10809,7 +10821,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L237-L348'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L237-L348'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10861,7 +10873,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L642-L658'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L642-L658'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -10935,7 +10947,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L665-L681'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L665-L681'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -11009,7 +11021,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L689-L717'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L689-L717'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -11091,7 +11103,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L726-L792'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L726-L792'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -11174,7 +11186,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L802-L875'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L802-L875'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -11257,7 +11269,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L884-L904'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L884-L904'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -11331,7 +11343,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L914-L940'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L914-L940'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -11414,7 +11426,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L948-L988'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L948-L988'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -11488,7 +11500,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L1054-L1071'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L1054-L1071'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -11554,7 +11566,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L1079-L1106'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L1079-L1106'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -11620,7 +11632,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L1115-L1147'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L1115-L1147'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -11694,7 +11706,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L1154-L1205'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L1154-L1205'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -11768,7 +11780,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L1212-L1266'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L1212-L1266'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -11859,7 +11871,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L1274-L1334'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L1274-L1334'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -11951,7 +11963,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L1344-L1372'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L1344-L1372'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -12034,7 +12046,7 @@ should validate the session.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L1380-L1396'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L1380-L1396'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -12087,7 +12099,7 @@ To be called after each upload to ensure no data is left outstanding</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/FileInteraction.js#L1404-L1420'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/FileInteraction.js#L1404-L1420'>
       <span>routes/FileInteraction.js</span>
       </a>
     
@@ -12140,7 +12152,7 @@ To be called after each download to ensure no data is left outstanding</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/SessionManager.js#L4-L141'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/SessionManager.js#L4-L141'>
       <span>routes/SessionManager.js</span>
       </a>
     
@@ -12207,7 +12219,7 @@ To be called after each download to ensure no data is left outstanding</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/SessionManager.js#L18-L28'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/SessionManager.js#L18-L28'>
       <span>routes/SessionManager.js</span>
       </a>
     
@@ -12286,7 +12298,7 @@ To be called after each download to ensure no data is left outstanding</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/SessionManager.js#L35-L58'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/SessionManager.js#L35-L58'>
       <span>routes/SessionManager.js</span>
       </a>
     
@@ -12365,7 +12377,7 @@ To be called after each download to ensure no data is left outstanding</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/SessionManager.js#L65-L89'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/SessionManager.js#L65-L89'>
       <span>routes/SessionManager.js</span>
       </a>
     
@@ -12444,7 +12456,7 @@ To be called after each download to ensure no data is left outstanding</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/SessionManager.js#L96-L116'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/SessionManager.js#L96-L116'>
       <span>routes/SessionManager.js</span>
       </a>
     
@@ -12523,7 +12535,7 @@ To be called after each download to ensure no data is left outstanding</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/SessionManager.js#L123-L139'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/SessionManager.js#L123-L139'>
       <span>routes/SessionManager.js</span>
       </a>
     
@@ -12607,7 +12619,7 @@ To be called after each download to ensure no data is left outstanding</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/UserAuthentication.js#L17-L17'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/UserAuthentication.js#L17-L17'>
       <span>routes/UserAuthentication.js</span>
       </a>
     
@@ -12664,7 +12676,7 @@ To be called after each download to ensure no data is left outstanding</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/UserAuthentication.js#L28-L175'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/UserAuthentication.js#L28-L175'>
       <span>routes/UserAuthentication.js</span>
       </a>
     
@@ -12740,7 +12752,7 @@ To be called after each download to ensure no data is left outstanding</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/UserAuthentication.js#L46-L95'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/UserAuthentication.js#L46-L95'>
       <span>routes/UserAuthentication.js</span>
       </a>
     
@@ -12828,7 +12840,7 @@ To be called after each download to ensure no data is left outstanding</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/5ae2d16528c7d6a6a625d44ca2ebcbf457b9a86e/routes/UserAuthentication.js#L103-L173'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mbenja/cloudf/blob/3af8c0182327344a0ae546e4360aa26c2979e9fc/routes/UserAuthentication.js#L103-L173'>
       <span>routes/UserAuthentication.js</span>
       </a>
     
