@@ -9,38 +9,90 @@ toc:
           Handles administrative functions such as setting up view engine, routing, and exposing ports.
 
       - name: public/js/icons_map.js
-        description:
+        description: |
+          Mapping file between MIME types and image file names.
+
+          Used to determine what image should be displayed for each file in the frontend.
+
       - name: public/js/index.js
-        description:
+        description: |
+          Contains functions necessary for the main file-viewing frontend.
+
+          Manages display of files and responds to button clicks.
+
       - name: public/js/login.js
-        description:
+        description: |
+          Contains functions for managing user login.
+
+          Allows users to login to their account or register a new account.
+
       - name: public/js/test_suite.js
-        description:
+        description: |
+          Contains functions for running the test suite.
+
       - name: routes/authenticate.js
-        description:
+        description: |
+          Contains routing functions for authentication-related requests.
+
+          Manages logging in and out, registration, and validating logins in the backend.
+
       - name: routes/connection.js
-        description:
+        description: |
+          Defines connection information for the mongo and mysql databases
+
       - name: routes/FileInteraction.js
-        description:
+        description: |
+          Contains routing functions for functions related to interacting with files.
+
+          Manages file and directory upload and download, deletion, renaming, sharing, etc. in the backend.
+
+          Also checks any requests for file interaction by verifying the requester's session is valid before proceeding.
       - name: routes/index.js
-        description:
+        description: |
+          Serves and renders index page (main page) html.
+
       - name: routes/login.js
-        description:
+        description: |
+          Serves and renders login page html.
+
       - name: routes/SessionManager.js
-        description:
+        description: |
+          Contains functions necessary for interacting with user sessions.
+
+          Can validate, create new, refresh, or delete sessions.
+          
       - name: routes/UserAuthentication.js
-        description:
+        description: |
+          Contains functions necessary for authenticating users in the backend.
+
+          Can authenticate a user given a username and password, or register a new user.
 
   - name: Works Cited
     children:
       - name: bcrypt
-        description:
+        description: |
+          Bcrypt is a library used for hashing strings.
+
+          We used this module for the purpose of hashing passwords before storing them in the database and for comparing those passwords.
+
+          https://www.npmjs.com/package/bcrypt
+
       - name: cookie-parser
-        description:
+        description: |
+          Cookie parser is a middleware module that automatically parses cookies in requests sent to the server.
+
+          This makes reading cookies inside request functions much easier.
+
+          https://www.npmjs.com/package/cookie-parser
+
       - name: dateformat
-        description:
+        description: |
+          Date format is self-explanatory. It allows JS date objects to be formatted in very customizable ways.
+
+          https://www.npmjs.com/package/dateformat
+
       - name: documentation
-        description:
+        description: |
           Documentation.js is a simple documentation generation package that uses the JSDoc format.
 
           We used documentation.js for generating documentation from our js files.
@@ -56,7 +108,7 @@ toc:
           https://www.npmjs.com/package/express
 
       - name: ejs
-        description:
+        description: |
           EJS is a simple templating language and view engine that can be used to generate HTML using javascript.
 
           We used ejs for our html view engine.
@@ -64,17 +116,41 @@ toc:
           https://www.npmjs.com/package/ejs
 
       - name: express-fileupload
-        description:
+        description: |
+          This package is a simple express middleware used for uploading files to a server.
+
+          https://www.npmjs.com/package/express-fileupload
+
       - name: express-zip
-        description:
+        description: |
+          This package allows zipping files on the server when sending them back to the client, with no intermediate steps or calls.
+
+          https://www.npmjs.com/package/express-zip
+
       - name: mime
-        description:
+        description: |
+          Mime contains all useful MIME type mappings, used in the mongoDB backend.
+
+          https://www.npmjs.com/package/mime
+
       - name: mongodb
-        description:
+        description: |
+          This package is the preferred method of interacting with Mongo databases in Node.
+
+          We used mongo for all file storage and access.
+
+          https://www.npmjs.com/package/mongodb
+
       - name: mysql
-        description:
+        description: |
+          This package is used for interacting with mysql server instances.
+
+          We used mysql for user authentication and session management.
+
+          https://www.npmjs.com/package/mysql
+
       - name: path
-        description:
+        description: |
           Path is a module for working with files and directories.
 
           We used path for our routing functionality.

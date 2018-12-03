@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "docgen": "documentation build ./app.js ./public/js/** ./routes/** -f html -o docs -g"
+    "docgen": "documentation build --config docs/documentation.yml ./app.js ./public/js/** ./routes/** -f html -o docs -g"
   },
   "repository": {
     "type": "git",
