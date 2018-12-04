@@ -110,6 +110,10 @@ router.use(express.static(path.join(__dirname, 'public')));
 /**
  * middleware function - before any call to file interaction backend, we
  * should validate the session.
+ * @alias valSession
+ * @param {Object} req - request data
+ * @param {Object} res - result data, send back to client
+ * @param {Function} next - the next routing function to be called based on the request
  */
 router.use(function valSession(req, res, next){
   console.log("in valSession");
@@ -158,6 +162,7 @@ router.use(function valSession(req, res, next){
 
 /**
  * tracks the client's user id for requests after the session is validated
+ * @type {String}
  */
 let client_user = '';
 
@@ -165,7 +170,8 @@ let client_user = '';
 /**
  * Route for getting root directory
  * Calls async function to get root directory, sends response
- * @param {String} user_id - the user id to retrieve root directory for
+ * @alias GET_rootDirectory
+ * @returns {Array.<Object>} a list of file information objects, if successful
  */
 router.get('/getRootDirectory', function(req, res) {
   console.log("GET /getRootDirectory");
@@ -179,8 +185,9 @@ router.get('/getRootDirectory', function(req, res) {
 /**
  * Route for getting sub directory
  * Calls async function to get subdirectory, sends response
- * @param {String} user_id - the user id to retrieve subdirectory for
+ * @alias GET_subDirectory
  * @param {String} subdirectory - the subdirectory to retrieve
+ * @returns {Array.<Object>} a list of file information objects, if successful
  */
 router.get('/getSubdirectory', function(req, res) {
   console.log("GET /getSubdirectory");
@@ -193,6 +200,9 @@ router.get('/getSubdirectory', function(req, res) {
 
 /**
  * Extracts upload_form data and calls for file to be uploaded if not duplicate
+ * @alias POST_uploadFile
+ * @param {Object} input_upload_file - file object being uploaded
+ * @param {String} current_path - the path that the file object is being uploaded to
  */
 router.post('/uploadFile', function(req, res) {
   console.log("POST /uploadFile");
@@ -233,6 +243,11 @@ router.post('/uploadFile', function(req, res) {
 
 /**
  * uploads a directory
+ * @alias POST_uploadDirectory
+ * @param {Array.<Object>} input_upload_directory - array of file objects being uploaded
+ * @param {String} current_path - the path being uploaded to
+ * @param {Array.<String>} directories - a list of subdirectories being uploaded
+ * @param {Array.<String>} paths - a list of file paths being uploaded
  */
 router.post('/uploadDirectory', function(req, res) {
   console.log("POST /uploadDirectory");
@@ -351,6 +366,9 @@ router.post('/uploadDirectory', function(req, res) {
 
 /**
  * Calls for directory to be created if not duplicate
+ * @alias GET_createDirectory
+ * @param {String} current_path - the path the directory is being created in
+ * @param {String} directory_name - name of the new directory
  */
 router.get('/createDirectory', function(req, res) {
   console.log("GET /createDirectory");
@@ -375,6 +393,8 @@ router.get('/createDirectory', function(req, res) {
 
 /**
  * Calls for file to be deleted
+ * @alias GET_deleteFile
+ * @param {Number} file_id - mongo file id of the file to remove
  */
 router.get('/deleteFile', function(req, res) {
   console.log("GET /deleteFile");
@@ -385,6 +405,9 @@ router.get('/deleteFile', function(req, res) {
 
 /**
  * Calls for directory to be deleted
+ * @alias GET_deleteDirectory
+ * @param {Number} directory_id - mongo file id of the directory to remove
+ * @param {String} directory_path - full directory path (including directory name) of directory to remove
  */
 router.get('/deleteDirectory', function(req, res) {
   console.log("GET /deleteDirectory");
@@ -397,7 +420,6 @@ router.get('/deleteDirectory', function(req, res) {
     obj.contents.push({ _id: req.query.directory_id });
     // call for delete
     deleteDirectory(obj).then((response) => {
-      // download
       res.send(response);
     })
   });
@@ -407,6 +429,9 @@ router.get('/deleteDirectory', function(req, res) {
 
 /**
  * Calls for file to be downloaded
+ * @alias GET_downloadFile
+ * @param {String} file_name - name of the file to be downloaded
+ * @returns {Object} file object to download
  */
 router.get('/downloadFile', function(req, res) {
   console.log("GET /downloadFile");
@@ -426,8 +451,12 @@ router.get('/downloadFile', function(req, res) {
 
 
 /**
-  * Calls for directory to be downloaded
-  */
+ * Calls for directory to be downloaded
+ * @alias GET_downloadDirectory
+ * @param {String} directory_path - full path (including directory name) of directory to download
+ * @param {String} directory_name - name of the directory being downloaded
+ * @param {Object} zip file containing directory contents
+ */
 router.get('/downloadDirectory', function(req, res) {
   console.log("GET /downloadDirectory");
   // get directory
@@ -460,8 +489,10 @@ router.get('/downloadDirectory', function(req, res) {
 });
 
 /**
-  * Calls for files to be moved
-  */
+ * Calls for files to be moved
+ * @alias GET_moveFiles
+ * @param {Array}
+ */
 router.get('/moveFiles', function(req, res) {
   console.log("GET /moveFiles");
   // get root directory

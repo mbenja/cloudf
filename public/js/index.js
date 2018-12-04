@@ -1,6 +1,6 @@
 /**
  * stores an array of all the file data received in the last query of the database
- * @type {Array}
+ * @type {Array.<Object>}
  */
 let current_file_data = [];
 
@@ -15,8 +15,9 @@ let current_upload_path_local = '';
  * @type {String}
  */
 let current_path;
-setCurrentPath('/root');
 
+// initialize the current stored path to root
+setCurrentPath('/root');
 
 let array_of_crumbs = [document.getElementById('path')];
 let current_breadcrumb_path;
@@ -479,6 +480,10 @@ function download() {
   hideSidebar();
 }
 
+/**
+ * toggle whether the filename or a text box should be shown
+ * @param {String} status - 'show' to display the textbox, 'hide' to display the filename as normal
+ */
 function showEditFileName(status) {
   let filename = document.getElementById('data-filename');
   let filenameInput = document.getElementById('data-filename-input');
@@ -494,6 +499,10 @@ function showEditFileName(status) {
 
 }
 
+/**
+ * shows the filename input box and creates a listener for when the user hits enter to submit the new name.
+ * the listener displays the new filname, finds any files that will need their path edited, and tells the backend to change all applicable data.
+ */
 function editFileName(){
   let filenameInput = document.getElementById('data-filename-input');
   let filename = document.getElementById('data-filename');
@@ -687,6 +696,7 @@ function checkInvalidSession(data){
 
 /**
  * Defining on submit for upload_form so that we can handle on complete, etc.
+ * @alias upload_form_submit
  */
 $('#upload_form').submit(function(event) {
   // prevents rerouting of page
@@ -741,6 +751,7 @@ $('#upload_form').submit(function(event) {
 
 /**
  * Defining on submit for upload_form_directory so that we can handle on complete, etc.
+ * @alias upload_form_directory_submit
  */
 $('#upload_form_directory').submit(function(event) {
   // prevents rerouting of page
@@ -810,6 +821,11 @@ function setCurrentPath(new_path){
   document.getElementById('upload_form_directory').setAttribute('action', '/FileInteraction/uploadDirectory?current_path=' + current_path + "&current_upload_path_local=" + current_upload_path_local);
 }
 
+/**
+ * updates the information that a directory upload will need to proceed, in both the js and the upload form directory element
+ * @param {Array.<String>} new_path - a list of the directories inside the directory being uploaded
+ * @param {Array.<String>} paths - a list of the file paths inside the directory being uploaded
+ */
 function setCurrentUploadPathLocal(new_path, paths){
   current_upload_path_local = new_path;
   document.getElementById('upload_form_directory').setAttribute('action', '/FileInteraction/uploadDirectory?current_path=' + current_path + "&directories=" + current_upload_path_local + '&paths=' + paths);
@@ -833,6 +849,10 @@ function doLogout(){
   });
 }
 
+/**
+ * html object of the input text space for the user's email with which to share a file
+ * @type {Object}
+ */
 let email_share_input = document.getElementById('emailShareInput');
 
 /**

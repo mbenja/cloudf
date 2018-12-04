@@ -51,6 +51,7 @@ router.use(cookieParser());
 
 /**
  * route for logging into cloudf
+ * @alias GET_initiateLogin
  * @param {String} email user's email
  * @param {String} password user's password
  * @returns {String} session id of a session created for the user that logged in
@@ -77,6 +78,7 @@ router.get('/initiateLogin', function(req, res) {
 
 /**
  * route for checking if user is logged in
+ * @alias GET_checkLogin
  */
 router.get('/checkLogin', function(req, res) {
 
@@ -121,6 +123,7 @@ router.get('/checkLogin', function(req, res) {
 
 /**
  * route for logging out of cloudf
+ * @alias GET_logout
  */
 router.get('/logout', function(req, res) {
 
@@ -149,6 +152,7 @@ router.get('/logout', function(req, res) {
 
 /**
  * route for registering a new user in cloudf
+ * @alias GET_register
  * @param {String} email email of the new user
  * @param {String} password password of the new user
  */

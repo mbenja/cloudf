@@ -1,11 +1,9 @@
 /**
  * class for managing sessions, ie. validation, creation, refreshing, and deletion
+ * @param {Object} connection a mysql connection object, created using mysql.createConnection
  */
 class SessionManager {
 
-  /**
-   * @param {Object} connection a mysql connection object, created using mysql.createConnection
-   */
   constructor(connection){
     this.connection = connection;
   }

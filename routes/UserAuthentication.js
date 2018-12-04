@@ -24,13 +24,11 @@ var mongodb = require('mongodb');
 
 /**
  * contains methods for authenticating and creating new users
+ * @param {Object} connection a mysql connection object, created using mysql.createConnection
+ * @param {String} mongo_url url of the mongo server that files are stored in
  */
 class UserAuthentication {
 
-  /**
-   * @param {Object} connection a mysql connection object, created using mysql.createConnection
-   * @param {String} mongo_url url of the mongo server that files are stored in
-   */
   constructor(connection, mongo_url){
     this.connection = connection;
     this.mongo_url = mongo_url;

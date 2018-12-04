@@ -3,9 +3,9 @@
  * @type {Object}
  */
 const icons_map = {
-  "directory": "folder.png", // http://yousense.info/33/06889-folder-icon-32x32.html
+  "directory": "folder.png",
   "parent": "folder.png",
-  "audio/x-aac": "aac.png", // https://github.com/redbooth/free-file-icons
+  "audio/x-aac": "aac.png",
   "application/postscript": "ai.png",
   "audio/x-aiff": "aiff.png",
   "video/x-msvideo": "avi.png",

@@ -5,9 +5,9 @@
 let cur_session;
 
 /**
-  * Calls all necessary tests for testing each portion of application
-  * Test scores are updating accordingly
-*/
+ * Calls all necessary tests for testing each portion of application
+ * Test scores are updating accordingly
+ */
 async function runTestSuite() {
 
   // store the current session cookie
@@ -18,6 +18,10 @@ async function runTestSuite() {
   testBackend();
 }
 
+/**
+ * copies all of the files needed for testing from the test account to the current user account
+ * @returns {Promise} resolved if files were successfully moved
+ */
 async function setupTests(){
   let promise = new Promise((resolve, reject) => {
 
