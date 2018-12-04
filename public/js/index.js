@@ -145,6 +145,11 @@ function populateDirectoryListing(path){
   hideSidebar();
 }
 
+/**
+ * Calculates the breadcrumb banner size relitive to the users
+ * monitor size and a given offset.
+ * @param float number of pixals to offset the calculation by
+ */
 function calculateBreadcrumbSize(offset) {
   prevNumOfTabs = numOfTabs;
   bannerWidth = document.getElementById('banner').clientWidth + offset;
@@ -152,6 +157,10 @@ function calculateBreadcrumbSize(offset) {
   checkOverflow();
 }
 
+/**
+ * Double check to make sure elements are not overflowing in the
+ * breadcrumb banner div
+ */
 function checkOverflow() {
   //let decBy = numOfTabs - prevNumOfTabs;
   //if(decBy < 0 && array_of_crumbs.length-1 > numOfTabs) {
