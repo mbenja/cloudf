@@ -148,7 +148,7 @@ function populateDirectoryListing(path){
 /**
  * Calculates the breadcrumb banner size relitive to the users
  * monitor size and a given offset.
- * @param float number of pixals to offset the calculation by
+ * @param {Number} number of pixels to offset the calculation by
  */
 function calculateBreadcrumbSize(offset) {
   prevNumOfTabs = numOfTabs;
