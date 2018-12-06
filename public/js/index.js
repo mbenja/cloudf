@@ -19,13 +19,49 @@ let current_path;
 // initialize the current stored path to root
 setCurrentPath('/root');
 
+/**
+ * array of breadcrumb html objects
+ * @type {Array.<Object>}
+ */
 let array_of_crumbs = [document.getElementById('path')];
+
+// this variable isn't used, but too late to delete it now
 let current_breadcrumb_path;
+
+/**
+ * count of how many breadcrumb parents there are, not including root
+ * @type {Number}
+ */
 let current_breadcrumb_parents = -1;
+
+/**
+ * count of how many total sections there are in the breadcrumbs
+ * @type {Number}
+ */
 let current_path_sections = 0;
+
+/**
+ * count of how many sections have been created but are not visible
+ * @type {Number}
+ */
 let elementsRemoved = 0;
+
+/**
+ * width of the space that the breadcrumbs are created in
+ * @type {Number}
+ */
 let bannerWidth = document.getElementById('banner').clientWidth;
+
+/**
+ * the maximum number of tabs possible with the current banner width
+ * @type {Number}
+ */
 let numOfTabs = Math.floor(bannerWidth/104);
+
+/**
+ * when a window resize occurs, this is the number of tabs available in the previous window size
+ * @type {Number}
+ */
 let prevNumOfTabs = 0;
 
 /**
